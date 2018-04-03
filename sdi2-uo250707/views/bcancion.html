@@ -1,0 +1,45 @@
+{% extends "base.html" %} 
+
+{% block titulo %} Detalles de {{ cancion.nombre }} {% endblock %} 
+
+{% block contenido_principal %}
+<div class="row">
+	<div class="media col-xs-10">
+		<div class="media-left media-middle">
+			<img class="media-object" src="/portadas/{{ cancion._id.toString() }}.png">
+		</div>
+		<div class="media-body">
+			<h2>{{ cancion.nombre }}</h2>
+			<p>{{ cancion.autor }}</p>
+			<p>{{ cancion.genero }}</p>
+			
+			{% if comprada %}
+			<audio id="audio" preload="auto">
+				<source src="/audios/{{ cancion._id.toString() }}.mp3" type="audio/mpeg">
+			</audio>
+			<button class="btn btn-primary pull-right" id="audioButton">Reproducir</button>
+			<script>
+				$("#audioButton").click(function(){
+					var audio = document.getElementById('audio');
+
+					// Si el audio está pausado y se pulsa el botón
+					if(audio.paused){
+						// Se reproduce el audio y se cambia el texto del botón por "Pausar"
+						audio.play();
+						$(this).text("Pausar");
+					}else{
+						// Se pausa el audio y se cambia el texto del botón por "Reproducir"
+						audio.pause();
+						$(this).text("Reproducir");
+					}
+				});
+			</script>
+			{% else %}
+			<a class="btn btn-primary pull-right"
+				href="/cancion/comprar/{{ cancion._id.toString() }}">{{ cancion.precio }} €</a>
+			{% endif %}
+			
+		</div>
+	</div>
+</div>
+{% endblock %}
