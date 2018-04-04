@@ -79,7 +79,7 @@ app.set('crypto',crypto);
 
 // Rutas/controladores por lógica
 require("./routes/rusers.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
-require("./routes/rcanciones.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
+require("./routes/rinvitations.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
 
 app.get('/', function (req, res) {
 	var respuesta = swig.renderFile("views/index.html",{});

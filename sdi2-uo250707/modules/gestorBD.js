@@ -14,11 +14,11 @@ module.exports = {
 				var collection = db.collection('users');
 				collection.find({"email" : user.email}).toArray(function(err, users) {
 					if (err) {
-						// Si se produjo un error, devolvemos null en el callback y cerramos la conexion con la BD
+						// Si se produjo un error, devolvemos error
 						funcionCallback(null, "Error al crear el usuario.");
 						db.close();
 					} else if(users.length == 1) {
-						// Si el usuario ya existe, devolvemos null en el callback y cerramos la conexion con la BD
+						// Si el usuario ya existe, devolvemos error
 						funcionCallback(null, "El email ya existe. Introduzca otro.");
 						db.close();
 					} else{
@@ -80,40 +80,96 @@ module.exports = {
 			}
 		});
 	},
-	obtenerCanciones : function(criterio, funcionCallback) {
+	
+	insertInvitation : function(invitation, funcionCallback) {
+		var mySelf = this;
+		
 		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
 			if (err) {
-				funcionCallback(null);
+				funcionCallback(null, "Error al enviar la invitación."); // ERROR
 			} else {
-				var collection = db.collection('canciones');
-				collection.find(criterio).toArray(function(err, canciones) {
-					if (err) {
-						funcionCallback(null);
-					} else {
-						funcionCallback(canciones);
-					}
-					db.close();
-				});
+				mySelf.paso1ComprobarExisteReceiver(db, invitation, funcionCallback); // SIGUIENTE
 			}
 		});
 	},
-	insertarCancion : function(cancion, funcionCallback) {
-		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+	paso1ComprobarExisteReceiver : function(db, invitation, funcionCallback){
+		var mySelf = this;
+		
+		// Comprobamos que exista el usuario con ese 'receiverEmail'
+		var collection = db.collection('users');
+		collection.find({"email" : invitation.receiverEmail}).toArray(function(err, users) {
 			if (err) {
-				funcionCallback(null);
-			} else {
-				var collection = db.collection('canciones');
-				collection.insert(cancion, function(err, result) {
-					if (err) {
-						funcionCallback(null);
-					} else {
-						funcionCallback(result.ops[0]._id);
-					}
-					db.close();
-				});
+				// Si se produjo un error, devolvemos error
+				funcionCallback(null, "Error al enviar la invitación."); // ERROR
+				db.close();
+			} else if(users.length == 0) {
+				// Si el usuario NO existe, devolvemos error
+				funcionCallback(null, "Error al enviar la invitación. ¡No existe ningún usuario con ese email!"); // ERROR
+				db.close();
+			} else{					
+				mySelf.paso2ComprobarNoExisteInvitacion(db, invitation, funcionCallback); // SIGUIENTE
 			}
 		});
 	},
+	paso2ComprobarNoExisteInvitacion : function(db, invitation, funcionCallback){
+		var mySelf = this;
+		
+		// Comprobamos que no exista ya la invitacion
+		var collection = db.collection('invitations');
+		collection.find(invitation).toArray(function(err, invitations) {
+			if (err) {
+				// Si se produjo un error, devolvemos error
+				funcionCallback(null, "Error al enviar la invitación."); // ERROR
+				db.close();
+			} else if(invitations.length == 1) {
+				// Si ya existe la invitación, devolvemos error
+				funcionCallback(null, "Error al enviar la invitación. ¡Ya has enviado una invitación de amistad a ese usuario!"); // ERROR
+				db.close();
+			} else{					
+				mySelf.paso3ComprobarNoSonAmigos(db, invitation, funcionCallback); // SIGUIENTE
+			}
+		});
+	},
+	paso3ComprobarNoSonAmigos : function(db, invitation, funcionCallback){
+		var mySelf = this;
+		
+		// Comprobamos que no sean amigos
+		var criterio = {$or: [
+			{"userEmail" : invitation.senderEmail, 	"otherUserEmail" : invitation.receiverEmail},
+			{"userEmail" : invitation.receiverEmail, "otherUserEmail" : invitation.senderEmail}
+		]  };
+		
+		var collection = db.collection('friends');
+		collection.find(criterio).toArray(function(err, friends) {
+			if (err) {
+				// Si se produjo un error, devolvemos error
+				funcionCallback(null, "Error al enviar la invitación."); // ERROR
+				db.close();
+			} else if(friends.length == 1) {
+				// Si ya existe la amistad, devolvemos error
+				funcionCallback(null, "Error al enviar la invitación. ¡Ese usuario y tu ya sois amigos!"); // ERROR
+				db.close();
+			} else{					
+				mySelf.paso4InsertarInvitacion(db, invitation, funcionCallback); // SIGUIENTE
+			}
+		});
+	},
+	paso4InsertarInvitacion : function(db, invitation, funcionCallback){
+		var mySelf = this;
+		
+		// Guardamos la invitacion
+		var collection = db.collection('invitations');		
+		collection.insert(invitation, function(err, result) {
+			if (err) {
+				funcionCallback(null, "Error al enviar la invitación."); // ERROR
+			} else {
+				funcionCallback(result.ops[0]._id); // FIN
+			}
+			db.close();
+		});
+	},
+	
+	// TODO quitar cuando se acabe
 	modificarCancion : function(criterio, cancion, funcionCallback) {
 		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
 			if (err) {
@@ -144,40 +200,6 @@ module.exports = {
 						funcionCallback(null);
 					} else {
 						funcionCallback(result);
-					}
-					db.close();
-				});
-			}
-		});
-	},
-	insertarCompra : function(compra, funcionCallback) {
-		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-			if (err) {
-				funcionCallback(null);
-			} else {
-				var collection = db.collection('compras');
-				collection.insert(compra, function(err, result) {
-					if (err) {
-						funcionCallback(null);
-					} else {
-						funcionCallback(result.ops[0]._id);
-					}
-					db.close();
-				});
-			}
-		});
-	},
-	obtenerCompras : function(criterio, funcionCallback) {
-		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-			if (err) {
-				funcionCallback(null);
-			} else {
-				var collection = db.collection('compras');
-				collection.find(criterio).toArray(function(err, users) {
-					if (err) {
-						funcionCallback(null);
-					} else {
-						funcionCallback(users);
 					}
 					db.close();
 				});

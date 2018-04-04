@@ -1,0 +1,19 @@
+paso4CrearAmistad : function(db, invitation, funcionCallback){
+		var mySelf = this;
+		
+		// Creamos la relación de amistad
+		var amistad = {
+			"userEmail" : invitation.senderEmail,
+			"otherUserEmail" : invitation.receiverEmail
+		};
+		
+		var collection = db.collection('friends');		
+		collection.insert(amistad, function(err, result) {
+			if (err) {
+				funcionCallback(null, "Error al enviar la invitación."); // ERROR
+			} else {
+				funcionCallback(result.ops[0]._id); // FIN
+			}
+			db.close();
+		});
+	},
