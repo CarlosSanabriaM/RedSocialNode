@@ -38,12 +38,10 @@ module.exports = function(app, swig, gestorBD) {
 		});
 	});
 	
-
 	app.get("/login", function(req, res) {
 		var response = swig.renderFile('views/login.html', {});
 		res.send(response);
-	});
-	
+	});	
 
 	app.post("/login", function(req, res) {
 		// Encriptamos la contraseña
