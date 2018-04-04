@@ -41,9 +41,11 @@
 				<td>{{ user.name }}</td>
 				<td>{{ user.email }}</td>
 				<td> 
-					<!-- 
-						BOTON DE ENVIAR INVITACION AMISTAD (codigo en invitacionCode.txt)
-					 -->
+					<div>
+						<a id="invitateUserButton{{ user._id.toString() }}" 
+							href="/user/invitate/{{ user._id.toString() }}" 
+							class="btn btn-primary">Agregar amigo</a>
+					</div>
 				</td>
 			</tr>
 			{% endfor %}
