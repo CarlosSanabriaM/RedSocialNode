@@ -5,7 +5,7 @@ module.exports = {
 		this.mongo = mongo;
 		this.app = app;
 	},
-	insertUser : function(usuario, funcionCallback) {
+	insertUser : function(user, funcionCallback) {
 		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
 			if (err) {
 				funcionCallback(null, "Error al crear el usuario.");

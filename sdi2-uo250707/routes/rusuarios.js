@@ -6,23 +6,34 @@ module.exports = function(app, swig, gestorBD) {
 	});
 	
 	app.post('/signup', function(req, res){
+		// Comprobamos que las passwords coincidan
+		if(req.body.password !== req.body.passwordConfirm){
+			res.redirect("/signup" +
+	 				"?message=Las contraseñas no coinciden."+
+	 				"&messageType=alert-danger");
+			return;
+		}
+		
+		// Encriptamos la contraseña
 		var encryptedPassword = app.get("crypto").createHmac('sha256', app.get('key'))
 				.update(req.body.password).digest('hex');
 		
-		var usuario = {
+		var user = {
 			email : req.body.email,
 			name : req.body.name,
 			lastName : req.body.lastName,
 			password : encryptedPassword
 		}
 		
-		
-		
-		gestorBD.insertarUsuario(usuario, function(id) {
+		gestorBD.insertUser(user, function(id, errMessage) {
 			if (id == null) {
-				res.send("Error al insertar usuario");
+				res.redirect("/signup" +
+		 				"?message="+ errMessage+
+		 				"&messageType=alert-danger");
 			} else {
-				res.send('Usuario Insertado ' + id); //TODO - redirigir a la vista ppal
+				res.redirect("/login" +
+		 				"?message=Usuario registrado correctamente." +
+		 				"&messageType=alert-success");
 			}
 		});
 	});
@@ -35,22 +46,22 @@ module.exports = function(app, swig, gestorBD) {
 	
 
 	app.post("/identificarse", function(req, res) {
-		var seguro = app.get("crypto").createHmac('sha256', app.get('key'))
+		var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
 				.update(req.body.password).digest('hex');
 	
 		var criterio = {
-			username : req.body.username,
+			email : req.body.email,
 			password : seguro
 		}
 		
 		gestorBD.obtenerUsuarios(criterio, function(usuarios) {
 			if (usuarios == null || usuarios.length == 0) {
 				req.session.usuario = null;
-//				res.send("No identificado");
-				// Si no se pudo identificar, le llevamos al login de nuevo
-				res.redirect("/identificarse");
+				 res.redirect("/identificarse" +
+						 "?mensaje=Email o password incorrecto"+
+						 "&tipoMensaje=alert-danger");
 			} else {
-				req.session.usuario = usuarios[0].username;
+				req.session.usuario = usuarios[0].email;
 				// Si habia intentado acceder a una url antes de autenticarse, le redirigimos a dicha url
 				if(req.session.destino != null){
 					var destino = req.session.destino;
@@ -58,7 +69,7 @@ module.exports = function(app, swig, gestorBD) {
 					res.redirect(destino);
 				}
 				else{
-					res.redirect("/comentarios/listar");
+					 res.redirect("/publicaciones");
 				}	
 			}
 		});
@@ -66,7 +77,8 @@ module.exports = function(app, swig, gestorBD) {
 	
 	app.get("/desconectarse", function(req, res){
 		req.session.usuario = null;
-		res.redirect("/identificarse");
+		res.redirect("/identificarse" +
+				"?mensaje=Desconectado correctamente");
 	});
 	
 };
