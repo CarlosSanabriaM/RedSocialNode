@@ -1,56 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head th:replace="fragments/head" />
+{% extends "../base.html" %} 
 
-<body>
-	
-	<!-- Barra de Navegación superior -->
-	<nav th:replace="fragments/nav" />
-	
-	<div class="container">
+{% block titulo %} Invitaciones {%endblock %} 
+
+{% block contenido_principal %}
+
+<h2>Invitaciones de amistad</h2>
 		
-		<h2 th:text="#{Title.user.invitations}">Peticiones</h2>
-		
-		<div th:fragment="tableInvitationsAndPagination" id="tableInvitationsAndPagination">
-		
-			<div class="table-responsive">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th th:text="#{user.name}">Nombre</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="invitation : ${invitationsList}">
-							<td th:text="${invitation.sender.name}">Nombre completo del usuario</td>
-							
-							<td> 								
-								<div>
-									<button type="button" th:id="${'acceptInvitationButton' + invitation.id}"
-										class="btn btn-default" th:text="#{User.acceptInvitation}">Aceptar</button>
-									<script th:inline="javascript">
-										/*<![CDATA[*/
-										$("#acceptInvitationButton[[${invitation.id}]]").click( function() {
-											window.location.href = "/user/accept/[[${invitation.id}]]";
-										});
-										/*]]>*/
-									</script>
-								</div>
-							</td>
-							
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			
-			<footer th:replace="fragments/pagination" />
-			
-		</div>
-		
-	</div>
-	
-	<footer th:replace="fragments/footer" />
-	
-</body>
-</html>
+<div class="table-responsive">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th class="col-md-1"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for invitation in invitations %}
+			<tr>
+				<td>Nombre completo del usuario</td>
+				
+				<td> 								
+					<div>
+						<a href="/user/accept/{{ invitation._id.toString() }}" 
+							id="acceptInvitationButton{{ invitation._id.toString() }}"
+							class="btn btn-default">Aceptar</a>
+					</div>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

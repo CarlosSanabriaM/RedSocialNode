@@ -107,8 +107,9 @@ module.exports = function(app, swig, gestorBD) {
 		 				"&messageType=alert-danger");
 			} else {
 
-				var pgUltima = Math.floor(total / 5); // 5 canciones por página
-				if (total % 5 > 0) { // Sobran decimales
+				var itemsPerPage = app.get('itemsPerPage');
+				var pgUltima = Math.floor(total / itemsPerPage);
+				if (total % itemsPerPage > 0) { // Sobran decimales
 					pgUltima = pgUltima + 1;
 				}
 

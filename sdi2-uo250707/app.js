@@ -76,13 +76,17 @@ app.set('port', 8081);
 app.set('db', "mongodb://admin:sdi_2018@ds129593.mlab.com:29593/sdi2-uo250707");
 app.set('key','abcdefg');
 app.set('crypto',crypto);
+app.set('itemsPerPage', 5);
 
 // Rutas/controladores por lógica
 require("./routes/rusers.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
 require("./routes/rinvitations.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
 
+// Página inicio
 app.get('/', function (req, res) {
-	var respuesta = swig.renderFile("views/index.html",{});
+	var respuesta = swig.renderFile("views/index.html",{
+		email : req.session.email
+	});
 	res.send(respuesta);
 });
 

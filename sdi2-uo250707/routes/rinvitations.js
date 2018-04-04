@@ -27,5 +27,42 @@ module.exports = function(app, swig, gestorBD) {
 			}
 		});
 	});	
+
+	app.get("/user/invitations", function(req, res) {
+		// Hay que obtener aquellas invitaciones en las que eres el receptor
+		var criterio = {
+			receiverEmail : req.session.email
+		};
 		
+		// Número de página
+		var pg = parseInt(req.query.pg);
+		if (req.query.pg == null || isNaN(pg)) {
+			pg = 1;
+		}
+		
+		gestorBD.getInvitationsPg(criterio, pg, function(invitations, total) {
+			if (invitations == null) {
+				res.redirect("/user/list" +
+		 				"?message=Error al listar las invitaciones."+
+		 				"&messageType=alert-danger");
+			} else {
+
+				var itemsPerPage = app.get('itemsPerPage');
+				var pgUltima = Math.floor(total / itemsPerPage);
+				if (total % itemsPerPage > 0) { // Sobran decimales
+					pgUltima = pgUltima + 1;
+				}
+
+				var respuesta = swig.renderFile('views/user/invitations.html', {
+					invitations : invitations,
+					pgActual : pg,
+					pgUltima : pgUltima,
+					email: req.session.email
+				});
+				res.send(respuesta);
+			}
+		});
+		
+	});	
+	
 };
