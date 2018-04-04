@@ -53,6 +53,7 @@
 	</table>
 </div>
 
-{% include "../fragments/pagination.html" %}
+<!-- Incluimos el sistema de paginación -->
+{% include "../fragments/pagination.html" with {url: "/user/list"} %}
 
 {% endblock %}
