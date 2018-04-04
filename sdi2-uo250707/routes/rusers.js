@@ -1,7 +1,9 @@
 module.exports = function(app, swig, gestorBD) {
 
 	app.get("/signup", function(req, res){
-		var response = swig.renderFile("views/signup.html", {});
+		var response = swig.renderFile("views/signup.html", {
+			email: req.session.email
+		});
 		res.send(response);
 	});
 	
@@ -39,7 +41,9 @@ module.exports = function(app, swig, gestorBD) {
 	});
 	
 	app.get("/login", function(req, res) {
-		var response = swig.renderFile('views/login.html', {});
+		var response = swig.renderFile('views/login.html', {
+			email: req.session.email
+		});
 		res.send(response);
 	});	
 
@@ -56,26 +60,26 @@ module.exports = function(app, swig, gestorBD) {
 		gestorBD.getUsers(criterio, function(users) {
 			if (users == null){
 				// Error
-				req.session.usuario = null;
+				req.session.email = null;
 			 	res.redirect("/login" +
 			 			"?message=Error al registrarse."+
 						"&messageType=alert-danger");
 			} else if(users.length == 0) {
 				// Usuario con esas credenciales no existe
-				req.session.usuario = null;
+				req.session.email = null;
 			 	res.redirect("/login" +
 			 			"?message=Email o password incorrecto."+
 						"&messageType=alert-danger");
 			} else {
 				// Usuario con esas credenciales existe
-				req.session.usuario = users[0].email;
+				req.session.email = users[0].email;
 				res.redirect("/user/list");	
 			}
 		});
 	});
 	
 	app.get("/logout", function(req, res){
-		req.session.usuario = null;
+		req.session.email = null;
 		res.redirect("/login" +
 				"?message=Desconectado correctamente");
 	});
@@ -107,7 +111,8 @@ module.exports = function(app, swig, gestorBD) {
 				var respuesta = swig.renderFile('views/user/list.html', {
 					users : users,
 					pgActual : pg,
-					pgUltima : pgUltima
+					pgUltima : pgUltima,
+					email: req.session.email
 				});
 				res.send(respuesta);
 			}

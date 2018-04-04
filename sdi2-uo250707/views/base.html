@@ -30,6 +30,7 @@
       <ul class="nav navbar-nav">
       	<li><a id="aHome" href="/">Inicio</a></li>
         
+        {% if email != null %}
         <li id= "users-menu" class="dropdown">
 			<a id="aDropdownUsersMenu" class="dropdown-toggle" data-toggle="dropdown" href="#">
 				Usuarios <span class="caret"></span>
@@ -41,12 +42,16 @@
 				<li><a id="aUserFriendRequestList" href="/user/invitations">Ver Solicitudes de Amistad</a></li>
 			</ul>
 		</li>
+		{% endif %}
       </ul>
     
       <ul class="nav navbar-nav navbar-right">
+	    {% if email == null %}
 	    <li><a  id="aSignup" href="/signup"><span class="glyphicon glyphicon-user"></span> Registrate</a></li>
         <li><a  id="aLogin" href="/login"><span class="glyphicon glyphicon-log-in"></span> Identifícate</a></li>
+        {% else %}
         <li>	<a id="aDesconectarse" href="/logout"><span class="glyphicon glyphicon-log-out"></span> Desconectarse</a></li>
+        {% endif %}
       </ul>
     </div>
     

@@ -22,91 +22,52 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var gestorBD = require("./modules/gestorBD.js");
 gestorBD.init(app,mongo);
 
-var gestorComprobaciones = require("./modules/gestorComprobaciones.js");
-gestorComprobaciones.init(mongo);
-app.set('gestorComprobaciones', gestorComprobaciones);
+// TODO quitar
+//var gestorComprobaciones = require("./modules/gestorComprobaciones.js");
+//gestorComprobaciones.init(mongo);
+//app.set('gestorComprobaciones', gestorComprobaciones);
 
 // routerUsuarioSession
 var routerUsuarioSession = express.Router();
 routerUsuarioSession.use(function(req, res, next) {
-	console.log("routerUsuarioSession");
-	if ( req.session.usuario ) {
-		// dejamos correr la petición
+	if ( req.session.email ) {
+		// Si hay un usuario en sesión, dejamos correr la petición
 		next();
 	} else {
-		// Guardamos en sesión la url a la que iba y lo redirigimos al login
-		console.log("va a : "+req.originalUrl);
-		req.session.destino = req.originalUrl;
-		res.redirect("/identificarse" +
-		 				"?mensaje=Debes identificarte primero para acceder a esa página.");
+		// Si no, lo redirigimos al login
+		res.redirect("/login" +
+				"?message=Debes identificarte primero para acceder a esa página.");
 	}
 });
 
 // Aplicar routerUsuarioSession
-app.use("/canciones/agregar", routerUsuarioSession);
-app.use("/publicaciones", routerUsuarioSession);
-app.use("/cancion/comprar", routerUsuarioSession);
-app.use("/compras", routerUsuarioSession);
+app.use("/user", routerUsuarioSession);
 
 //routerUsuarioAutor
-var routerUsuarioAutor = express.Router();
-routerUsuarioAutor.use(function(req, res, next) {
-	console.log("routerUsuarioAutor");
-	var path = require('path');
-	var id = path.basename(req.originalUrl);
-	// Cuidado porque req.params no funciona
-	// en el router si los params van en la URL.
-	gestorBD.obtenerCanciones(
-				{ _id : mongo.ObjectID(id) }, function (canciones) {
-			console.log(canciones[0]);
-			if(canciones[0]!=null && canciones[0].autor == req.session.usuario ){
-				next();
-			} else {
-				res.redirect("/tienda" +
-		 				"?mensaje=No puedes realizar esa operación sobre una canción la cual no eres su autor."+
-		 				"&tipoMensaje=alert-warning");
-			}
-	})
-});
+//var routerUsuarioAutor = express.Router();
+//routerUsuarioAutor.use(function(req, res, next) {
+//	console.log("routerUsuarioAutor");
+//	var path = require('path');
+//	var id = path.basename(req.originalUrl);
+//	// Cuidado porque req.params no funciona
+//	// en el router si los params van en la URL.
+//	gestorBD.obtenerCanciones(
+//				{ _id : mongo.ObjectID(id) }, function (canciones) {
+//			console.log(canciones[0]);
+//			if(canciones[0]!=null && canciones[0].autor == req.session.email ){
+//				next();
+//			} else {
+//				res.redirect("/tienda" +
+//		 				"?message=No puedes realizar esa operación sobre una canción la cual no eres su autor."+
+//		 				"&messageType=alert-warning");
+//			}
+//	});
+//});
+//
+//// Aplicar routerUsuarioAutor
+//app.use("/cancion/modificar",routerUsuarioAutor);
+//app.use("/cancion/eliminar",routerUsuarioAutor);
 
-// Aplicar routerUsuarioAutor
-app.use("/cancion/modificar",routerUsuarioAutor);
-app.use("/cancion/eliminar",routerUsuarioAutor);
-
-// routerAudios
-var routerAudios = express.Router();
-routerAudios.use(function(req, res, next) {
-	console.log("routerAudios");
-	var path = require('path');
-	var idCancion = path.basename(req.originalUrl, '.mp3');
-	
-	gestorBD.obtenerCanciones(
-		{ _id : mongo.ObjectID(idCancion) }, function (canciones) {
-			// Si el usuario en sesión es el autor de la canción, le dejamos acceder
-			if( canciones[0] != null && canciones[0].autor == req.session.usuario ){
-				next();
-			} else {
-				var criterio = {
-					 usuario : req.session.usuario,
-					 cancionId : mongo.ObjectID(idCancion)
-				 };
-
-				 gestorBD.obtenerCompras(criterio ,function(compras){
-					 // Si el usuario en sesión ha comprado la canción, le dejamos acceder
-					 if (compras != null && compras.length > 0 ){
-						 next();
-					 } else {
-						 res.redirect("/tienda" +
-		 				"?mensaje=No se puede acceder al audio de la canción indicada."+
-		 				"&tipoMensaje=alert-warning");
-					 }
-				 });
-			}
-		});
-});
-
-// Aplicar routerAudios
-app.use("/audios/",routerAudios);
 
 app.use(express.static('public'));
 
@@ -123,14 +84,14 @@ require("./routes/rcanciones.js")(app, swig, gestorBD); // (app, param1, param2,
 app.get('/', function (req, res) {
 	var respuesta = swig.renderFile("views/index.html",{});
 	res.send(respuesta);
-})
+});
 
 // Función de manejo de errores
 app.use( function (err, req, res, next ) {
 	console.log("Error producido: " + err); // we log the error in our db TODO
 	if (! res.headersSent) {
 		res.status(400);
-		res.send("Recurso no disponible");
+		res.send("Recurso no disponible"); // TODO render a error html page with the error
 	}
 });
 
