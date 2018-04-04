@@ -5,6 +5,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/css/custom.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   {% block scripts %} {% endblock %}
@@ -15,36 +16,46 @@
 <!-- Barra de Navegación superior -->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
+    
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <img src="/img/logo.png" alt="logo"/> 
+      <img src="/img/user-48.png" alt="logo"/> 
     </div>
+    
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li id="mTienda" class="active"><a href="/tienda">Tienda</a></li>
-		<li id="mPublicaciones"><a href="/publicaciones">Publicaciones</a></li>
-        <li id="mCompras"><a href="/compras">Compras</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-	    <li><a href="/registrarse"><span class="glyphicon glyphicon-user"></span> Registrate</a></li>
-        <li><a href="/identificarse"><span class="glyphicon glyphicon-log-in"></span> Identifícate</a></li>
-        <li>	
-        		<a id="aDesconectarse" href="/desconectarse"> 
-				<span class="glyphicon glyphicon-log-out"></span> Desconectarse
+      	<li><a id="aHome" href="/">Inicio</a></li>
+        
+        <li id= "users-menu" class="dropdown">
+			<a id="aDropdownUsersMenu" class="dropdown-toggle" data-toggle="dropdown" href="#">
+				Usuarios <span class="caret"></span>
 			</a>
+
+			<ul class="dropdown-menu">
+				<li><a id="aUserList" href="/user/list">Ver Todos</a></li>
+				<li><a id="aUserFriendList" href="/user/friends">Ver Amigos</a>	</li>
+				<li><a id="aUserFriendRequestList" href="/user/invitations">Ver Solicitudes de Amistad</a></li>
+			</ul>
 		</li>
       </ul>
+    
+      <ul class="nav navbar-nav navbar-right">
+	    <li><a  id="aSignup" href="/signup"><span class="glyphicon glyphicon-user"></span> Registrate</a></li>
+        <li><a  id="aLogin" href="/login"><span class="glyphicon glyphicon-log-in"></span> Identifícate</a></li>
+        <li>	<a id="aDesconectarse" href="/logout"><span class="glyphicon glyphicon-log-out"></span> Desconectarse</a></li>
+      </ul>
     </div>
+    
   </div>
 </nav>
 
 
 
-<div class="container">
+<div class="container" style="text-align: center">
 
 	<script>
 		var mensaje = getUrlParameter('mensaje');
@@ -73,6 +84,11 @@
 
 </div>
 
+<footer class="footer">
+	<div class="container">
+		<span class="text-muted">&copy; Red Social</span>
+	</div>
+</footer>
 
 </body>
 </html>

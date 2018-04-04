@@ -112,7 +112,7 @@ app.use(express.static('public'));
 
 // Variables
 app.set('port', 8081);
-app.set('db', "mongodb://admin:sdi_2018@ds151082.mlab.com:51082/tiendamusica");
+app.set('db', "mongodb://admin:sdi_2018@ds129593.mlab.com:29593/sdi2-uo250707");
 app.set('clave','abcdefg');
 app.set('crypto',crypto);
 
@@ -121,13 +121,14 @@ require("./routes/rusuarios.js")(app, swig, gestorBD); // (app, param1, param2, 
 require("./routes/rcanciones.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
 
 app.get('/', function (req, res) {
-	res.redirect('/tienda');
+	var respuesta = swig.renderFile("views/index.html",{});
+	res.send(respuesta);
 })
 
 // Función de manejo de errores
 app.use( function (err, req, res, next ) {
-	console.log("Error producido: " + err); // we log the error in our db
-	if (! res.headersSent) { // headersSent --> Boolean property that indicates if the app sent HTTP headers for the response.
+	console.log("Error producido: " + err); // we log the error in our db TODO
+	if (! res.headersSent) {
 		res.status(400);
 		res.send("Recurso no disponible");
 	}
