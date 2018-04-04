@@ -22,8 +22,7 @@ module.exports = function(app, swig, gestorBD) {
 		
 		var user = {
 			email : req.body.email,
-			name : req.body.name,
-			lastName : req.body.lastName,
+			name : req.body.name + ' ' + req.body.lastName,
 			password : encryptedPassword
 		}
 		
@@ -87,13 +86,15 @@ module.exports = function(app, swig, gestorBD) {
 	app.get("/user/list", function(req, res) {
 		var criterio = {};
 
+		// Si hay parametro de busqueda, modificamos el criterio
 		if(req.query.searchText != null){
 			criterio = {$or: [
 							{"email" : {$regex : ".*"+req.query.searchText+".*"}},
-							{"email" : {$regex : ".*"+req.query.searchText+".*"}}
+							{"name" : {$regex : ".*"+req.query.searchText+".*"}}
 			]  };
 		}
 		
+		// Número de página
 		var pg = parseInt(req.query.pg);
 		if (req.query.pg == null || isNaN(pg)) {
 			pg = 1;
@@ -115,6 +116,7 @@ module.exports = function(app, swig, gestorBD) {
 					users : users,
 					pgActual : pg,
 					pgUltima : pgUltima,
+					searchText : req.query.searchText, // TODO ??
 					email: req.session.email
 				});
 				res.send(respuesta);

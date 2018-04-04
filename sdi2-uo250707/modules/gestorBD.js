@@ -60,7 +60,7 @@ module.exports = {
 				funcionCallback(null);
 			} else {
 				var collection = db.collection('users');
-				collection.count(function(err, count) {
+				collection.count(criterio, function(err, count) { //TODO- se supone que es equivalente a find(criterio).count(callback)
 					if (err) {
 						funcionCallback(null);
 						db.close();

@@ -23,7 +23,7 @@
 					</thead>
 					<tbody>
 						<tr th:each="invitation : ${invitationsList}">
-							<td th:text="${invitation.sender.name + ' ' + invitation.sender.lastName}">Nombre completo del usuario</td>
+							<td th:text="${invitation.sender.name}">Nombre completo del usuario</td>
 							
 							<td> 								
 								<div>
