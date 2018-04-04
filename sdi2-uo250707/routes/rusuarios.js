@@ -1,28 +1,28 @@
 module.exports = function(app, swig, gestorBD) {
-	
-	app.get("/registrarse", function(req, res){
-		var respuesta = swig.renderFile("views/bregistro.html", {});
-		res.send(respuesta);
+
+	app.get("/signup", function(req, res){
+		var response = swig.renderFile("views/signup.html", {});
+		res.send(response);
 	});
 	
-	app.post('/usuario', function(req, res){
-		var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
+	app.post('/signup', function(req, res){
+		var encryptedPassword = app.get("crypto").createHmac('sha256', app.get('key'))
 				.update(req.body.password).digest('hex');
 		
 		var usuario = {
 			email : req.body.email,
-			password : seguro
+			name : req.body.name,
+			lastName : req.body.lastName,
+			password : encryptedPassword
 		}
+		
+		
 		
 		gestorBD.insertarUsuario(usuario, function(id) {
 			if (id == null) {
-				 res.redirect("/registrarse" +
-				 				"?mensaje=Error al registrar usuario"+
-				 				"&tipoMensaje=alert-danger");
+				res.send("Error al insertar usuario");
 			} else {
-				res.redirect("/identificarse" +
-						"?mensaje=Nuevo usuario registrado" +
-						"&tipoMensaje=alert-success");
+				res.send('Usuario Insertado ' + id); //TODO - redirigir a la vista ppal
 			}
 		});
 	});
@@ -35,22 +35,22 @@ module.exports = function(app, swig, gestorBD) {
 	
 
 	app.post("/identificarse", function(req, res) {
-		var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
+		var seguro = app.get("crypto").createHmac('sha256', app.get('key'))
 				.update(req.body.password).digest('hex');
 	
 		var criterio = {
-			email : req.body.email,
+			username : req.body.username,
 			password : seguro
 		}
 		
 		gestorBD.obtenerUsuarios(criterio, function(usuarios) {
 			if (usuarios == null || usuarios.length == 0) {
 				req.session.usuario = null;
-				 res.redirect("/identificarse" +
-						 "?mensaje=Email o password incorrecto"+
-						 "&tipoMensaje=alert-danger");
+//				res.send("No identificado");
+				// Si no se pudo identificar, le llevamos al login de nuevo
+				res.redirect("/identificarse");
 			} else {
-				req.session.usuario = usuarios[0].email;
+				req.session.usuario = usuarios[0].username;
 				// Si habia intentado acceder a una url antes de autenticarse, le redirigimos a dicha url
 				if(req.session.destino != null){
 					var destino = req.session.destino;
@@ -58,7 +58,7 @@ module.exports = function(app, swig, gestorBD) {
 					res.redirect(destino);
 				}
 				else{
-					 res.redirect("/publicaciones");
+					res.redirect("/comentarios/listar");
 				}	
 			}
 		});
@@ -66,8 +66,7 @@ module.exports = function(app, swig, gestorBD) {
 	
 	app.get("/desconectarse", function(req, res){
 		req.session.usuario = null;
-		res.redirect("/identificarse" +
-				"?mensaje=Desconectado correctamente");
+		res.redirect("/identificarse");
 	});
 	
 };

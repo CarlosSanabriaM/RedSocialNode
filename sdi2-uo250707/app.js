@@ -113,7 +113,7 @@ app.use(express.static('public'));
 // Variables
 app.set('port', 8081);
 app.set('db', "mongodb://admin:sdi_2018@ds129593.mlab.com:29593/sdi2-uo250707");
-app.set('clave','abcdefg');
+app.set('key','abcdefg');
 app.set('crypto',crypto);
 
 // Rutas/controladores por lógica
