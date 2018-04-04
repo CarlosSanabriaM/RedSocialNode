@@ -54,6 +54,32 @@ module.exports = {
 			}
 		});
 	},
+	getUsersPg : function(criterio, pg, funcionCallback) {
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+			if (err) {
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('users');
+				collection.count(function(err, count) {
+					if (err) {
+						funcionCallback(null);
+						db.close();
+					} else {
+						collection.find(criterio).skip((pg - 1) * 5).limit(5) // 5 usuarios por página
+								.toArray(function(err, users) {
+								
+								if (err) {
+									funcionCallback(null);
+								} else {
+									funcionCallback(users, count);
+								}
+								db.close();
+							});
+					}
+				});
+			}
+		});
+	},
 	obtenerCanciones : function(criterio, funcionCallback) {
 		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
 			if (err) {
@@ -67,32 +93,6 @@ module.exports = {
 						funcionCallback(canciones);
 					}
 					db.close();
-				});
-			}
-		});
-	},
-	obtenerCancionesPg : function(criterio, pg, funcionCallback) {
-		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-			if (err) {
-				funcionCallback(null);
-			} else {
-				var collection = db.collection('canciones');
-				collection.count(function(err, count) {
-					if (err) {
-						funcionCallback(null);
-						db.close();
-					} else {
-						collection.find(criterio).skip((pg - 1) * 4).limit(4) // 4 canciones por página
-								.toArray(function(err, canciones) {
-								
-								if (err) {
-									funcionCallback(null);
-								} else {
-									funcionCallback(canciones, count);
-								}
-								db.close();
-							});
-					}
 				});
 			}
 		});

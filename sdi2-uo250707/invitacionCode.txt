@@ -1,0 +1,5 @@
+{{% if user.canInvite(#authorization.getAuthentication().getName()) %}}
+<div>
+	<a id="invitateUserButton{{ user.id }}" href="/user/invitate/{{user.id}}" class="btn btn-default">Enviar invitación</button>
+</div>
+{{% endif %}}

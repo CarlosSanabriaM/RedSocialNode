@@ -80,4 +80,39 @@ module.exports = function(app, swig, gestorBD) {
 				"?message=Desconectado correctamente");
 	});
 	
+	app.get("/user/list", function(req, res) {
+		var criterio = {};
+
+//		if(req.query.busqueda != null){
+//			criterio = { "email" : {$regex : ".*"+req.query.busqueda+".*"} };
+//		}
+		
+		var pg = parseInt(req.query.pg);
+		if (req.query.pg == null || isNaN(pg)) {
+			pg = 1;
+		}
+		
+		gestorBD.getUsersPg(criterio, pg, function(users, total) {
+			if (users == null) {
+				res.redirect("/" +
+		 				"?message=Error al listar los usuarios."+
+		 				"&messageType=alert-danger");
+			} else {
+
+				var pgUltima = Math.floor(total / 5); // 5 canciones por página
+				if (total % 5 > 0) { // Sobran decimales
+					pgUltima = pgUltima + 1;
+				}
+
+				var respuesta = swig.renderFile('views/user/list.html', {
+					users : users,
+					pgActual : pg,
+					pgUltima : pgUltima
+				});
+				res.send(respuesta);
+			}
+		});
+		
+	});	
+	
 };
