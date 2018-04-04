@@ -37,17 +37,17 @@ module.exports = {
 			}
 		});
 	},
-	obtenerUsuarios : function(criterio, funcionCallback) {
+	getUsers : function(criterio, funcionCallback) {
 		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
 			if (err) {
 				funcionCallback(null);
 			} else {
-				var collection = db.collection('usuarios');
-				collection.find(criterio).toArray(function(err, usuarios) {
+				var collection = db.collection('users');
+				collection.find(criterio).toArray(function(err, users) {
 					if (err) {
 						funcionCallback(null);
 					} else {
-						funcionCallback(usuarios);
+						funcionCallback(users);
 					}
 					db.close();
 				});
@@ -173,11 +173,11 @@ module.exports = {
 				funcionCallback(null);
 			} else {
 				var collection = db.collection('compras');
-				collection.find(criterio).toArray(function(err, usuarios) {
+				collection.find(criterio).toArray(function(err, users) {
 					if (err) {
 						funcionCallback(null);
 					} else {
-						funcionCallback(usuarios);
+						funcionCallback(users);
 					}
 					db.close();
 				});
