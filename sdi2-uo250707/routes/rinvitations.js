@@ -27,7 +27,9 @@ module.exports = function(app, swig, gestorBD) {
 			}
 		});
 	});	
+
 	
+	// TODO - mejorar
 	// Variables globales
 	var numAllCallbacks; 
 	var numCallbacks; 
@@ -80,9 +82,6 @@ module.exports = function(app, swig, gestorBD) {
 		 				"&messageType=alert-danger");
 				return; // TODO - MAL!!!
 			} else {
-				
-				console.log("\n\ncurrentSenderName: \n");
-				console.log(users[0].name);
 				
 				// Añadimos el nombre del sender en la posicion actual del array
 				currentInvitation = currentInvitation.senderName = users[0].name;
