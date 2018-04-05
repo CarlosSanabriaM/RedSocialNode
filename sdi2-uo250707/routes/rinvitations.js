@@ -27,6 +27,10 @@ module.exports = function(app, swig, gestorBD) {
 			}
 		});
 	});	
+	
+	// Variables globales
+	var numAllCallbacks; 
+	var numCallbacks; 
 
 	app.get("/user/invitations", function(req, res) {
 		// Hay que obtener aquellas invitaciones en las que eres el receptor
@@ -53,16 +57,53 @@ module.exports = function(app, swig, gestorBD) {
 					pgUltima = pgUltima + 1;
 				}
 
-				var respuesta = swig.renderFile('views/user/invitations.html', {
-					invitations : invitations,
-					pgActual : pg,
-					pgUltima : pgUltima,
-					email: req.session.email
+				numAllCallbacks = invitations.length;
+				numCallbacks = 0;
+				
+				// Sacamos el nombre de cada usuario que ha enviado invitacion al usuario en sesion
+				invitations.map(function(currentInvitation, currentIndex, invitations){
+					var criterio = {"email" : currentInvitation.senderEmail};
+					addSenderNameToCurrentInvitation(req, res, criterio, currentInvitation, currentIndex, invitations, pg, pgUltima);
 				});
-				res.send(respuesta);
+				
 			}
 		});
+	});
+	
+	function addSenderNameToCurrentInvitation(req, res, criterio, currentInvitation, currentIndex, invitations, pg, pgUltima){
 		
-	});	
+		gestorBD.getUsers(criterio, function(users) {
+			if (users == null || users[0] == null){
+				// Error
+				res.redirect("/user/list" +
+		 				"?message=Error al listar las invitaciones."+
+		 				"&messageType=alert-danger");
+				return; // TODO - MAL!!!
+			} else {
+				
+				console.log("\n\ncurrentSenderName: \n");
+				console.log(users[0].name);
+				
+				// Añadimos el nombre del sender en la posicion actual del array
+				currentInvitation = currentInvitation.senderName = users[0].name;
+				
+				sendGetInvitationsPgResponse(req, res, invitations, pg, pgUltima);
+			}
+		});
+	}
+	
+	function sendGetInvitationsPgResponse(req, res, invitations, pg, pgUltima){
+		numCallbacks++;
+		
+		if (numCallbacks == numAllCallbacks) {	
+			var respuesta = swig.renderFile('views/user/invitations.html', {
+				invitations : invitations,
+				pgActual : pg,
+				pgUltima : pgUltima,
+				email : req.session.email
+			});
+			res.send(respuesta);
+		}
+	}
 	
 };
