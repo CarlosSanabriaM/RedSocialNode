@@ -113,6 +113,8 @@ module.exports = function(app, swig, gestorBD) {
 					pgUltima = pgUltima + 1;
 				}
 
+				addCanInviteToUsers(users, req.session.email);
+				
 				var respuesta = swig.renderFile('views/user/list.html', {
 					users : users,
 					pgActual : pg,
@@ -123,9 +125,25 @@ module.exports = function(app, swig, gestorBD) {
 				res.send(respuesta);
 			}
 		});
-		
+
 	});	
 
+	function addCanInviteToUsers(users, emailUserInSession){
+		users.forEach(function(currentUser) {
+			// No se puede invitar a un usuario si es el mismo que el usuario en sesion
+			if(currentUser.email == emailUserInSession)
+				currentUser.canInvite = false;
+//			// No se puede invitar a un usuario si ya es amigo
+//			else if(currentUser.email ---)
+//				currentUser.canInvite = false;
+//			// No se puede invitar a un usuario si ya se le ha enviado una invitación
+//			else if(currentUser.email ---)
+//				currentUser.canInvite = false;
+			else
+				currentUser.canInvite = true;
+		});
+	}
+	
 	app.get("/user/friends", function(req, res) {
 		var criterio = {$or: [
 			{"userEmail" : req.session.email},
