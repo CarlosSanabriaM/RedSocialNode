@@ -28,14 +28,8 @@ module.exports = function(app, swig, gestorBD) {
 		});
 	});	
 
-	
-	// TODO - mejorar
-	// Variables globales
-	var numAllCallbacks; 
-	var numCallbacks; 
-
 	app.get("/user/invitations", function(req, res) {
-		// Hay que obtener aquellas invitaciones en las que eres el receptor
+		// Obtenemos aquellas invitaciones en las que el usuario en sesion es el receptor
 		var criterio = {
 			receiverEmail : req.session.email
 		};
@@ -58,51 +52,53 @@ module.exports = function(app, swig, gestorBD) {
 				if (total % itemsPerPage > 0) { // Sobran decimales
 					pgUltima = pgUltima + 1;
 				}
-
-				numAllCallbacks = invitations.length;
-				numCallbacks = 0;
 				
-				// Sacamos el nombre de cada usuario que ha enviado invitacion al usuario en sesion
-				invitations.map(function(currentInvitation, currentIndex, invitations){
-					var criterio = {"email" : currentInvitation.senderEmail};
-					addSenderNameToCurrentInvitation(req, res, criterio, currentInvitation, currentIndex, invitations, pg, pgUltima);
-				});
-				
+				paso1ObtenerSenderUsers(req, res, invitations, pg, pgUltima);
 			}
 		});
 	});
 	
-	function addSenderNameToCurrentInvitation(req, res, criterio, currentInvitation, currentIndex, invitations, pg, pgUltima){
+	function paso1ObtenerSenderUsers(req, res, invitations, pg, pgUltima){
+		// Sacamos el email de cada usuario que ha enviado invitacion al usuario en sesion
+		var senderEmails = invitations.map(function(currentInvitation) {
+			return currentInvitation.senderEmail;
+		});
 		
-		gestorBD.getUsers(criterio, function(users) {
-			if (users == null || users[0] == null){
-				// Error
+		// Obtenemos los usuarios con esos emails
+		var criterio = { "email" : { "$in" : senderEmails } };
+		
+		gestorBD.getUsers(criterio, function(senderUsers) {
+			if (senderUsers == null){
 				res.redirect("/user/list" +
 		 				"?message=Error al listar las invitaciones."+
 		 				"&messageType=alert-danger");
-				return; // TODO - MAL!!!
 			} else {
-				
-				// Añadimos el nombre del sender en la posicion actual del array
-				currentInvitation = currentInvitation.senderName = users[0].name;
-				
-				sendGetInvitationsPgResponse(req, res, invitations, pg, pgUltima);
+				paso2AniadirSenderUsersAInvitaciones(req, res, invitations, senderUsers, pg, pgUltima);
 			}
 		});
 	}
 	
-	function sendGetInvitationsPgResponse(req, res, invitations, pg, pgUltima){
-		numCallbacks++;
-		
-		if (numCallbacks == numAllCallbacks) {	
-			var respuesta = swig.renderFile('views/user/invitations.html', {
-				invitations : invitations,
-				pgActual : pg,
-				pgUltima : pgUltima,
-				email : req.session.email
+	function paso2AniadirSenderUsersAInvitaciones(req, res, invitations, senderUsers, pg, pgUltima){
+		invitations.forEach(function(invitation){
+			senderUsers.some(function(senderUser){ // "some" deja de iterar por los senderUses cuando se retorna true
+				if(senderUser.email == invitation.senderEmail){
+					invitation.senderUser = senderUser;
+					return true;
+				} 
 			});
-			res.send(respuesta);
-		}
+		});
+		
+		paso3MostrarInvitaciones(req, res, invitations, pg, pgUltima);
+	}
+
+	function paso3MostrarInvitaciones(req, res, invitations, pg, pgUltima){
+		var respuesta = swig.renderFile('views/user/invitations.html', {
+			invitations : invitations,
+			pgActual : pg,
+			pgUltima : pgUltima,
+			email : req.session.email
+		});
+		res.send(respuesta);
 	}
 	
 	app.get("/user/accept/:idInvitation", function(req, res) {	
