@@ -166,13 +166,27 @@ module.exports = function(app, swig, gestorBD) {
 				friendsEmails.push(currentFriendship.otherUserEmail);
 		});
 		
-		var respuesta = swig.renderFile('views/user/friends.html', {
-			friends : friendsEmails, // HACER!
-			pgActual : pg,
-			pgUltima : pgUltima,
-			email: req.session.email
+		paso2ObtenerAmigosConEsosEmails(req, res, friendsEmails, pg, pgUltima);
+	}
+	
+	function paso2ObtenerAmigosConEsosEmails(req, res, friendsEmails, pg, pgUltima){
+		var criterio = { "email" : { "$in" : friendsEmails } };
+		
+		gestorBD.getUsers(criterio, function(friends) {
+			if (friends == null){
+				res.redirect("/user/list" +
+						"?message=Error al listar los amigos."+
+						"&messageType=alert-danger");
+			} else {
+				var respuesta = swig.renderFile('views/user/friends.html', {
+					friends : friends,
+					pgActual : pg,
+					pgUltima : pgUltima,
+					email: req.session.email
+				});
+				res.send(respuesta);	
+			}
 		});
-		res.send(respuesta);
 	}
 	
 };
