@@ -249,7 +249,34 @@ module.exports = {
 			}
 		});
 	},
-	
+	getFriendshipsPg : function(criterio, pg, funcionCallback) {
+		var itemsPerPage = this.app.get('itemsPerPage');
+		
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+			if (err) {
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('friends');
+				collection.count(criterio, function(err, count) {
+					if (err) {
+						funcionCallback(null);
+						db.close();
+					} else {
+						collection.find(criterio).skip((pg - 1) * itemsPerPage).limit(itemsPerPage) 
+								.toArray(function(err, friendships) {
+								
+								if (err) {
+									funcionCallback(null);
+								} else {
+									funcionCallback(friendships, count);
+								}
+								db.close();
+							});
+					}
+				});
+			}
+		});
+	},
 	
 	// TODO quitar cuando se acabe
 	modificarCancion : function(criterio, cancion, funcionCallback) {

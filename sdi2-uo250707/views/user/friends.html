@@ -1,44 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head th:replace="fragments/head" />
+{% extends "../base.html" %} 
 
-<body>
-	
-	<!-- Barra de Navegación superior -->
-	<nav th:replace="fragments/nav" />
-	
-	<div class="container">
-		
-		<h2 th:text="#{Title.user.friends}">Tus Amigos</h2>
-		
-		<div th:fragment="tableUsersAndPagination" id="tableUsersAndPagination">
-		
-			<div class="table-responsive">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th th:text="#{user.name}">Nombre</th>
-							<th th:text="#{user.email}">Email</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="user : ${usersList}">
-						
-							<td> <a th:text="${user.name}" th:href="${'/post/list/' + user.id}">Nombre completo del usuario</a></td>
-							<td th:text="${user.email}">Email del usuario</td>
-	
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			
-			<footer th:replace="fragments/pagination" />
-			
-		</div>
-		
-	</div>
-	
-	<footer th:replace="fragments/footer" />
-	
-</body>
-</html>
+{% block titulo %} Amigos {%endblock %} 
+
+{% block contenido_principal %}
+
+<h2>Tus Amigos</h2>
+
+<div class="table-responsive">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for friend in friends %}
+			<tr>
+				<td>{{ friend }}</td>
+				<!-- 
+				<td>{{ friend.name }}</td>
+				<td>{{ friend.email }}</td>
+				 -->
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+<!-- Incluimos el sistema de paginación -->
+{% include "../fragments/pagination.html" with {url: "/user/friends"} %}
+
+{% endblock %}

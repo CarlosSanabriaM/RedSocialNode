@@ -138,7 +138,7 @@ module.exports = function(app, swig, gestorBD) {
 		}
 	}
 	
-	function paso2CrearAmistad(req, res, invitation) {		
+	function paso2CrearAmistad(req, res, invitation) {
 		// Creamos la relación de amistad
 		var friendship = {
 			"userEmail" : invitation.senderEmail,

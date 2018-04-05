@@ -125,5 +125,54 @@ module.exports = function(app, swig, gestorBD) {
 		});
 		
 	});	
+
+	app.get("/user/friends", function(req, res) {
+		var criterio = {$or: [
+			{"userEmail" : req.session.email},
+			{"otherUserEmail" : req.session.email},
+		]  };
+		
+		// Número de página
+		var pg = parseInt(req.query.pg);
+		if (req.query.pg == null || isNaN(pg)) {
+			pg = 1;
+		}
+		
+		gestorBD.getFriendshipsPg(criterio, pg, function(friendships, total) {
+			if (friendships == null) {
+				res.redirect("/user/list" +
+						"?message=Error al listar los amigos."+
+						"&messageType=alert-danger");
+			} else {
+				
+				var itemsPerPage = app.get('itemsPerPage');
+				var pgUltima = Math.floor(total / itemsPerPage);
+				if (total % itemsPerPage > 0) { // Sobran decimales
+					pgUltima = pgUltima + 1;
+				}
+				
+				paso1ObtenerEmailsAmigos(req, res, friendships, pg, pgUltima);
+			}
+		});
+	});	
+	
+	function paso1ObtenerEmailsAmigos(req, res, friendships, pg, pgUltima){
+		friendsEmails = [];
+		
+		friendships.forEach(function(currentFriendship) {
+			if(currentFriendship.userEmail != req.session.email)
+				friendsEmails.push(currentFriendship.userEmail);
+			else
+				friendsEmails.push(currentFriendship.otherUserEmail);
+		});
+		
+		var respuesta = swig.renderFile('views/user/friends.html', {
+			friends : friendsEmails, // HACER!
+			pgActual : pg,
+			pgUltima : pgUltima,
+			email: req.session.email
+		});
+		res.send(respuesta);
+	}
 	
 };
