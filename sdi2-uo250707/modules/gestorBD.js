@@ -198,6 +198,58 @@ module.exports = {
 			}
 		});
 	},
+	getInvitations : function(criterio, funcionCallback) {
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+			if (err) {
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('invitations');
+				collection.find(criterio).toArray(function(err, invitations) {
+					if (err) {
+						funcionCallback(null);
+					} else {
+						funcionCallback(invitations);
+					}
+					db.close();
+				});
+			}
+		});
+	},
+	removeInvitation : function(criterio, funcionCallback) {
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+			if (err) {
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('invitations');
+				collection.remove(criterio, function(err, result) {
+					if (err) {
+						funcionCallback(null);
+					} else {
+						funcionCallback(result);
+					}
+					db.close();
+				});
+			}
+		});
+	},
+	insertFriendship : function(friendship, funcionCallback) {
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+			if (err) {
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('friends');		
+				collection.insert(friendship, function(err, result) {
+					if (err) {
+						funcionCallback(null);
+					} else {
+						funcionCallback(result.ops[0]._id);
+					}
+					db.close();
+				});
+			}
+		});
+	},
+	
 	
 	// TODO quitar cuando se acabe
 	modificarCancion : function(criterio, cancion, funcionCallback) {
@@ -209,23 +261,6 @@ module.exports = {
 				collection.update(criterio, {
 					$set : cancion
 				}, function(err, result) {
-					if (err) {
-						funcionCallback(null);
-					} else {
-						funcionCallback(result);
-					}
-					db.close();
-				});
-			}
-		});
-	},
-	eliminarCancion : function(criterio, funcionCallback) {
-		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-			if (err) {
-				funcionCallback(null);
-			} else {
-				var collection = db.collection('canciones');
-				collection.remove(criterio, function(err, result) {
 					if (err) {
 						funcionCallback(null);
 					} else {
