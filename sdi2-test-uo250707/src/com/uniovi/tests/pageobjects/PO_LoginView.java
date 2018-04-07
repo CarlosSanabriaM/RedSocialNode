@@ -10,23 +10,23 @@ public class PO_LoginView extends PO_NavView {
 	 * Espera a que se cargue el formulario de login y lo rellena con los datos indicados
 	 * 
 	 * @param driver
-	 * @param usernamep
+	 * @param emailp
 	 * @param passwordp
 	 */
-	static public void fillForm(WebDriver driver, String usernamep, String passwordp) {
+	static public void fillForm(WebDriver driver, String emailp, String passwordp) {
 		
 		// Si ya está cargado el formulario, no espera, y si no está cargado, espera a que se cargue
 		checkElement(driver, "id", "buttonSubmit");
 		
-		WebElement dni = driver.findElement(By.name("username"));
-		dni.click();
-		dni.clear();
-		dni.sendKeys(usernamep);
+		WebElement email = driver.findElement(By.name("email"));
+		email.click();
+		email.clear();
+		email.sendKeys(emailp);
 		
-		WebElement name = driver.findElement(By.name("password"));
-		name.click();
-		name.clear();
-		name.sendKeys(passwordp);
+		WebElement password = driver.findElement(By.name("password"));
+		password.click();
+		password.clear();
+		password.sendKeys(passwordp);
 		
 		// Pulsar el boton de Alta.
 		By boton = By.id("buttonSubmit");
@@ -37,25 +37,25 @@ public class PO_LoginView extends PO_NavView {
 	 * Va al formulario de login y lo rellena con los datos indicados
 	 * 
 	 * @param driver: apuntando al navegador abierto actualmente
-	 * @param usernamep: valor para el campo username
+	 * @param emailp: valor para el campo email
 	 * @param passwordp: valor para el campo password
 	 */
-	static public void goToLoginAndfillForm(WebDriver driver, String usernamep, String passwordp) {
+	static public void goToLoginAndfillForm(WebDriver driver, String emailp, String passwordp) {
 		PO_HomeView.clickLinkAndCheckElement(driver, "aLogin", "id", "buttonSubmit");
-		PO_LoginView.fillForm(driver, usernamep, passwordp);
+		PO_LoginView.fillForm(driver, emailp, passwordp);
 	}
 
 	/**
 	 * Va al formulario de login, lo rellena con los datos indicados y comprueba que entra correctamente
 	 * 
 	 * @param driver: apuntando al navegador abierto actualmente
-	 * @param usernamep: valor para el campo username
+	 * @param emailp: valor para el campo email
 	 * @param passwordp: valor para el campo password
 	 */
-	static public void goToLoginFillFormAndCheckWasOk(WebDriver driver, String usernamep, String passwordp) {
-		goToLoginAndfillForm(driver, usernamep, passwordp);
+	static public void goToLoginFillFormAndCheckWasOk(WebDriver driver, String emailp, String passwordp) {
+		goToLoginAndfillForm(driver, emailp, passwordp);
 		// Comprobamos que entramos en la pagina privada del usuario
-		PO_View.checkElement(driver, "text", "Usuario autenticado: " + usernamep);
+		PO_View.checkElement(driver, "text", "Usuario autenticado: " + emailp);
 	}
 	
 	/**

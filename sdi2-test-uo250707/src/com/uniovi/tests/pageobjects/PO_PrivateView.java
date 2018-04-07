@@ -15,10 +15,13 @@ import com.uniovi.tests.util.SeleniumUtils;
 public class PO_PrivateView extends PO_NavView {
 	
 	/**
-	 * Hacemos click en el botón de Desconectarse y vemos como va al formulario de Login
+	 * Hacemos click en el botón de Desconectarse y vemos 
+	 * que se muestra el mensaje "Desconectado correctamente"
+	 * y el texto "Identifícate"
 	 */
 	public static void logoutAndCheckWasOk(WebDriver driver) {
-		clickLinkAndCheckElement(driver, "aLogout", "text", "Identifícate");
+		clickLinkAndCheckElement(driver, "aLogout", "text", "Desconectado correctamente");
+		checkElement(driver, "text", "Identifícate");
 	}
 	
 	/**
