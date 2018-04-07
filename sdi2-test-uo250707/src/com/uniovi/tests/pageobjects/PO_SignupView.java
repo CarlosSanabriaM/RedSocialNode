@@ -62,13 +62,14 @@ public class PO_SignupView extends PO_NavView {
 	}
 	
 	/**
-	 * Espera a que se cargue el formulario, lo rellena y comprueba que se autologea correctamente
+	 * Espera a que se cargue el formulario, lo rellena y comprueba que
+	 * aparece el texto "Usuario registrado correctamente"
 	 */
 	public static void fillFormAndCheckWasOk(WebDriver driver, String emailp, String namep, 
 			String lastnamep, String passwordp, String passwordconfp) {
 		
 		PO_SignupView.fillForm(driver, emailp, namep, lastnamep, passwordp, passwordconfp);
-		PO_View.checkElement(driver, "text", "Usuario autenticado: " + emailp);
+		PO_View.checkElement(driver, "text", "Usuario registrado correctamente");
 	}
 	
 	/**

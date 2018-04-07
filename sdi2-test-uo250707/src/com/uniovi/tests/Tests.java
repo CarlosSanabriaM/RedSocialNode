@@ -20,12 +20,11 @@ import com.uniovi.tests.pageobjects.PO_View;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
 	
-	// Descomentar uno de los dos paths en función del SO:
-	//static String PathFirefox = "C:\\Users\\Alex\\Desktop\\sts-bundle\\Firefox46.win\\FirefoxPortable.exe";  // Windows
-	static String PathFirefox = "/Applications/Firefox_46.0.app/Contents/MacOS/firefox-bin"; 			   // Mac
+	// Indicar la ruta donde está situado el firefox 46.0
+	static String PathFirefox = "/Applications/Firefox_46.0.app/Contents/MacOS/firefox-bin"; // Mac
 	
 	static WebDriver driver = getDriver(PathFirefox);
-	static String URL = "http://localhost:8090";
+	static String URL = "https://localhost:8081";
 
 	public static WebDriver getDriver(String PathFirefox) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -34,12 +33,9 @@ public class Tests {
 	}
 	
 	// Credenciales de inicio de sesión de varios usuarios
-	private static String adminEmail = "admin@gmail.com";
-	private static String adminPassword = "1234";
-	
-	private static String user1Email = "user1@gmail.com";
+	private static String user1Email = "user01@gmail.com";
 	private static String user1Password = "1234";
-	private static String user2Email = "user2@gmail.com";
+	private static String user2Email = "user02@gmail.com";
 	private static String user2Password = "1234";
 	
 	/**
@@ -64,14 +60,14 @@ public class Tests {
 	 */
 	@BeforeClass
 	static public void begin() {
-		driver.navigate().to(URL);
-		
-		// Entramos como administrador y pinchamos en la opción de Reiniciar BD
-		PO_AdminLoginView.goToAdminLoginFillFormAndCheckWasOk(driver, adminEmail, adminPassword);
-		PO_PrivateView.clickLinkAndCheckElement(driver, "aAdminRestart", "text", "Base de datos reiniciada");
-		
-		// Ahora nos desconectamos
-		PO_PrivateView.logoutAndCheckWasOk(driver);
+//		driver.navigate().to(URL);
+//		
+//		// Entramos como administrador y pinchamos en la opción de Reiniciar BD
+//		PO_AdminLoginView.goToAdminLoginFillFormAndCheckWasOk(driver, adminEmail, adminPassword);
+//		PO_PrivateView.clickLinkAndCheckElement(driver, "aAdminRestart", "text", "Base de datos reiniciada");
+//		
+//		// Ahora nos desconectamos
+//		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 
 	/**
@@ -90,7 +86,6 @@ public class Tests {
 		PO_SignupView.goToSignup(driver);
 		PO_SignupView.fillFormAndCheckWasOk(driver, 
 				"newUser@gmail.com", "NewUserName", "NewUserLastName", "1234", "1234");
-		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 	
 	/**
@@ -370,74 +365,6 @@ public class Tests {
 		// Nos envia directamente al listado de publicaciones del usuario, 
 		// así que buscamos el titulo de la nueva publicación que hemos creado
 		PO_PrivateView.checkElement(driver, "text", title);
-		
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
-	
-	/**
-	 * 13.1 [AdInVal] Inicio de sesión como administrador con datos válidos. 
-	 */
-	@Test
-	public void PR20() {
-		PO_AdminLoginView.goToAdminLoginFillFormAndCheckWasOk(driver, adminEmail, adminPassword);
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
-	
-	/**
-	 * 13.2 [AdInInVal] Inicio de sesión como administrador con datos inválidos 
-	 * (usar los datos de un usuario que no tenga perfil administrador).
-	 */
-	@Test
-	public void PR21() {
-		PO_AdminLoginView.goToAdminLoginFillFormAndCheckWasWrong(
-				driver, user1Email, user1Password, "Error.admin.login.role" ,PO_Properties.getSPANISH());
-	}
-	
-	/**
-	 * 14.1 [AdLisUsrVal] Desde un usuario identificado en sesión como 
-	 * administrador listar a todos los usuarios de la aplicación. 
-	 */
-	@Test
-	public void PR22() {
-		PO_AdminLoginView.goToAdminLoginFillFormAndCheckWasOk(driver, adminEmail, adminPassword);
-		
-		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownUsersMenu", "aUserList", "text", "Todos los usuarios");
-
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
-	
-	/**
-	 * 15.1 [AdBorUsrVal] Desde un usuario identificado en sesión como 
-	 * administrador eliminar un usuario existente en la aplicación.  
-	 */
-	@Test
-	public void PR23() {
-		PO_AdminLoginView.goToAdminLoginFillFormAndCheckWasOk(driver, adminEmail, adminPassword);
-		
-		// Eliminamos al user6 y comprobamos que ya no aparece y nos deslogeamos como administradores
-		PO_PrivateView.deleteUserAndCheckWasOk(driver, "user5@gmail.com");
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-		
-		// Nos conectamos como user1, que era amigo de user6, 
-		// y comprobamos que ya no aparece en su listado de amigos
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-		PO_PrivateView.checkUserIsNotFriend(driver, "user5@gmail.com");
-		
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
-	
-	/**
-	 * 15.2 [AdBorUsrInVal] Intento de acceso vía URL al borrado de un usuario existente en la aplicación. 
-	 * Debe utilizarse un usuario identificado en sesión pero que no tenga perfil de administrador. 
-	 */
-	@Test
-	public void PR24() {
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-		
-		driver.navigate().to("http://localhost:8090/user/delete/2");
-		PO_View.checkElement(driver, "text", "¡Se ha producido un error!");
-		PO_PrivateView.clickLinkAndCheckElement(driver, "aIndex", "text", "¡Bienvenidos a Red Social!");
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
