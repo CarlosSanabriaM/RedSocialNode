@@ -133,9 +133,9 @@ public class Tests {
 	 */
 	@Test
 	public void PR06() {
-		// Acceder al listado de usuarios sin estar logeados nos lleva a la página de login.
-		driver.navigate().to("http://localhost:8090/user/list");
-		PO_View.checkElement(driver, "text", "Identifícate");
+		// Acceder al listado de usuarios sin estar logeados 
+		// nos lleva a la página de login y nos muestra un mensaje de error
+		PO_PrivateView.checkAccessNotPermittedToPrivateViews(driver, URL + "/user/list");
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class Tests {
 	@Test
 	public void PR08() {
 		// Acceder a la busqueda de usuarios sin estar logeados nos lleva a la página de login.
-		driver.navigate().to("http://localhost:8090/user/list?searchText=Mar");
+		driver.navigate().to(URL + "/user/list?searchText=Mar");
 		PO_View.checkElement(driver, "text", "Identifícate");
 	}
 	
@@ -303,7 +303,7 @@ public class Tests {
 	public void PR17() {
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
 		
-		driver.navigate().to("http://localhost:8090/post/list/4");
+		driver.navigate().to(URL + "/post/list/4");
 		PO_View.checkElement(driver, "text", "¡Se ha producido un error!");
 		PO_PrivateView.clickLinkAndCheckElement(driver, "aIndex", "text", "¡Bienvenidos a Red Social!");
 		

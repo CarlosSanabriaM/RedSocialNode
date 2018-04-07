@@ -23,6 +23,23 @@ public class PO_PrivateView extends PO_NavView {
 		clickLinkAndCheckElement(driver, "aLogout", "text", "Desconectado correctamente");
 		checkElement(driver, "text", "Identifícate");
 	}
+
+	/**
+	 * Intenta acceder desde URL a una página de la zona privada 
+	 * (donde es necesario estar logeado) y comprueba que
+	 * le lleva a la página de login y se le muestra el mensaje de error
+	 * "Debes identificarte primero para acceder a esa página"
+	 * 
+	 * @param driver: apuntando al navegador abierto actualmente
+	 * @param url: la url de la página privada a la que quiere acceder sin estar logeado 
+	 */
+	public static void checkAccessNotPermittedToPrivateViews(WebDriver driver, String url) {
+		// Intenta acceder directamente a la URL
+		driver.navigate().to(url);
+		// Comprueba que se le lleva a la página de login y se le muestra el mensaje de error
+		PO_View.checkElement(driver, "text", "Identifícate");
+		PO_View.checkElement(driver, "text", "Debes identificarte primero para acceder a esa página");
+	}
 	
 	/**
 	 * Rellena el formulario de crear una publicación con los datos indicados
