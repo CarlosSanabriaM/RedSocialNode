@@ -16,6 +16,7 @@ import com.uniovi.tests.pageobjects.PO_PrivateView;
 import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_SignupView;
 import com.uniovi.tests.pageobjects.PO_View;
+import com.uniovi.tests.util.MongoDocuments;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
@@ -60,14 +61,9 @@ public class Tests {
 	 */
 	@BeforeClass
 	static public void begin() {
-//		driver.navigate().to(URL);
-//		
-//		// Entramos como administrador y pinchamos en la opción de Reiniciar BD
-//		PO_AdminLoginView.goToAdminLoginFillFormAndCheckWasOk(driver, adminEmail, adminPassword);
-//		PO_PrivateView.clickLinkAndCheckElement(driver, "aAdminRestart", "text", "Base de datos reiniciada");
-//		
-//		// Ahora nos desconectamos
-//		PO_PrivateView.logoutAndCheckWasOk(driver);
+		// Borramos todas las invitaciones y las relaciones de amistad
+//		MongoDocuments.deleteAllDocumentsInCollection("invitations");
+//		MongoDocuments.deleteAllDocumentsInCollection("friends");
 	}
 
 	/**
