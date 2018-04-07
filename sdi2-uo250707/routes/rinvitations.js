@@ -1,4 +1,4 @@
-module.exports = function(app, swig, gestorBD, logger) {
+module.exports = function(app, swig, gestorBD, gestorLog) {
 
 	app.get("/user/invitate/:email", function(req, res) {
 		// Comprobamos que el email indicado no coincida con el email del usuario en sesion
@@ -21,6 +21,8 @@ module.exports = function(app, swig, gestorBD, logger) {
 		 				"?message="+ errMessage+
 		 				"&messageType=alert-danger");
 			} else {
+				gestorLog.userSendsInvitation(invitation.senderEmail, invitation.receiverEmail);
+				
 				res.redirect("/user/list" +	// TODO - no guarda la pagina en la que estabas
 		 				"?message=Invitación enviada correctamente." +
 		 				"&messageType=alert-success");
@@ -92,6 +94,8 @@ module.exports = function(app, swig, gestorBD, logger) {
 	}
 
 	function paso3MostrarInvitaciones(req, res, invitations, pg, pgUltima){
+		gestorLog.userListHisInvitations(req.session.email, pg, invitations);	
+		
 		var respuesta = swig.renderFile('views/user/invitations.html', {
 			invitations : invitations,
 			pgActual : pg,
@@ -161,6 +165,8 @@ module.exports = function(app, swig, gestorBD, logger) {
 						"?message=Usuario agregado como amigo correctamente, pero no se ha podido borrar la invitación de amistad."+
 		 				"&messageType=alert-warning");
 			} else {
+				gestorLog.userAcceptsInvitation(invitation.receiverEmail, invitation.senderEmail);
+				
 				res.redirect("/user/friends" +
 						"?message=Usuario agregado como amigo correctamente." +
 						"&messageType=alert-success"); 

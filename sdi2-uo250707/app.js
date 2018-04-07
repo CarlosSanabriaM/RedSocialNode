@@ -41,6 +41,9 @@ log4js.configure({
 });
 var logger = log4js.getLogger();
 
+var gestorLog = require("./modules/gestorLog.js");
+gestorLog.init(app, logger);
+
 // routerUsuarioSession
 var routerUsuarioSession = express.Router();
 routerUsuarioSession.use(function(req, res, next) {
@@ -68,8 +71,8 @@ app.set('crypto',crypto);
 app.set('itemsPerPage', 5);
 
 // Rutas/controladores por lógica
-require("./routes/rusers.js")(app, swig, gestorBD, logger); // (app, param1, param2, etc.)
-require("./routes/rinvitations.js")(app, swig, gestorBD, logger); // (app, param1, param2, etc.)
+require("./routes/rusers.js")(app, swig, gestorBD, gestorLog); // (app, param1, param2, etc.)
+require("./routes/rinvitations.js")(app, swig, gestorBD, gestorLog); // (app, param1, param2, etc.)
 
 // Página inicio
 app.get('/', function (req, res) {
@@ -81,7 +84,8 @@ app.get('/', function (req, res) {
 
 //Función de manejo de errores
 app.use( function (err, req, res, next ) {
-	console.log("Error producido: " + err); // we log the error in our db TODO
+	gestorLog.error("Error producido: " + err);
+	
 	if (! res.headersSent) {
 		res.status(400);
 		

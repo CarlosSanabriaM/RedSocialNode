@@ -1,4 +1,4 @@
-module.exports = function(app, swig, gestorBD, logger) {
+module.exports = function(app, swig, gestorBD, gestorLog) {
 
 	app.get("/signup", function(req, res){
 		var response = swig.renderFile("views/signup.html", {
@@ -32,8 +32,7 @@ module.exports = function(app, swig, gestorBD, logger) {
 		 				"?message="+ errMessage+
 		 				"&messageType=alert-danger");
 			} else {
-				logger.info("Se ha registrado un nuevo usuario con los siguientes datos: " +
-						"Email: '"+user.email+"' Nombre: '"+user.name+"'.");
+				gestorLog.newUserHasSignedUp(user.email);
 				
 				res.redirect("/login" +
 		 				"?message=Usuario registrado correctamente." +
@@ -74,6 +73,8 @@ module.exports = function(app, swig, gestorBD, logger) {
 						"&messageType=alert-danger");
 			} else {
 				// Usuario con esas credenciales existe
+				gestorLog.userHasLoggedIn(users[0].email);
+				
 				req.session.email = users[0].email;
 				res.redirect("/user/list");	
 			}
@@ -81,6 +82,8 @@ module.exports = function(app, swig, gestorBD, logger) {
 	});
 	
 	app.get("/logout", function(req, res){
+		gestorLog.userHasLoggedOut(req.session.email);
+		
 		req.session.email = null;
 		res.redirect("/login" +
 				"?message=Desconectado correctamente");
@@ -88,13 +91,14 @@ module.exports = function(app, swig, gestorBD, logger) {
 	
 	app.get("/user/list", function(req, res) {
 		var criterio = {};
+		var searchText = req.query.searchText;
 
 		// Si hay parametro de busqueda, modificamos el criterio
-		if(req.query.searchText != null){
+		if(searchText != null){
 			criterio = {$or: [
 							// Opcion i: Case insensitivity to match upper and lower cases
-							{"email" : {$regex : ".*"+req.query.searchText+".*", $options: "i" }},
-							{"name" 	 : {$regex : ".*"+req.query.searchText+".*", $options: "i" }}
+							{"email" : {$regex : ".*"+searchText+".*", $options: "i" }},
+							{"name" 	 : {$regex : ".*"+searchText+".*", $options: "i" }}
 			]  };
 		}
 		
@@ -120,11 +124,17 @@ module.exports = function(app, swig, gestorBD, logger) {
 				// Añadimos a cada usuario de la lista el atributo "canInvite" con valor true/false
 				addCanInviteToUsers(users, req.session.email);
 				
+				// Lo añadimos al log
+				if(searchText != null)
+					gestorLog.userListSearchByEmailAndName(req.session.email, searchText, pg, users);
+				else
+					gestorLog.userList(req.session.email, pg, users);
+				
 				var respuesta = swig.renderFile('views/user/list.html', {
 					users : users,
 					pgActual : pg,
 					pgUltima : pgUltima,
-					searchText : req.query.searchText, // TODO ??
+					searchText : searchText, // TODO ??
 					email: req.session.email
 				});
 				res.send(respuesta);
@@ -138,7 +148,7 @@ module.exports = function(app, swig, gestorBD, logger) {
 			// No se puede invitar a un usuario si es el mismo que el usuario en sesion
 			if(currentUser.email == emailUserInSession)
 				currentUser.canInvite = false;
-//			// No se puede invitar a un usuario si ya es amigo
+//			// No se puede invitar a un usuario si ya es amigo			TODO - quitar o completar
 //			else if(areFriends(currentUser.email, emailUserInSession))
 //				currentUser.canInvite = false;
 //			// No se puede invitar a un usuario si ya se le ha enviado una invitación
@@ -149,6 +159,7 @@ module.exports = function(app, swig, gestorBD, logger) {
 		});
 	}
 	
+	// TODO - quitar o completar
 //	function areFriends(emailUser1, emailUser2){
 //		var criterio = {$or: [
 //			{"userEmail" : emailUser1, "otherUserEmail" : emailUser2},
@@ -218,6 +229,8 @@ module.exports = function(app, swig, gestorBD, logger) {
 						"?message=Error al listar los amigos."+
 						"&messageType=alert-danger");
 			} else {
+				gestorLog.userListHisFriends(req.session.email, pg, friendsEmails);
+				
 				var respuesta = swig.renderFile('views/user/friends.html', {
 					friends : friends,
 					pgActual : pg,
