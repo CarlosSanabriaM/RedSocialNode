@@ -21,11 +21,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 var gestorBD = require("./modules/gestorBD.js");
 gestorBD.init(app,mongo);
+var log4js = require('log4js');
 
-// TODO quitar
-//var gestorComprobaciones = require("./modules/gestorComprobaciones.js");
-//gestorComprobaciones.init(mongo);
-//app.set('gestorComprobaciones', gestorComprobaciones);
+// Configuramos el logger
+log4js.configure({
+	appenders: {
+		out: { 	// para la salida estándar
+			type: 'stdout', 
+			layout: { type: 'pattern', pattern: '%[[%d{dd-MM-yyyy hh:mm:ss}] [%p] - %]%m' }
+		},
+	    file: { 	// para la salida a un fichero de log
+	    		type: 'file', filename: 'logs/uo250707.log', 
+	    		layout: { type: 'pattern', pattern: '[%d{dd-MM-yyyy hh:mm:ss}] [%p] - %m' }
+		}
+	},
+	categories: { 
+		default: { appenders: [ 'out', 'file' ], level: 'debug' } 
+	}
+});
+var logger = log4js.getLogger();
 
 // routerUsuarioSession
 var routerUsuarioSession = express.Router();
@@ -54,8 +68,8 @@ app.set('crypto',crypto);
 app.set('itemsPerPage', 5);
 
 // Rutas/controladores por lógica
-require("./routes/rusers.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
-require("./routes/rinvitations.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
+require("./routes/rusers.js")(app, swig, gestorBD, logger); // (app, param1, param2, etc.)
+require("./routes/rinvitations.js")(app, swig, gestorBD, logger); // (app, param1, param2, etc.)
 
 // Página inicio
 app.get('/', function (req, res) {

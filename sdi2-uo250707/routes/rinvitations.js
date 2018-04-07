@@ -1,4 +1,4 @@
-module.exports = function(app, swig, gestorBD) {
+module.exports = function(app, swig, gestorBD, logger) {
 
 	app.get("/user/invitate/:email", function(req, res) {
 		// Comprobamos que el email indicado no coincida con el email del usuario en sesion

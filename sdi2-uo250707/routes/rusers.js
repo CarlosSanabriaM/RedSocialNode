@@ -1,4 +1,4 @@
-module.exports = function(app, swig, gestorBD) {
+module.exports = function(app, swig, gestorBD, logger) {
 
 	app.get("/signup", function(req, res){
 		var response = swig.renderFile("views/signup.html", {
@@ -32,6 +32,9 @@ module.exports = function(app, swig, gestorBD) {
 		 				"?message="+ errMessage+
 		 				"&messageType=alert-danger");
 			} else {
+				logger.info("Se ha registrado un nuevo usuario con los siguientes datos: " +
+						"Email: '"+user.email+"' Nombre: '"+user.name+"'.");
+				
 				res.redirect("/login" +
 		 				"?message=Usuario registrado correctamente." +
 		 				"&messageType=alert-success");
