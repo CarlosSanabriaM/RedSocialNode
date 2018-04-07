@@ -41,10 +41,10 @@ public class PO_SignupView extends PO_NavView {
 		name.clear();
 		name.sendKeys(namep);
 		
-		WebElement lastname = driver.findElement(By.name("lastName"));
-		lastname.click();
-		lastname.clear();
-		lastname.sendKeys(lastnamep);
+		WebElement lastName = driver.findElement(By.name("lastName"));
+		lastName.click();
+		lastName.clear();
+		lastName.sendKeys(lastnamep);
 		
 		WebElement password = driver.findElement(By.name("password"));
 		password.click();

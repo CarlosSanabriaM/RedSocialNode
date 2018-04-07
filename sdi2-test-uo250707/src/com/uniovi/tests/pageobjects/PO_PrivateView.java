@@ -8,8 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.uniovi.tests.util.SeleniumUtils;
-
 public class PO_PrivateView extends PO_NavView {
 	
 	/**
@@ -68,17 +66,6 @@ public class PO_PrivateView extends PO_NavView {
 		driver.findElement(boton).click();
 	}
 
-	/**
-	 * Va al listado de amigos y comprueba que no aparece el email indicado
-	 * @param driver
-	 * @param userEmail
-	 */
-	public static void checkUserIsNotFriend(WebDriver driver, String userEmail) {
-		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownUsersMenu", "aUserFriendList", "text", "Tus Amigos");
-		SeleniumUtils.EsperaCargaPaginaNoTexto(driver, userEmail, getTimeout());
-	}
-	
 	/**
 	 * Manda una invitación de amistad al usuario con el email indicado
 	 */
