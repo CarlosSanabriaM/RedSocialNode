@@ -201,7 +201,9 @@ public class Tests {
 	public void PR10() {
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
 		
-		PO_PrivateView.checkCantSendInvitation(driver, "user2@gmail.com");
+		// Intentamos volver a enviarle invitacion a user2 y comprobamos que se muestra un error
+		PO_PrivateView.sendInvitationAndCheckWasWrong(driver, user2Email, 
+				"Error al enviar la invitación. ¡Ya has enviado una invitación de amistad a ese usuario!");
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
@@ -246,128 +248,4 @@ public class Tests {
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 	
-	/**
-	 * 9.1 [PubVal] Crear una publicación con datos válidos. 
-	 */
-	@Test
-	public void PR14() {
-		// Iniciamos sesión, pinchamos en "Publicaciones" -> "Nueva Publicación" en el menú de navegación
-		// y comprobamos que aparece el texto "Nueva publicación"
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-		
-		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownPostsMenu", "aPostAdd", "text", "Nueva publicación");
-		
-		// Esperamos a que cargue y rellenamos el formulario para crear una publicación
-		String title = "Título nueva publicación";
-		String text = "Texto nueva publicación";
-		PO_PrivateView.fillFormAddPost(driver, title, text);
-		
-		// Nos envia directamente al listado de publicaciones del usuario, 
-		// así que buscamos el titulo de la nueva publicación que hemos creado
-		PO_PrivateView.checkElement(driver, "text", title);
-		
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
-	/**
-	 * 10.1 [LisPubVal] Acceso al listado de publicaciones desde un usuario en sesión.
-	 */
-	@Test
-	public void PR15() {
-		// Iniciamos sesión, pinchamos en "Publicaciones" -> "Ver mis Publicaciones" 
-		// en el menú de navegación y comprobamos que aparece el texto "Mis publicaciones"
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
-		
-		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownPostsMenu", "aPostList", "text", "Mis publicaciones");
-				
-		// Comprobamos tambien que el usuario user2 tiene 4 publicaciones
-		PO_PrivateView.checkNumPosts(driver, 4);
-		
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
-	
-//	/**
-//	 * 11.1 [LisPubAmiVal] Listar las publicaciones de un usuario amigo 
-//	 */
-//	@Test
-//	public void PR16() {
-//		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-//		
-//		// Comprobamos que se accede correctamente al listado de publicaciones Marta,
-//		// que es amiga de user1
-//		PO_PrivateView.listFriendPostsAndCheckWasOk(driver, "Marta Almonte");
-//		
-//		// Comprobamos también que Marta tiene 4 publicaciones
-//		PO_PrivateView.checkNumPosts(driver, 4);
-//		
-//		PO_PrivateView.logoutAndCheckWasOk(driver);
-//	}
-
-	/**
-	 * 11.2 [LisPubAmiInVal] Utilizando un acceso vía URL tratar de listar 
-	 * las publicaciones de un usuario que no sea amigo del usuario identificado en sesión.
-	 */
-	@Test
-	public void PR17() {
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-		
-		driver.navigate().to(URL + "/post/list/4");
-		PO_View.checkElement(driver, "text", "¡Se ha producido un error!");
-		PO_PrivateView.clickLinkAndCheckElement(driver, "aIndex", "text", "¡Bienvenidos a Red Social!");
-		
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}	
-	
-	/**
-	 * 12.1 [PubFot1Val] Crear una publicación con datos válidos y una foto adjunta.
-	 */
-	@Test
-	public void PR18() {
-		// Iniciamos sesión, pinchamos en "Publicaciones" -> "Nueva Publicación" en el menú de navegación
-		// y comprobamos que aparece el texto "Nueva publicación"
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-		
-		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownPostsMenu", "aPostAdd", "text", "Nueva publicación");
-		
-		// Esperamos a que cargue y rellenamos el formulario para crear una publicación con una foto adjunta
-		String title = "Título nueva publicación 2";
-		String text = "Texto nueva publicación 2";
-
-		PO_PrivateView.fillFormAddPostWithImage(driver, title, text);
-		
-		// Nos envia directamente al listado de publicaciones del usuario, 
-		// así que buscamos el titulo de la nueva publicación que hemos creado
-		// y comprobamos que tiene una imágen
-		PO_PrivateView.checkElement(driver, "text", title);
-		PO_PrivateView.checkElement(driver, "free", "//img[contains(@alt, 'Imagen')]");
-		
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
-	
-	/**
-	 * 12.1 [PubFot2Val] Crear una publicación con datos válidos y sin una foto adjunta.
-	 */
-	@Test
-	public void PR19() {
-		// Iniciamos sesión, pinchamos en "Publicaciones" -> "Nueva Publicación" en el menú de navegación
-		// y comprobamos que aparece el texto "Nueva publicación"
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-		
-		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownPostsMenu", "aPostAdd", "text", "Nueva publicación");
-		
-		// Esperamos a que cargue y rellenamos el formulario para crear una publicación
-		String title = "Título nueva publicación 3";
-		String text = "Texto nueva publicación 3";
-		PO_PrivateView.fillFormAddPost(driver, title, text);
-		
-		// Nos envia directamente al listado de publicaciones del usuario, 
-		// así que buscamos el titulo de la nueva publicación que hemos creado
-		PO_PrivateView.checkElement(driver, "text", title);
-		
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
-
 }

@@ -42,66 +42,11 @@ public class PO_PrivateView extends PO_NavView {
 	}
 	
 	/**
-	 * Rellena el formulario de crear una publicación con los datos indicados
-	 * 
-	 * @param driver: apuntando al navegador abierto actualmente. 
-	 * @param titlep: valor a introducir en el campo title.
-	 * @param textp: valor a introducir en el campo text.
-	 */
-	public static void fillFormAddPost(WebDriver driver, String titlep, String textp) {
-		//Si ya está cargado no espera, y si no está cargado espera a que se cargue
-		checkElement(driver, "id", "buttonSubmit");
-		
-		// Rellenemos el campo de "Título"
-		WebElement title = driver.findElement(By.name("title"));
-		title.click();
-		title.clear();
-		title.sendKeys(titlep);
-		
-		// Rellenemos el campo "Texto"
-		WebElement text = driver.findElement(By.name("text"));
-		text.click();
-		text.clear();
-		text.sendKeys(textp);
-		
-		By boton = By.id("buttonSubmit");
-		driver.findElement(boton).click();
-	}
-	
-	/**
-	 * Rellena el formulario de crear una publicación con los datos indicados,
-	 * incluyendo además una imágen de prueba
-	 * 
-	 * @param driver: apuntando al navegador abierto actualmente. 
-	 * @param titlep: valor a introducir en el campo title.
-	 * @param textp: valor a introducir en el campo text.
-	 */
-	public static void fillFormAddPostWithImage(WebDriver driver, String titlep, String textp) {
-		String pathProyecto = System.getProperty("user.dir");		
-		String pathFotoPrueba = "file:///"+pathProyecto+"/imagen.jpg";
-		
-		// Esperamos a que cargue el formulario, y rellenamos los datos añadiendo también una imagen
-		checkElement(driver, "id", "buttonSubmit");
-		driver.findElement(By.name("image")).sendKeys(pathFotoPrueba);
-		PO_PrivateView.fillFormAddPost(driver, titlep, textp);
-	}
-	
-	/**
 	 * Comprueba que el numero de usuarios en la vista actual coincida con el indicado
 	 */
 	public static void checkNumUsers(WebDriver driver, int numUsers) {
 		List<WebElement> elementos = checkElement(driver, "free", "//tbody/tr");
 		assertTrue(elementos.size() == numUsers);
-	}
-	
-	/**
-	 * Comprueba que el numero de posts en la vista actual coincida con el indicado
-	 * 
-	 */
-	public static void checkNumPosts(WebDriver driver, int numPosts) {
-		// Cada post está dentro de un div con class="panel panel-default"
-		List<WebElement> elementos = checkElement(driver, "class", "panel panel-default");
-		assertTrue(elementos.size() == numPosts);
 	}
 	
 	/**
@@ -123,33 +68,6 @@ public class PO_PrivateView extends PO_NavView {
 		// Pulsamos el boton de enviar para realizar la búsqueda
 		By boton = By.id("buttonSearchText");
 		driver.findElement(boton).click();
-	}
-	
-	/**
-	 * Pulsa el botón de eliminar del usuario con el email indicado, siempre que 
-	 * se esté en la vista que tiene la lista de usuarios para el administrador y 
-	 * dicho email aparezca en la página actual
-	 * 
-	 * @param driver: apuntando al navegador abierto actualmente. 
-	 * @param userEmail: email del usuario a eliminar
-	 */
-	public static void deleteUser(WebDriver driver, String userEmail) {
-		// Buscamos una celda que contenga el email indicado. 
-		// La celda siguiente de la misma fila contendrá el botón de eliminar, así que lo clickamos.
-		List<WebElement> elementos = checkElement(driver, "free",
-				"//td[contains(text(), '"+ userEmail +"')]/following-sibling::td/div/button[contains(@id, 'deleteUserButton')]");
-		elementos.get(0).click();
-	}
-	
-	/**
-	 * Elimina el usuario con el email indicado, y comprueba que ya no aparece
-	 * su email en la vista actual (que se ha eliminado correctamente)
-	 * @param driver
-	 * @param userEmail: email del usuario a eliminar
-	 */
-	public static void deleteUserAndCheckWasOk(WebDriver driver, String userEmail) {
-		deleteUser(driver, userEmail);
-		SeleniumUtils.EsperaCargaPaginaNoTexto(driver, userEmail, getTimeout());
 	}
 
 	/**
@@ -182,16 +100,14 @@ public class PO_PrivateView extends PO_NavView {
 		sendInvitation(driver, userEmail);
 		checkElement(driver, "text", "Invitación enviada correctamente");
 	}
-
+	
 	/**
-	 * Comprueba que no se le puede mandar una invitación de amistad al usuario con ese email,
-	 * dado que ya son amigos.
+	 * Manda una invitación de amistad al usuario con el email indicado
+	 * y comprueba que se muestra el mensaje de error indicado
 	 */
-	public static void checkCantSendInvitation(WebDriver driver, String userEmail) {
-		try {
-			PO_PrivateView.sendInvitation(driver, userEmail);
-			Assert.fail("Se ha encontrado el agregar usuario que precede a " + userEmail);
-		} catch (TimeoutException e) {}
+	public static void sendInvitationAndCheckWasWrong(WebDriver driver, String userEmail, String errorMessage) {
+		sendInvitation(driver, userEmail);
+		checkElement(driver, "text", errorMessage);
 	}
 	
 	/**
