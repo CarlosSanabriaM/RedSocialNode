@@ -166,12 +166,21 @@ public class PO_PrivateView extends PO_NavView {
 	/**
 	 * Manda una invitación de amistad al usuario con el email indicado
 	 */
-	public static void sendInvitation(WebDriver driver, String userEmail) {
+	private static void sendInvitation(WebDriver driver, String userEmail) {
 		// Buscamos una celda que contenga el email indicado. 
 		// La celda siguiente de la misma fila contendrá el botón de invitar, así que lo clickamos.
 		List<WebElement> elementos = checkElement(driver, "free",
-				"//td[contains(text(), '"+ userEmail +"')]/following-sibling::td/div/button[contains(@id, 'invitateUserButton')]");
+				"//td[contains(text(), '"+ userEmail +"')]/following-sibling::td/div/*[contains(@id, 'invitateUserButton')]");
 		elementos.get(0).click();
+	}
+	
+	/**
+	 * Manda una invitación de amistad al usuario con el email indicado
+	 * y comprueba que se muestra el mensaje "Invitación enviada correctamente"
+	 */
+	public static void sendInvitationAndCheckWasOk(WebDriver driver, String userEmail) {
+		sendInvitation(driver, userEmail);
+		checkElement(driver, "text", "Invitación enviada correctamente");
 	}
 
 	/**
@@ -198,23 +207,6 @@ public class PO_PrivateView extends PO_NavView {
 		// Comprueba que aparece en la lista de amigos
 		PO_View.checkElement(driver, "text", "Tus Amigos");
 		PO_View.checkElement(driver, "text", userName);
-	}
-
-	/**
-	 * Accede al listado de amigos, clicka en el amigo con ese nombre, y comprueba
-	 * que se pueden ver sus posts correctamente.
-	 */
-	public static void listFriendPostsAndCheckWasOk(WebDriver driver, String friendName) {
-		// Va al listado de amigos
-		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownUsersMenu", "aUserFriendList", "text", "Tus Amigos");
-		
-		//Clicka en el nombre del amigo
-		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//a[contains(text(), '"+ friendName +"')]");
-		elementos.get(0).click();
-		
-		// Comprueba que aparece en el listado de posts de su amigo
-		PO_View.checkElement(driver, "text", "Publicaciones de " + friendName);
 	}
 
 }

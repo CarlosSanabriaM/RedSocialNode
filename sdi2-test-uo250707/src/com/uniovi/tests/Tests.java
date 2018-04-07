@@ -182,13 +182,13 @@ public class Tests {
 	public void PR09() {
 		// Iniciar sesión como user1 y mandar una invitación de amistad a user2
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-		PO_PrivateView.sendInvitation(driver, "user2@gmail.com");
+		PO_PrivateView.sendInvitationAndCheckWasOk(driver, user2Email);
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 		
-		// Iniciar sesión como user2 y comprobar que tenemos una invitación de Pedro (nombre de user1)
+		// Iniciar sesión como user2 y comprobar que tenemos una invitación de Juan Perez Martinez (nombre de user1)
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Pedro");
+				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Juan Perez Martinez");
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 	
@@ -287,22 +287,22 @@ public class Tests {
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 	
-	/**
-	 * 11.1 [LisPubAmiVal] Listar las publicaciones de un usuario amigo 
-	 */
-	@Test
-	public void PR16() {
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
-		
-		// Comprobamos que se accede correctamente al listado de publicaciones Marta,
-		// que es amiga de user1
-		PO_PrivateView.listFriendPostsAndCheckWasOk(driver, "Marta Almonte");
-		
-		// Comprobamos también que Marta tiene 4 publicaciones
-		PO_PrivateView.checkNumPosts(driver, 4);
-		
-		PO_PrivateView.logoutAndCheckWasOk(driver);
-	}
+//	/**
+//	 * 11.1 [LisPubAmiVal] Listar las publicaciones de un usuario amigo 
+//	 */
+//	@Test
+//	public void PR16() {
+//		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
+//		
+//		// Comprobamos que se accede correctamente al listado de publicaciones Marta,
+//		// que es amiga de user1
+//		PO_PrivateView.listFriendPostsAndCheckWasOk(driver, "Marta Almonte");
+//		
+//		// Comprobamos también que Marta tiene 4 publicaciones
+//		PO_PrivateView.checkNumPosts(driver, 4);
+//		
+//		PO_PrivateView.logoutAndCheckWasOk(driver);
+//	}
 
 	/**
 	 * 11.2 [LisPubAmiInVal] Utilizando un acceso vía URL tratar de listar 
