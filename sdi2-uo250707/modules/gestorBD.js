@@ -249,6 +249,23 @@ module.exports = {
 			}
 		});
 	},
+	getFriendships : function(criterio, funcionCallback) {
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+			if (err) {
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('friends');
+				collection.find(criterio).toArray(function(err, friendships) {
+					if (err) {
+						funcionCallback(null);
+					} else {
+						funcionCallback(friendships);
+					}
+					db.close();
+				});
+			}
+		});
+	},
 	getFriendshipsPg : function(criterio, pg, funcionCallback) {
 		var itemsPerPage = this.app.get('itemsPerPage');
 		

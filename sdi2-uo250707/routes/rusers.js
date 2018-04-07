@@ -90,7 +90,7 @@ module.exports = function(app, swig, gestorBD) {
 		if(req.query.searchText != null){
 			criterio = {$or: [
 							{"email" : {$regex : ".*"+req.query.searchText+".*"}},
-							{"name" : {$regex : ".*"+req.query.searchText+".*"}}
+							{"name" 	 : {$regex : ".*"+req.query.searchText+".*"}}
 			]  };
 		}
 		
@@ -113,6 +113,7 @@ module.exports = function(app, swig, gestorBD) {
 					pgUltima = pgUltima + 1;
 				}
 
+				// Añadimos a cada usuario de la lista el atributo "canInvite" con valor true/false
 				addCanInviteToUsers(users, req.session.email);
 				
 				var respuesta = swig.renderFile('views/user/list.html', {
@@ -134,7 +135,7 @@ module.exports = function(app, swig, gestorBD) {
 			if(currentUser.email == emailUserInSession)
 				currentUser.canInvite = false;
 //			// No se puede invitar a un usuario si ya es amigo
-//			else if(currentUser.email ---)
+//			else if(areFriends(currentUser.email, emailUserInSession))
 //				currentUser.canInvite = false;
 //			// No se puede invitar a un usuario si ya se le ha enviado una invitación
 //			else if(currentUser.email ---)
@@ -143,6 +144,23 @@ module.exports = function(app, swig, gestorBD) {
 				currentUser.canInvite = true;
 		});
 	}
+	
+//	function areFriends(emailUser1, emailUser2){
+//		var criterio = {$or: [
+//			{"userEmail" : emailUser1, "otherUserEmail" : emailUser2},
+//			{"userEmail" : emailUser2, "otherUserEmail" : emailUser1},
+//		]  };
+//		
+//		gestorBD.getFriendshipsPg(criterio, function(friendships, total) {
+//			if (friendships == null) {
+//				return false;
+//			} else if(friendship.length == 1){
+//				return true;
+//			} else{
+//				return false;
+//			}
+//		});
+//	}
 	
 	app.get("/user/friends", function(req, res) {
 		var criterio = {$or: [
