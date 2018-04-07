@@ -60,17 +60,16 @@ public class PO_LoginView extends PO_NavView {
 	
 	/**
 	 * Va al formulario de login, lo rellena con los datos indicados y 
-	 * comprueba que se produce un error en el idioma indicado
+	 * comprueba que se muestra el mensaje de error "Email o password incorrecto"
 	 * 
-	 * @param errorKey: clave del error en el fichero de propiedades
-	 * @param language: idioma en el que se va a mostrar el error
+	 * @param driver: apuntando al navegador abierto actualmente
+	 * @param emailp: valor para el campo email
+	 * @param passwordp: valor para el campo password
 	 */
-	static public void goToLoginFillFormAndCheckWasWrong(WebDriver driver, String usernamep, 
-			String passwordp,int language) {
-		
-		goToLoginAndfillForm(driver, usernamep, passwordp);
-		// Comprobamos que volvemos a la pagina de login y se muestra un error en el idioma indicado
-		PO_View.checkKey(driver, "Error.login", language);
+	static public void goToLoginFillFormAndCheckWasWrong(WebDriver driver, String emailp, String passwordp) {
+		goToLoginAndfillForm(driver, emailp, passwordp);
+		// Comprobamos que volvemos a la pagina de login y se muestra el mensaje de error
+		PO_View.checkElement(driver, "text", "Email o password incorrecto");
 	}
 	
 }

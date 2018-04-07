@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class PO_Properties {
+public class PO_Properties { //XXX quitar???
 	
 	private static String Path;
 	static int SPANISH = 0;

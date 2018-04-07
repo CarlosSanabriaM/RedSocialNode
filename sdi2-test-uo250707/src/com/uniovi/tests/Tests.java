@@ -10,13 +10,10 @@ import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import com.uniovi.tests.pageobjects.PO_AdminLoginView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_PrivateView;
-import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_SignupView;
 import com.uniovi.tests.pageobjects.PO_View;
-import com.uniovi.tests.util.MongoDocuments;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
@@ -111,8 +108,7 @@ public class Tests {
 	 */
 	@Test
 	public void PR04() {
-		PO_LoginView.goToLoginFillFormAndCheckWasWrong(driver, 
-				"notExists@gmail.com", "123456", PO_Properties.getSPANISH());
+		PO_LoginView.goToLoginFillFormAndCheckWasWrong(driver, "notExists@gmail.com", "123456");
 	}
 
 	/**
