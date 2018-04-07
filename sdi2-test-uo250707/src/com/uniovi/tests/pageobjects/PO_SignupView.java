@@ -74,16 +74,15 @@ public class PO_SignupView extends PO_NavView {
 	
 	/**
 	 * Espera a que se cargue el formulario, lo rellena 
-	 * y comprueba que se produce el error indicado en el idioma indicado
+	 * y comprueba que se produce el error indicado
 	 * 
-	 * @param errorKey: clave del error en el fichero de propiedades
-	 * @param language: idioma en el que se va a mostrar el error
+	 * @param errorMessage: mensaje de error que se ha de producir
 	 */
-	public static void fillFormAndCheckErrorKey(WebDriver driver, String emailp, String namep, 
-			String lastnamep, String passwordp, String passwordconfp, String errorKey, int language) {
+	public static void fillFormAndCheckError(WebDriver driver, String emailp, String namep, 
+			String lastnamep, String passwordp, String passwordconfp, String errorMessage) {
 		 
 		PO_SignupView.fillForm(driver, emailp, namep, lastnamep, passwordp, passwordconfp);
-		PO_SignupView.checkKey(driver, errorKey, language);
+		PO_SignupView.checkElement(driver, "text", errorMessage);
 	}
 
 }

@@ -90,9 +90,9 @@ public class Tests {
 	@Test
 	public void PR02() {
 		PO_SignupView.goToSignup(driver);
-		PO_SignupView.fillFormAndCheckErrorKey(driver, 
-				"newUser2@gmail.com", "NewUserName2", "NewUserLastName2", "1234", "12345", 
-				"Error.signup.passwordConfirm.coincidence", PO_Properties.getSPANISH());
+		PO_SignupView.fillFormAndCheckError(driver, 
+				"newUser2@gmail.com", "NewUserName2", "NewUserLastName2", "1234", "54321", 
+				"Las contraseñas no coinciden");
 	}
 	
 	/**
