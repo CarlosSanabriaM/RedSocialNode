@@ -115,7 +115,7 @@ public class Tests {
 	 * 3.1 [LisUsrVal] Acceso al listado de usuarios desde un usuario en sesión.
 	 */
 	@Test
-	public void PR05() { //TODO - mejorar test??
+	public void PR05() {
 		// Iniciamos sesión, pinchamos en "Usuarios" -> "Ver Todos" en el menú de navegación
 		// (para asegurarnos de que dicho enlace también funciona, aunque ya estemos en dicho listado)
 		// y comprobamos que aparece el texto "Todos los usuarios"
@@ -123,6 +123,8 @@ public class Tests {
 		
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
 				"aDropdownUsersMenu", "aUserList", "text", "Todos los usuarios");
+		// Comprobamos que hay 5 usuarios en la pagina actual (la primera pagina del listado de usuarios)
+		PO_PrivateView.checkNumUsers(driver, 5);// TODO - quitar?
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
