@@ -43,32 +43,7 @@ routerUsuarioSession.use(function(req, res, next) {
 // Aplicar routerUsuarioSession
 app.use("/user", routerUsuarioSession);
 
-//routerUsuarioAutor
-//var routerUsuarioAutor = express.Router();
-//routerUsuarioAutor.use(function(req, res, next) {
-//	console.log("routerUsuarioAutor");
-//	var path = require('path');
-//	var id = path.basename(req.originalUrl);
-//	// Cuidado porque req.params no funciona
-//	// en el router si los params van en la URL.
-//	gestorBD.obtenerCanciones(
-//				{ _id : mongo.ObjectID(id) }, function (canciones) {
-//			console.log(canciones[0]);
-//			if(canciones[0]!=null && canciones[0].autor == req.session.email ){
-//				next();
-//			} else {
-//				res.redirect("/tienda" +
-//		 				"?message=No puedes realizar esa operación sobre una canción la cual no eres su autor."+
-//		 				"&messageType=alert-warning");
-//			}
-//	});
-//});
-//
-//// Aplicar routerUsuarioAutor
-//app.use("/cancion/modificar",routerUsuarioAutor);
-//app.use("/cancion/eliminar",routerUsuarioAutor);
-
-
+// Directorio public
 app.use(express.static('public'));
 
 // Variables
@@ -90,12 +65,16 @@ app.get('/', function (req, res) {
 	res.send(respuesta);
 });
 
-// Función de manejo de errores
+//Función de manejo de errores
 app.use( function (err, req, res, next ) {
 	console.log("Error producido: " + err); // we log the error in our db TODO
 	if (! res.headersSent) {
 		res.status(400);
-		res.send("Recurso no disponible"); // TODO render a error html page with the error
+		
+		var respuesta = swig.renderFile('views/error.html', {
+			errorMessage : "Recurso no disponible."
+		});
+		res.send(respuesta);
 	}
 });
 
