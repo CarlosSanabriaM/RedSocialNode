@@ -170,9 +170,9 @@ public class Tests {
 	 */
 	@Test
 	public void PR08() {
-		// Acceder a la busqueda de usuarios sin estar logeados nos lleva a la página de login.
-		driver.navigate().to(URL + "/user/list?searchText=Mar");
-		PO_View.checkElement(driver, "text", "Identifícate");
+		// Acceder a la búsqueda de usuarios sin estar logeados 
+		// nos lleva a la página de login y nos muestra un mensaje de error
+		PO_PrivateView.checkAccessNotPermittedToPrivateViews(driver, URL + "/user/list?searchText=mar");
 	}
 	
 	/**
