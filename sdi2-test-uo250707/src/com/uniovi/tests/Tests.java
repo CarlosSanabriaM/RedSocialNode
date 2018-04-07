@@ -146,7 +146,7 @@ public class Tests {
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
 		
 		// Realizamos una busqueda por el texto "Mar" y comprobamos que 
-		// sólo salen dos usuarios, cuyos nombres son María y Marta
+		// sólo salen 4 usuarios, cuyos nombres son María y Marta
 		PO_PrivateView.searchText(driver, "Mar");
 		PO_PrivateView.checkNumUsers(driver, 2);
 		PO_PrivateView.checkElement(driver, "text", "María");

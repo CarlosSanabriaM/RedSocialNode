@@ -89,8 +89,9 @@ module.exports = function(app, swig, gestorBD) {
 		// Si hay parametro de busqueda, modificamos el criterio
 		if(req.query.searchText != null){
 			criterio = {$or: [
-							{"email" : {$regex : ".*"+req.query.searchText+".*"}},
-							{"name" 	 : {$regex : ".*"+req.query.searchText+".*"}}
+							// Opcion i: Case insensitivity to match upper and lower cases
+							{"email" : {$regex : ".*"+req.query.searchText+".*", $options: "i" }},
+							{"name" 	 : {$regex : ".*"+req.query.searchText+".*", $options: "i" }}
 			]  };
 		}
 		
