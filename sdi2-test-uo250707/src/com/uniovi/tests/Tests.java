@@ -145,12 +145,21 @@ public class Tests {
 	public void PR07() {
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
 		
-		// Realizamos una busqueda por el texto "Mar" y comprobamos que 
-		// sólo salen 4 usuarios, cuyos nombres son María y Marta
-		PO_PrivateView.searchText(driver, "Mar");
-		PO_PrivateView.checkNumUsers(driver, 2);
-		PO_PrivateView.checkElement(driver, "text", "María");
-		PO_PrivateView.checkElement(driver, "text", "Marta");
+		/* Realizamos una busqueda por el texto "mar" y comprobamos que sólo salen 4 usuarios, cuyos datos son:
+		 * - Juan Perez Martinez	- user01@gmail.com
+		 * - Marta Roces Lara 	- user03@gmail.com
+		 * - María Torres Viesca	- user04@gmail.com
+		 * - Álvaro Alonso Perez	- user06@marte.com [Notese que aquí la coincidencia se da por el email]
+		 */
+
+		PO_PrivateView.searchText(driver, "mar");
+
+		PO_PrivateView.checkNumUsers(driver, 4);
+		
+		PO_PrivateView.checkElement(driver, "text", "Juan Perez Martinez");
+		PO_PrivateView.checkElement(driver, "text", "Marta Roces Lara");
+		PO_PrivateView.checkElement(driver, "text", "María Torres Viesca");
+		PO_PrivateView.checkElement(driver, "text", "Álvaro Alonso Perez");
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
