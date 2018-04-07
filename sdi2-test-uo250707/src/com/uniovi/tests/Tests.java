@@ -14,6 +14,7 @@ import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_PrivateView;
 import com.uniovi.tests.pageobjects.PO_SignupView;
 import com.uniovi.tests.pageobjects.PO_View;
+import com.uniovi.tests.util.Mongo;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
@@ -33,6 +34,7 @@ public class Tests {
 	// Credenciales de inicio de sesión de varios usuarios
 	private static String user1Email = "user01@gmail.com";
 	private static String user1Password = "1234";
+	private static String user1Name = "Juan Perez Martinez";
 	private static String user2Email = "user02@gmail.com";
 	private static String user2Password = "1234";
 	
@@ -53,14 +55,21 @@ public class Tests {
 	}
 
 	/**
-	 * Antes de la primera prueba entramos como administrador y 
-	 * reiniciamos la BD con los usuarios de prueba
+	 * Antes de la primera prueba, nos conectamos a la BD en la nube y borramos:
+	 * - todos los documentos de las colecciones 'invitations' y 'friends'
+	 * - el usuario con email 'newUser@gmail.com', si existe
+	 * Con esto, dejamos la BD preparada para las pruebas.
 	 */
 	@BeforeClass
 	static public void begin() {
+		Mongo mongo = new Mongo();
+		
 		// Borramos todas las invitaciones y las relaciones de amistad
-//		MongoDocuments.deleteAllDocumentsInCollection("invitations");
-//		MongoDocuments.deleteAllDocumentsInCollection("friends");
+		mongo.deleteAllDocumentsInCollection("invitations");
+		mongo.deleteAllDocumentsInCollection("friends");
+		
+		// Borramos al usuario newUser@gmail.com, si existe
+		mongo.deleteUserWithEmail("newUser@gmail.com");
 	}
 
 	/**
@@ -191,7 +200,7 @@ public class Tests {
 		// Iniciar sesión como user2 y comprobar que tenemos una invitación de Juan Perez Martinez (nombre de user1)
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Juan Perez Martinez");
+				"aDropdownUsersMenu", "aUserFriendRequestList", "text", user1Name);
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 	
@@ -224,7 +233,7 @@ public class Tests {
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
 				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Solicitudes de amistad");		
 		PO_PrivateView.checkNumUsers(driver, 1);
-		PO_PrivateView.checkElement(driver, "text", "Juan Perez Martinez");
+		PO_PrivateView.checkElement(driver, "text", user1Name);
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
@@ -240,7 +249,7 @@ public class Tests {
 		
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
 				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Solicitudes de amistad");		
-		PO_PrivateView.acceptInvitationAndCheckWasOk(driver, "Juan Perez Martinez");
+		PO_PrivateView.acceptInvitationAndCheckWasOk(driver, user1Name);
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
@@ -259,7 +268,7 @@ public class Tests {
 				"aDropdownUsersMenu", "aUserFriendList", "text", "Tus Amigos");
 		PO_PrivateView.checkNumUsers(driver, 1);
 		// Comprobamos que aparece el nombre y el email de su unico amigo (user1)
-		PO_View.checkElement(driver, "text", "Juan Perez Martinez");
+		PO_View.checkElement(driver, "text", user1Name);
 		PO_View.checkElement(driver, "text", user1Email);
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
