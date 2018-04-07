@@ -184,6 +184,7 @@ public class Tests {
 		PO_PrivateView.sendInvitationAndCheckWasOk(driver, user2Email);
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 		
+		// TODO - quitar? que se listen las invitaicones se comprueba mas abajo, pero yo creo que no está de mas hacer esta comprobacion
 		// Iniciar sesión como user2 y comprobar que tenemos una invitación de Juan Perez Martinez (nombre de user1)
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
@@ -230,11 +231,13 @@ public class Tests {
 	 */
 	@Test
 	public void PR12() {
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
+		// Nos conectamos como user2, accedemos al listado de invitaciones, 
+		// y aceptamos la invitación de user1 (cuyo nombre es "Juan Perez Martinez")
+		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
 		
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Nombre7");
-		PO_PrivateView.acceptInvitationAndCheckWasOk(driver, "Nombre7 Apellido7");
+				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Solicitudes de amistad");		
+		PO_PrivateView.acceptInvitationAndCheckWasOk(driver, "Juan Perez Martinez");
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}

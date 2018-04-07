@@ -4,9 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -117,11 +115,13 @@ public class PO_PrivateView extends PO_NavView {
 	public static void acceptInvitationAndCheckWasOk(WebDriver driver, String userName) {
 		// Acepta la invitación de amistad
 		List<WebElement> elementos = PO_View.checkElement(driver, "free",
-				"//td[contains(text(), '" + userName +"')]/following-sibling::td/div/button[contains(@id,'acceptInvitationButton')]");
+				"//td[contains(text(), '" + userName +"')]/following-sibling::td/div/*[contains(@id,'acceptInvitationButton')]");
 		elementos.get(0).click();
 		
-		// Comprueba que aparece en la lista de amigos
+		// Comprueba que nos redirige a la lista de amigos, se muestra el mensaje
+		// "Usuario agregado como amigo correctamente" y aparece el nombre del nuevo amigo
 		PO_View.checkElement(driver, "text", "Tus Amigos");
+		PO_View.checkElement(driver, "text", "Usuario agregado como amigo correctamente");
 		PO_View.checkElement(driver, "text", userName);
 	}
 
