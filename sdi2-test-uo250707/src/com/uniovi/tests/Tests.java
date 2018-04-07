@@ -13,7 +13,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_PrivateView;
 import com.uniovi.tests.pageobjects.PO_SignupView;
-import com.uniovi.tests.pageobjects.PO_View;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
@@ -214,9 +213,15 @@ public class Tests {
 	 */
 	@Test
 	public void PR11() {
-		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
+		// Nos conectamos como user2, accedemos al listado de invitaciones, 
+		// y comprobamos que tenemos sólo una, de user1 (cuyo nombre es "Juan Perez Martinez")
+		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
+		
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
-				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Nombre7");
+				"aDropdownUsersMenu", "aUserFriendRequestList", "text", "Solicitudes de amistad");		
+		PO_PrivateView.checkNumUsers(driver, 1);
+		PO_PrivateView.checkElement(driver, "text", "Juan Perez Martinez");
+		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 	
