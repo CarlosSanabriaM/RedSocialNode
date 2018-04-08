@@ -8,7 +8,7 @@ public class PO_HomeView extends PO_NavView {
 	 * Comprueba que se carga el saludo de bienvenida correctamente
 	 */
 	static public void checkWelcome(WebDriver driver, int language) {
-		checkElement(driver, "text", "¡Bienvenidos a Red Social!");
+		PO_View.checkElement(driver, "text", "¡Bienvenidos a Red Social!");
 	}
 	
 }

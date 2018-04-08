@@ -42,6 +42,7 @@ public class PO_LoginView extends PO_NavView {
 	 */
 	static public void goToLoginAndfillForm(WebDriver driver, String emailp, String passwordp) {
 		PO_HomeView.clickLinkAndCheckElement(driver, "aLogin", "id", "buttonSubmit");
+		PO_LoginView.checkElement(driver, "text", "Identifícate como usuario");
 		PO_LoginView.fillForm(driver, emailp, passwordp);
 	}
 
@@ -60,7 +61,8 @@ public class PO_LoginView extends PO_NavView {
 	
 	/**
 	 * Va al formulario de login, lo rellena con los datos indicados y 
-	 * comprueba que se muestra el mensaje de error "Email o password incorrecto"
+	 * comprueba que le lleva a la página de login y 
+	 * se muestra el mensaje de error "Email o password incorrecto"
 	 * 
 	 * @param driver: apuntando al navegador abierto actualmente
 	 * @param emailp: valor para el campo email
@@ -69,6 +71,7 @@ public class PO_LoginView extends PO_NavView {
 	static public void goToLoginFillFormAndCheckWasWrong(WebDriver driver, String emailp, String passwordp) {
 		goToLoginAndfillForm(driver, emailp, passwordp);
 		// Comprobamos que volvemos a la pagina de login y se muestra el mensaje de error
+		PO_View.checkElement(driver, "text", "Identifícate como usuario");
 		PO_View.checkElement(driver, "text", "Email o password incorrecto");
 	}
 	

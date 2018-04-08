@@ -34,7 +34,7 @@ public class Tests {
 	// Credenciales de inicio de sesión de varios usuarios
 	private static String user1Email = "user01@gmail.com";
 	private static String user1Password = "1234";
-	private static String user1Name = "Juan Perez Martinez";
+	private static String user1Name = "Juan Pérez Martínez";
 	private static String user2Email = "user02@gmail.com";
 	private static String user2Password = "1234";
 	
@@ -133,7 +133,7 @@ public class Tests {
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
 				"aDropdownUsersMenu", "aUserList", "text", "Todos los usuarios");
 		// Comprobamos que hay 5 usuarios en la pagina actual (la primera pagina del listado de usuarios)
-		PO_PrivateView.checkNumUsers(driver, 5);// TODO - quitar?
+		PO_PrivateView.checkNumUsers(driver, 5);
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
@@ -157,20 +157,20 @@ public class Tests {
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user1Email, user1Password);
 		
 		/* Realizamos una busqueda por el texto "mar" y comprobamos que sólo salen 4 usuarios, cuyos datos son:
-		 * - Juan Perez Martinez	- user01@gmail.com
+		 * - Juan Pérez Martínez	- user01@gmail.com
 		 * - Marta Roces Lara 	- user03@gmail.com
 		 * - María Torres Viesca	- user04@gmail.com
-		 * - Álvaro Alonso Perez	- user06@marte.com [Notese que aquí la coincidencia se da por el email]
+		 * - Álvaro Alonso Pérez	- user06@marte.com [Notese que aquí la coincidencia se da por el email]
 		 */
 
 		PO_PrivateView.searchText(driver, "mar");
 
 		PO_PrivateView.checkNumUsers(driver, 4);
 		
-		PO_PrivateView.checkElement(driver, "text", "Juan Perez Martinez");
+		PO_PrivateView.checkElement(driver, "text", "Juan Pérez Martínez");
 		PO_PrivateView.checkElement(driver, "text", "Marta Roces Lara");
 		PO_PrivateView.checkElement(driver, "text", "María Torres Viesca");
-		PO_PrivateView.checkElement(driver, "text", "Álvaro Alonso Perez");
+		PO_PrivateView.checkElement(driver, "text", "Álvaro Alonso Pérez");
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
@@ -196,8 +196,7 @@ public class Tests {
 		PO_PrivateView.sendInvitationAndCheckWasOk(driver, user2Email);
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 		
-		// TODO - quitar? que se listen las invitaicones se comprueba mas abajo, pero yo creo que no está de mas hacer esta comprobacion
-		// Iniciar sesión como user2 y comprobar que tenemos una invitación de Juan Perez Martinez (nombre de user1)
+		// Iniciar sesión como user2 y comprobar que tenemos una invitación de Juan Pérez Martinez (nombre de user1)
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
 				"aDropdownUsersMenu", "aUserFriendRequestList", "text", user1Name);
@@ -227,7 +226,7 @@ public class Tests {
 	@Test
 	public void PR11() {
 		// Nos conectamos como user2, accedemos al listado de invitaciones, 
-		// y comprobamos que tenemos sólo una, de user1 (cuyo nombre es "Juan Perez Martinez")
+		// y comprobamos que tenemos sólo una, de user1 (cuyo nombre es "Juan Pérez Martinez")
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
 		
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
@@ -244,7 +243,7 @@ public class Tests {
 	@Test
 	public void PR12() {
 		// Nos conectamos como user2, accedemos al listado de invitaciones, 
-		// y aceptamos la invitación de user1 (cuyo nombre es "Juan Perez Martinez")
+		// y aceptamos la invitación de user1 (cuyo nombre es "Juan Pérez Martinez")
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
 		
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 
@@ -261,7 +260,7 @@ public class Tests {
 	@Test
 	public void PR13() {
 		// Nos conectamos como user2, accedemos al listado de amigos 
-		// y comprobamos como tiene un amigo, user1 (cuyo nombre es "Juan Perez Martinez")
+		// y comprobamos como tiene un amigo, user1 (cuyo nombre es "Juan Pérez Martinez")
 		PO_LoginView.goToLoginFillFormAndCheckWasOk(driver, user2Email, user2Password);
 		
 		PO_PrivateView.clickDropdownMenuOptionAndCheckElement(driver, 

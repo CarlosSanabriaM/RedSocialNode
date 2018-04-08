@@ -13,6 +13,7 @@ public class PO_SignupView extends PO_NavView {
 	 */
 	public static void goToSignup(WebDriver driver) {
 		PO_HomeView.clickLinkAndCheckElement(driver, "aSignup", "id", "buttonSubmit");
+		PO_SignupView.checkElement(driver, "text", "Regístrate como usuario");
 	}
 	
 	/**
@@ -63,18 +64,21 @@ public class PO_SignupView extends PO_NavView {
 	
 	/**
 	 * Espera a que se cargue el formulario, lo rellena y comprueba que
-	 * aparece el texto "Usuario registrado correctamente"
+	 * aparecen los textos "Identifícate como usuario" (está en la página de login)
+	 * y "Usuario registrado correctamente"
 	 */
 	public static void fillFormAndCheckWasOk(WebDriver driver, String emailp, String namep, 
 			String lastnamep, String passwordp, String passwordconfp) {
 		
 		PO_SignupView.fillForm(driver, emailp, namep, lastnamep, passwordp, passwordconfp);
+		PO_View.checkElement(driver, "text", "Identifícate como usuario");
 		PO_View.checkElement(driver, "text", "Usuario registrado correctamente");
 	}
 	
 	/**
 	 * Espera a que se cargue el formulario, lo rellena 
-	 * y comprueba que se produce el error indicado
+	 * y comprueba que le lleva a la página de signup y 
+	 * se produce el error indicado
 	 * 
 	 * @param errorMessage: mensaje de error que se ha de producir
 	 */
@@ -82,7 +86,8 @@ public class PO_SignupView extends PO_NavView {
 			String lastnamep, String passwordp, String passwordconfp, String errorMessage) {
 		 
 		PO_SignupView.fillForm(driver, emailp, namep, lastnamep, passwordp, passwordconfp);
-		PO_SignupView.checkElement(driver, "text", errorMessage);
+		PO_View.checkElement(driver, "text", "Regístrate como usuario");
+		PO_View.checkElement(driver, "text", errorMessage);
 	}
 
 }

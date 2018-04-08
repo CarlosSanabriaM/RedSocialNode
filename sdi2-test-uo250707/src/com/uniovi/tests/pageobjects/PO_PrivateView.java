@@ -16,8 +16,8 @@ public class PO_PrivateView extends PO_NavView {
 	 * y el texto "Identifícate"
 	 */
 	public static void logoutAndCheckWasOk(WebDriver driver) {
-		clickLinkAndCheckElement(driver, "aLogout", "text", "Desconectado correctamente");
-		checkElement(driver, "text", "Identifícate");
+		PO_PrivateView.clickLinkAndCheckElement(driver, "aLogout", "text", "Desconectado correctamente");
+		PO_View.checkElement(driver, "text", "Identifícate");
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class PO_PrivateView extends PO_NavView {
 	 * Comprueba que el numero de usuarios en la vista actual coincida con el indicado
 	 */
 	public static void checkNumUsers(WebDriver driver, int numUsers) {
-		List<WebElement> elementos = checkElement(driver, "free", "//tbody/tr");
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr");
 		assertTrue(elementos.size() == numUsers);
 	}
 	
@@ -53,7 +53,7 @@ public class PO_PrivateView extends PO_NavView {
 	 */
 	public static void searchText(WebDriver driver, String searchText) {
 		// Obtenemos el input donde se introduce el texto a buscar
-		List<WebElement> elementos = PO_PrivateView.checkElement(driver, "id", "inputSearchText");
+		List<WebElement> elementos = PO_View.checkElement(driver, "id", "inputSearchText");
 		WebElement inputST = elementos.get(0); 
 		
 		// Introducimos el texto a buscar
@@ -72,7 +72,7 @@ public class PO_PrivateView extends PO_NavView {
 	private static void sendInvitation(WebDriver driver, String userEmail) {
 		// Buscamos una celda que contenga el email indicado. 
 		// La celda siguiente de la misma fila contendrá el botón de invitar, así que lo clickamos.
-		List<WebElement> elementos = checkElement(driver, "free",
+		List<WebElement> elementos = PO_View.checkElement(driver, "free",
 				"//td[contains(text(), '"+ userEmail +"')]/following-sibling::td/div/*[contains(@id, 'invitateUserButton')]");
 		elementos.get(0).click();
 	}
@@ -83,7 +83,7 @@ public class PO_PrivateView extends PO_NavView {
 	 */
 	public static void sendInvitationAndCheckWasOk(WebDriver driver, String userEmail) {
 		sendInvitation(driver, userEmail);
-		checkElement(driver, "text", "Invitación enviada correctamente");
+		PO_View.checkElement(driver, "text", "Invitación enviada correctamente");
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class PO_PrivateView extends PO_NavView {
 	 */
 	public static void sendInvitationAndCheckWasWrong(WebDriver driver, String userEmail, String errorMessage) {
 		sendInvitation(driver, userEmail);
-		checkElement(driver, "text", errorMessage);
+		PO_View.checkElement(driver, "text", errorMessage);
 	}
 	
 	/**
