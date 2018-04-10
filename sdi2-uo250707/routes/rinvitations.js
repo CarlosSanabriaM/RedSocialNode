@@ -1,4 +1,6 @@
-module.exports = function(app, swig, gestorBD, gestorLog) {
+module.exports = function(app, swig, gestorBD) {
+	
+	var gestorLog = app.get('gestorLog');
 
 	app.get("/user/invitate/:email", function(req, res) {
 		// Comprobamos que el email indicado no coincida con el email del usuario en sesion
@@ -17,13 +19,13 @@ module.exports = function(app, swig, gestorBD, gestorLog) {
 		
 		gestorBD.insertInvitation(invitation, function(id, errMessage) {
 			if (id == null) {
-				res.redirect("/user/list" + 	// TODO - no guarda la pagina en la que estabas
+				res.redirect("/user/list" +
 		 				"?message="+ errMessage+
 		 				"&messageType=alert-danger");
 			} else {
 				gestorLog.userSendsInvitation(invitation.senderEmail, invitation.receiverEmail);
 				
-				res.redirect("/user/list" +	// TODO - no guarda la pagina en la que estabas
+				res.redirect("/user/list" +
 		 				"?message=Invitación enviada correctamente." +
 		 				"&messageType=alert-success");
 			}
@@ -112,12 +114,12 @@ module.exports = function(app, swig, gestorBD, gestorLog) {
 		gestorBD.getInvitations(criterio, function(invitations) {
 			if (invitations == null){
 				// Error
-				res.redirect("/user/invitations" + 	// TODO - no guarda la pagina en la que estabas
+				res.redirect("/user/invitations" +
 		 				"?message=Error al aceptar la invitación de amistad."+
 		 				"&messageType=alert-danger");
 			} else if(invitations.length == 0) {
 				// No existe una invitacion con ese id
-				res.redirect("/user/invitations" + 	// TODO - no guarda la pagina en la que estabas
+				res.redirect("/user/invitations" +
 		 				"?message=Esa invitación de amistad no existe."+
 		 				"&messageType=alert-danger");
 			} else {
@@ -145,7 +147,7 @@ module.exports = function(app, swig, gestorBD, gestorLog) {
 			"otherUserEmail" : invitation.receiverEmail
 		};
 		
-		gestorBD.insertFriendship(friendship, function(id) { //TODO - hay que comprobar que no sean ya amigos, por si fallo al borrarse la invitacion??
+		gestorBD.insertFriendship(friendship, function(id) {
 			if (id == null) {
 				res.redirect("/user/invitations" +
 						"?message=Error al aceptar la invitación de amistad."+
@@ -161,7 +163,7 @@ module.exports = function(app, swig, gestorBD, gestorLog) {
 		
 		gestorBD.removeInvitation(criterio, function(invitations) {
 			if (invitations == null) {
-				res.redirect("/user/invitations" + //TODO - que error se da?? porque la invitacion se ha aceptado y son amigos, solo que no se ha eliminado la invitacion
+				res.redirect("/user/invitations" +
 						"?message=Usuario agregado como amigo correctamente, pero no se ha podido borrar la invitación de amistad."+
 		 				"&messageType=alert-warning");
 			} else {

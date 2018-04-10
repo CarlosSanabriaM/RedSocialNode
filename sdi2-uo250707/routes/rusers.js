@@ -1,5 +1,7 @@
-module.exports = function(app, swig, gestorBD, gestorLog) {
+module.exports = function(app, swig, gestorBD) {
 
+	var gestorLog = app.get('gestorLog');
+	
 	app.get("/signup", function(req, res){
 		var response = swig.renderFile("views/signup.html", {
 			email: req.session.email
@@ -122,6 +124,7 @@ module.exports = function(app, swig, gestorBD, gestorLog) {
 				}
 
 				// Añadimos a cada usuario de la lista el atributo "canInvite" con valor true/false
+				// Se añade a aquellos usuarios que son el usuario en sesión, para que no les aparezca el botón de enviar invitación
 				addCanInviteToUsers(users, req.session.email);
 				
 				// Lo añadimos al log
@@ -134,7 +137,7 @@ module.exports = function(app, swig, gestorBD, gestorLog) {
 					users : users,
 					pgActual : pg,
 					pgUltima : pgUltima,
-					searchText : searchText, // TODO ??
+					searchText : searchText,
 					email: req.session.email
 				});
 				res.send(respuesta);
@@ -148,34 +151,10 @@ module.exports = function(app, swig, gestorBD, gestorLog) {
 			// No se puede invitar a un usuario si es el mismo que el usuario en sesion
 			if(currentUser.email == emailUserInSession)
 				currentUser.canInvite = false;
-//			// No se puede invitar a un usuario si ya es amigo			TODO - quitar o completar
-//			else if(areFriends(currentUser.email, emailUserInSession))
-//				currentUser.canInvite = false;
-//			// No se puede invitar a un usuario si ya se le ha enviado una invitación
-//			else if(currentUser.email ---)
-//				currentUser.canInvite = false;
 			else
 				currentUser.canInvite = true;
 		});
 	}
-	
-	// TODO - quitar o completar
-//	function areFriends(emailUser1, emailUser2){
-//		var criterio = {$or: [
-//			{"userEmail" : emailUser1, "otherUserEmail" : emailUser2},
-//			{"userEmail" : emailUser2, "otherUserEmail" : emailUser1},
-//		]  };
-//		
-//		gestorBD.getFriendshipsPg(criterio, function(friendships, total) {
-//			if (friendships == null) {
-//				return false;
-//			} else if(friendship.length == 1){
-//				return true;
-//			} else{
-//				return false;
-//			}
-//		});
-//	}
 	
 	app.get("/user/friends", function(req, res) {
 		var criterio = {$or: [

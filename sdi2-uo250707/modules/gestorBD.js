@@ -62,7 +62,7 @@ module.exports = {
 				funcionCallback(null);
 			} else {
 				var collection = db.collection('users');
-				collection.count(criterio, function(err, count) { //TODO- se supone que es equivalente a find(criterio).count(callback)
+				collection.count(criterio, function(err, count) {
 					if (err) {
 						funcionCallback(null);
 						db.close();
@@ -290,27 +290,6 @@ module.exports = {
 								db.close();
 							});
 					}
-				});
-			}
-		});
-	},
-	
-	// TODO quitar cuando se acabe
-	modificarCancion : function(criterio, cancion, funcionCallback) {
-		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-			if (err) {
-				funcionCallback(null);
-			} else {
-				var collection = db.collection('canciones');
-				collection.update(criterio, {
-					$set : cancion
-				}, function(err, result) {
-					if (err) {
-						funcionCallback(null);
-					} else {
-						funcionCallback(result);
-					}
-					db.close();
 				});
 			}
 		});
