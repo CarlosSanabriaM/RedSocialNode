@@ -116,7 +116,7 @@ module.exports = {
 	paso2ComprobarNoExisteInvitacion : function(db, invitation, funcionCallback){
 		var mySelf = this;
 		
-		// Comprobamos que no exista ya la invitacion
+		// Comprobamos que no exista ya esa invitación
 		var collection = db.collection('invitations');
 		collection.find(invitation).toArray(function(err, invitations) {
 			if (err) {
@@ -128,11 +128,36 @@ module.exports = {
 				funcionCallback(null, "Error al enviar la invitación. ¡Ya has enviado una invitación de amistad a ese usuario!"); // ERROR
 				db.close();
 			} else{					
-				mySelf.paso3ComprobarNoSonAmigos(db, invitation, funcionCallback); // SIGUIENTE
+				mySelf.paso3ComprobarNoExisteInvitacionInversa(db, invitation, funcionCallback); // SIGUIENTE
 			}
 		});
 	},
-	paso3ComprobarNoSonAmigos : function(db, invitation, funcionCallback){
+	paso3ComprobarNoExisteInvitacionInversa : function(db, invitation, funcionCallback){
+		var mySelf = this;
+		
+		// Comprobamos que no exista la invitacion inversa 
+		// (que el usuario al que le quieres enviar una invitación ya te haya enviado una a ti)
+		var criterio = {
+			"receiverEmail" : invitation.senderEmail,
+			"senderEmail" : invitation.receiverEmail
+		};
+		
+		var collection = db.collection('invitations');
+		collection.find(criterio).toArray(function(err, invitations) {
+			if (err) {
+				// Si se produjo un error, devolvemos error
+				funcionCallback(null, "Error al enviar la invitación."); // ERROR
+				db.close();
+			} else if(invitations.length == 1) {
+				// Si existe la invitación inversa, devolvemos error
+				funcionCallback(null, "¡Ese usuario ya te ha enviado una invitación de amistad! Revisa tus invitaciones."); // ERROR
+				db.close();
+			} else{					
+				mySelf.paso4ComprobarNoSonAmigos(db, invitation, funcionCallback); // SIGUIENTE
+			}
+		});
+	},
+	paso4ComprobarNoSonAmigos : function(db, invitation, funcionCallback){
 		var mySelf = this;
 		
 		// Comprobamos que no sean amigos
@@ -152,11 +177,11 @@ module.exports = {
 				funcionCallback(null, "Error al enviar la invitación. ¡Ese usuario y tu ya sois amigos!"); // ERROR
 				db.close();
 			} else{					
-				mySelf.paso4InsertarInvitacion(db, invitation, funcionCallback); // SIGUIENTE
+				mySelf.paso5InsertarInvitacion(db, invitation, funcionCallback); // SIGUIENTE
 			}
 		});
 	},
-	paso4InsertarInvitacion : function(db, invitation, funcionCallback){
+	paso5InsertarInvitacion : function(db, invitation, funcionCallback){
 		var mySelf = this;
 		
 		// Guardamos la invitacion
