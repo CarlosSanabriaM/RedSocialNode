@@ -81,6 +81,15 @@ app.get('/', function (req, res) {
 	res.send(respuesta);
 });
 
+// Pagina de error cuando no se encuentra el recurso (404 Not Found)
+// Si no se entra por ninguna de las rutas anteriores, se entra por esta.
+app.get('*', function(req, res){
+	var respuesta = swig.renderFile('views/error.html', {
+		errorMessage : "404 Not Found. No existe el recurso indicado."
+	});
+	res.send(respuesta);
+});
+
 //Función de manejo de errores
 app.use( function (err, req, res, next ) {
 	gestorLog.error("Error producido: " + err);
