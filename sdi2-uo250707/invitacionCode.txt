@@ -1,5 +1,0 @@
-{{% if canInviteUser %}}
-<div>
-	<a id="invitateUserButton{{ user.id }}" href="/user/invitate/{{user.id}}" class="btn btn-default">Agregar amigo</button>
-</div>
-{{% endif %}}
