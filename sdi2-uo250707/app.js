@@ -52,6 +52,43 @@ var logger = log4js.getLogger();
 var gestorLog = require("./modules/gestorLog.js");
 gestorLog.init(app, logger);
 
+//routerUsuarioToken
+var routerUsuarioToken = express.Router();
+routerUsuarioToken.use(function(req, res, next) {
+	
+	// obtener el token, puede ser un parámetro GET , POST o HEADER
+	var token = req.body.token || req.query.token || req.headers['token'];
+	
+	if (token != null) {
+		// verificar el token
+		jwt.verify(token, 'secreto', function(err, infoToken) {
+			// Si el token NO es valido o han pasado más de 4min desde que se expedió
+			if (err || (Date.now() / 1000 - infoToken.tiempo) > 240) {
+				res.status(403); // Forbidden
+				res.json({
+					access: false,
+					error: 'Token inválido o caducado'
+				});
+				return;
+			} else {
+				// dejamos correr la petición
+				res.email = infoToken.email;
+				next();
+			}
+		});
+
+	} else {
+		res.status(403); // Forbidden
+		res.json({
+			access: false,
+			message: 'No hay Token'
+		});
+	}
+});
+
+// Aplicar routerUsuarioToken
+app.use('/api/friend', routerUsuarioToken);
+
 // routerUsuarioSession
 var routerUsuarioSession = express.Router();
 routerUsuarioSession.use(function(req, res, next) {
