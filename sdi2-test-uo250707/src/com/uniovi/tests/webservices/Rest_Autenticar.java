@@ -18,7 +18,7 @@ public class Rest_Autenticar extends Rest {
 	 * @param email: email que se va a enviar con la petición
 	 * @param password: password que se va a enviar con la petición
 	 */
-	private static ObjectNode postAutenticar(String baseURL, String email, String password) {
+	private static StatusAndResponseBody postAutenticar(String baseURL, String email, String password) {
 		// Creamos una entidad con las credenciales 
 		UserCredentials userCredentials = new UserCredentials(email, password);
 		Entity<UserCredentials> entityUC = Entity.json(userCredentials);
@@ -31,8 +31,8 @@ public class Rest_Autenticar extends Rest {
 	/**
 	 * Envía una petición POST a la url /api/autenticar, pasandole en el body
 	 * un objeto JSON con los campos email y password dados como parámetro.
-	 * Comprueba que se retorne un campo "authenticated" con valor true y
-	 * un campo token.
+	 * Comprueba que el estado sea 200 OK, que se retorne un campo "authenticated" 
+	 * con valor true y un campo token.
 	 * 
 	 * @param baseURL: la url base de la aplicación
 	 * @param email: email que se va a enviar con la petición
@@ -40,21 +40,22 @@ public class Rest_Autenticar extends Rest {
 	 */
 	public static void postAutenticarAndCheckWasOk(String baseURL, String email, String password) {
 		// Enviamos la petición post para autenticarnos
-		ObjectNode response = postAutenticar(baseURL, email, password);
+		StatusAndResponseBody response = postAutenticar(baseURL, email, password);
 		
-		// Comprobamos que devuelve una respuesta 200
-		
+		// Comprobamos que devuelve una respuesta 200 OK
+		assertTrue( response.getStatus() == 200 );
 		
 		// Comprobamos que retorna un campo token y un campo "authenticated" con valor true
-		assertTrue( response.get("authenticated").asBoolean() );
-		assertTrue( !response.get("token").isMissingNode() ) ;
+		ObjectNode responseBody = response.getResponseBody();
+		assertTrue( responseBody.get("authenticated").asBoolean() );
+		assertTrue( responseBody.get("token") != null );//TODO - mejorar?? Como comprobar que sea String??
 	}
 	
 	/**
 	 * Envía una petición POST a la url /api/autenticar, pasandole en el body
 	 * un objeto JSON con los campos email y password dados como parámetro.
-	 * Comprueba que se retorne un campo "authenticated" con valor false, 
-	 * que NO se retorne un campo token, y que se retorne un campo
+	 * Comprueba que el estado sea 200 OK, que se retorne un campo "authenticated" 
+	 * con valor false, que NO se retorne un campo token, y que se retorne un campo
 	 * "message" con valor "Inicio de sesión no correcto"
 	 * 
 	 * @param baseURL: la url base de la aplicación
@@ -63,13 +64,17 @@ public class Rest_Autenticar extends Rest {
 	 */
 	public static void postAutenticarAndCheckWasWrong(String baseURL, String email, String password) {
 		// Enviamos la petición post para autenticarnos
-		ObjectNode response = postAutenticar(baseURL, email, password);
+		StatusAndResponseBody response = postAutenticar(baseURL, email, password);
+		
+		// Comprobamos que devuelve una respuesta 401 Unauthorized
+		assertTrue( response.getStatus() == 401 );
 		
 		// Comprobamos que retorna un campo "authenticated" con valor false, NO retorna un campo token,
 		// y retorna un campo message con valor "Inicio de sesión no correcto"
-		assertTrue( !response.get("authenticated").asBoolean() );
-		assertTrue( response.get("token").isMissingNode() );
-		assertTrue( response.get("message").toString() == "Inicio de sesión no correcto");
+		ObjectNode responseBody = response.getResponseBody();
+		assertTrue( !responseBody.get("authenticated").asBoolean() );
+		assertTrue( responseBody.get("token") == null );
+		assertTrue( "Inicio de sesión no correcto".equalsIgnoreCase(responseBody.get("message").asText()) );
 	}
 	
 }
