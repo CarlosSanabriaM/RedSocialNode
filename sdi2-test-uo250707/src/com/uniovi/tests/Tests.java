@@ -15,6 +15,7 @@ import com.uniovi.tests.pageobjects.PO_PrivateView;
 import com.uniovi.tests.pageobjects.PO_SignupView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.Mongo;
+import com.uniovi.tests.webservices.Rest_Autenticar;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
@@ -23,7 +24,7 @@ public class Tests {
 	static String PathFirefox = "/Applications/Firefox_46.0.app/Contents/MacOS/firefox-bin"; // Mac
 	
 	static WebDriver driver = getDriver(PathFirefox);
-	static String URL = "https://localhost:8081";
+	static String URL = "http://localhost:8081";
 
 	public static WebDriver getDriver(String PathFirefox) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -281,7 +282,7 @@ public class Tests {
 		// Realizamos una petición POST a la URL /api/autenticar, pasando
 		// las credenciales de user1, y comprobamos que nos retorna un token 
 		// y un campo "authenticated" con valor true
-		
+		Rest_Autenticar.postAutenticarAndCheckWasOk(URL, user1Email, user1Password);
 	}
 	
 }

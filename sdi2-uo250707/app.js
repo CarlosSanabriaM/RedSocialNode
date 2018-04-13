@@ -2,6 +2,15 @@
 var express = require('express');
 var app = express();
 
+app.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Credentials", "true");
+	res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, UPDATE, PUT");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token");
+	// Debemos especificar todas las headers que se aceptan. Content-Type , token
+	next();
+});
+
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
 var https = require('https');
@@ -107,10 +116,15 @@ app.use( function (err, req, res, next ) {
 	}
 });
 
-//Lanzar el servidor, utilizando https
-https.createServer({
-	key:  fs.readFileSync('certificates/alice.key'),
-	cert: fs.readFileSync('certificates/alice.crt')
-}, app).listen(app.get('port'), function() {
+//Lanzar el servidor
+app.listen(app.get('port'), function() {
 	console.log("Servidor activo");
 });
+
+//Lanzar el servidor, utilizando https
+//https.createServer({
+//	key:  fs.readFileSync('certificates/alice.key'),
+//	cert: fs.readFileSync('certificates/alice.crt')
+//}, app).listen(app.get('port'), function() {
+//	console.log("Servidor activo");
+//});
