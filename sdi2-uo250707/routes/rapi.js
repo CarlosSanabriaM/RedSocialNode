@@ -152,7 +152,106 @@ module.exports = function(app, gestorBD) {
 					 _id : id
 				 });
 			 }
-		 });
+		 });// TODO - log
+	}
+	
+	app.get("/api/conversation/message", function(req, res) {
+		// Validamos los datos de entrada
+		if (req.query.user1 == null || req.query.user2 == null
+				|| typeof req.query.user1 != "string"
+				|| typeof req.query.user2 != "string"
+				|| req.query.user1 == req.query.user2) {
+
+			res.status(400);// Bad Request
+			res.json({
+				error : "Datos introducidos erróneos"
+			});
+			return;
+		}
+
+		paso1ComprobarExisteUser1(req, res);
+	});
+	
+	function paso1ComprobarExisteUser1(req, res){		
+		// Comprobamos que exista user1
+		var criterio = {"email" : req.query.user1};
+		
+		gestorBD.getUsers(criterio, function(users, total) {
+			if (users == null) {
+				// Error
+				res.status(500); // Server Internal Error
+				res.json({
+					error : "Se ha producido un error"
+				});
+			} else if(users.length == 0){
+				// No existe user1
+				res.status(404); // Not Found
+				res.json({
+					error : "No existe el usuario 1"
+				});
+			} else {
+				// Existe user1
+				paso2ComprobarExisteUser2(req, res);
+			}
+		});
+	}
+	
+	function paso2ComprobarExisteUser2(req, res){		
+		// Comprobamos que exista user2
+		var criterio = {"email" : req.query.user2};
+		
+		gestorBD.getUsers(criterio, function(users, total) {
+			if (users == null) {
+				// Error
+				res.status(500); // Server Internal Error
+				res.json({
+					error : "Se ha producido un error"
+				});
+			} else if(users.length == 0){
+				// No existe user2
+				res.status(404); // Not Found
+				res.json({
+					error : "No existe el usuario 2"
+				});
+			} else {
+				// Existe user2
+				paso3ComprobarUsuarioEnSesionEsEmisorOReceptor(req, res);
+			}
+		});
+	}
+	
+	function paso3ComprobarUsuarioEnSesionEsEmisorOReceptor(req, res){
+		// Si el email del usuario en sesión es el de user1 o el de user2,
+		// entonces podemos acceder a los mensajes enviados entre user1 y user2
+		if(res.email == req.query.user1 || res.email == req.query.user2){
+			paso4ObtenerMensajesConversacion(req, res);
+		} else{
+			res.status(403); // Forbidden
+			res.json({
+				error : "No puedes acceder a esa conversación. " +
+						"No eres ni el emisor ni el receptor de los mensajes."
+			});
+		}
+	}
+	
+	function paso4ObtenerMensajesConversacion(req, res){		
+		var criterio = {$or: [
+			{"emisor" : req.query.user1, "destino" : req.query.user2},
+			{"emisor" : req.query.user2, "destino" : req.query.user1}
+		]  };
+		
+		gestorBD.getMessages(criterio, function(messages, total) {
+			if (messages == null) {
+				// Error
+				res.status(500); // Server Internal Error
+				res.json({
+					error : "Se ha producido un error"
+				});
+			} else {
+				res.status(200);	// OK
+				res.send(JSON.stringify(messages));
+			}
+		});
 	}
 	
 };

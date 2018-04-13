@@ -335,5 +335,22 @@ module.exports = {
 				});
 			}
 		});
+	},
+	getMessages : function(criterio, funcionCallback) {
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+			if (err) {
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('messages');
+				collection.find(criterio).toArray(function(err, messages) {
+					if (err) {
+						funcionCallback(null);
+					} else {
+						funcionCallback(messages);
+					}
+					db.close();
+				});
+			}
+		});
 	}
 };
