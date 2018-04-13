@@ -88,6 +88,7 @@ routerUsuarioToken.use(function(req, res, next) {
 
 // Aplicar routerUsuarioToken
 app.use('/api/friend', routerUsuarioToken);
+app.use('/api/message', routerUsuarioToken);
 
 // routerUsuarioSession
 var routerUsuarioSession = express.Router();
