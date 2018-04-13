@@ -2,6 +2,7 @@
 var express = require('express');
 var app = express();
 
+var jwt = require('jsonwebtoken');
 var fs = require('fs');
 var https = require('https');
 var expressSession = require('express-session');
@@ -68,10 +69,12 @@ app.set('key','abcdefg');
 app.set('crypto',crypto);
 app.set('itemsPerPage', 5);
 app.set('gestorLog', gestorLog);
+app.set('jwt',jwt);
 
 // Rutas/controladores por lógica
 require("./routes/rusers.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
 require("./routes/rinvitations.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
+require("./routes/rapi.js")(app, gestorBD);
 
 // Página inicio
 app.get('/', function (req, res) {
