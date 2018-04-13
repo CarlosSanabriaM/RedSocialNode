@@ -280,9 +280,21 @@ public class Tests {
 	@Test
 	public void PR14() {
 		// Realizamos una petición POST a la URL /api/autenticar, pasando
-		// las credenciales de user1, y comprobamos que nos retorna un token 
+		// las credenciales de user1, y comprobamos que nos retorna un campo token 
 		// y un campo "authenticated" con valor true
 		Rest_Autenticar.postAutenticarAndCheckWasOk(URL, user1Email, user1Password);
+	}
+	
+	/**
+	 * C1.2 [CInInVal] Inicio de sesión con datos inválidos (usuario no existente en la aplicación).
+	 */
+	@Test
+	public void PR15() {
+		// Realizamos una petición POST a la URL /api/autenticar, pasando
+		// las credenciales de un usuario NO existente, y comprobamos que retorna 
+		// un campo "authenticated" con valor false, NO retorna un campo token,
+		// y retorna un campo message con valor "Inicio de sesión no correcto"
+		Rest_Autenticar.postAutenticarAndCheckWasWrong(URL, "notExists@gmail.com", "123456");
 	}
 	
 }

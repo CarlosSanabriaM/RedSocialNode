@@ -42,6 +42,9 @@ public class Rest_Autenticar extends Rest {
 		// Enviamos la petición post para autenticarnos
 		ObjectNode response = postAutenticar(baseURL, email, password);
 		
+		// Comprobamos que devuelve una respuesta 200
+		
+		
 		// Comprobamos que retorna un campo token y un campo "authenticated" con valor true
 		assertTrue( response.get("authenticated").asBoolean() );
 		assertTrue( !response.get("token").isMissingNode() ) ;
