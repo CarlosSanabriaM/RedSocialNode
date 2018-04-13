@@ -15,7 +15,6 @@ import com.uniovi.tests.pageobjects.PO_PrivateView;
 import com.uniovi.tests.pageobjects.PO_SignupView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.Mongo;
-import com.uniovi.tests.webservices.Rest_Autenticar;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Tests {
@@ -279,7 +278,7 @@ public class Tests {
 	 */
 	@Test
 	public void PR14() {
-		Rest_Autenticar.postAutenticarAndCheckWasOk(URL, user1Email, user1Password);
+		
 	}
 	
 	/**
@@ -287,7 +286,7 @@ public class Tests {
 	 */
 	@Test
 	public void PR15() {
-		Rest_Autenticar.postAutenticarAndCheckWasWrong(URL, "notExists@gmail.com", "123456");
+		
 	}
 	
 }
