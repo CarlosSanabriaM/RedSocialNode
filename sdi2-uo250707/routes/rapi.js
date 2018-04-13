@@ -155,7 +155,7 @@ module.exports = function(app, gestorBD) {
 		 });// TODO - log
 	}
 	
-	app.get("/api/conversation/message", function(req, res) {
+	app.get("/api/conversation/message", function(req, res) {// QUitar lo de conversation??
 		// Validamos los datos de entrada
 		if (req.query.user1 == null || req.query.user2 == null
 				|| typeof req.query.user1 != "string"
@@ -250,6 +250,75 @@ module.exports = function(app, gestorBD) {
 			} else {
 				res.status(200);	// OK
 				res.send(JSON.stringify(messages));
+			}
+		});
+	}
+
+	// Permite marcar un mensaje como leido
+	app.put("/api/message/:id", function(req, res) {
+		// Primero obtenemos el mensaje con ese id
+		var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
+		
+		gestorBD.getMessages(criterio, function(messages) {
+			if (messages == null){
+				// Error
+				res.status(500); // Server Internal Error
+				res.json({
+					error : "Se ha producido un error"
+				});
+			} else if(messages.length == 0) {
+				// No existe el mensaje
+				res.status(404); // Not Found
+				res.json({
+					error : "No existe el mensaje con ese id"
+				});
+			} else {
+				// Existe el mensaje
+				paso1ComprobarUsuarioEnSesionEsReceptorMensaje(req, res, messages[0]);
+			}
+		});
+	});
+	
+	function paso1ComprobarUsuarioEnSesionEsReceptorMensaje(req, res, message){
+		if(res.email == message.destino){
+			paso2ComprobarMensajeNoLeido(req, res, message);
+		} else{
+			res.status(403); // Forbidden
+			res.json({
+				error : "No puedes marcar como leído un mensaje del cual no eres su receptor"
+			});
+		}
+	}
+	
+	function paso2ComprobarMensajeNoLeido(req, res, message){
+		if(message.leido){
+			res.status(400); // Forbidden TODO - correcto el status??
+			res.json({
+				error : "Ese mensaje ya está marcado como leido"
+			});
+		} else{
+			paso3MarcarMensajeComoLeido(req, res);
+		}
+	}
+	
+	function paso3MarcarMensajeComoLeido(req, res){
+		var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
+		var message = { leido : true };
+		
+		gestorBD.updateMessage(criterio, message, function(result) {
+			if (result == null) {
+				// Error
+				res.status(500); // Server Internal Error
+				res.json({
+					error : "Se ha producido un error"
+				});
+			} else {
+				// TODO - log
+				res.status(200); // OK
+				res.json({
+					mensaje: "Mensaje marcado como leído",
+					_id: req.params.id
+				});
 			}
 		});
 	}

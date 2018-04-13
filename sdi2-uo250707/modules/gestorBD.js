@@ -352,5 +352,22 @@ module.exports = {
 				});
 			}
 		});
+	},
+	updateMessage : function(criterio, message, funcionCallback) {
+		this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+			if (err) {
+				funcionCallback(null);
+			} else {
+				var collection = db.collection('messages');
+				collection.update(criterio, { $set : message }, function(err, result) {
+					if (err) {
+						funcionCallback(null);
+					} else {
+						funcionCallback(result);
+					}
+					db.close();
+				});
+			}
+		});
 	}
 };
