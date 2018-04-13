@@ -29,66 +29,39 @@ module.exports = function(app, gestorBD) {
 					token : token
 				});
 			}
-		});
+		});//TODO - log
 	});
 
 	app.get("/api/friend", function(req, res) {
 		var criterio = {$or: [
-			{"userEmail" : req.session.email},
-			{"otherUserEmail" : req.session.email},
+			{"userEmail" : res.email},
+			{"otherUserEmail" : res.email},
 		]  };
 		
-		gestorBD.getFriendshipsPg(criterio, pg, function(friendships, total) {
+		gestorBD.getFriendships(criterio, function(friendships, total) {
 			if (friendships == null) {
-				res.redirect("/user/list" +
-						"?message=Error al listar los amigos."+
-						"&messageType=alert-danger");
+				res.status(500); // Server Internal Error
+				res.json({
+					error : "Se ha producido un error"
+				});
 			} else {
-				
-				var itemsPerPage = app.get('itemsPerPage');
-				var pgUltima = Math.floor(total / itemsPerPage);
-				if (total % itemsPerPage > 0) { // Sobran decimales
-					pgUltima = pgUltima + 1;
-				}
-				
-				paso1ObtenerEmailsAmigos(req, res, friendships, pg, pgUltima);
+				obtenerEmailsAmigos(req, res, friendships);
 			}
 		});
 	});	
 	
-	function paso1ObtenerEmailsAmigos(req, res, friendships, pg, pgUltima){
+	function obtenerEmailsAmigos(req, res, friendships){
 		friendsEmails = [];
 		
 		friendships.forEach(function(currentFriendship) {
-			if(currentFriendship.userEmail != req.session.email)
+			if(currentFriendship.userEmail != res.email)
 				friendsEmails.push(currentFriendship.userEmail);
 			else
 				friendsEmails.push(currentFriendship.otherUserEmail);
 		});
 		
-		paso2ObtenerAmigosConEsosEmails(req, res, friendsEmails, pg, pgUltima);
-	}
-	
-	function paso2ObtenerAmigosConEsosEmails(req, res, friendsEmails, pg, pgUltima){
-		var criterio = { "email" : { "$in" : friendsEmails } };
-		
-		gestorBD.getUsers(criterio, function(friends) {
-			if (friends == null){
-				res.redirect("/user/list" +
-						"?message=Error al listar los amigos."+
-						"&messageType=alert-danger");
-			} else {
-				gestorLog.userListHisFriends(req.session.email, pg, friendsEmails);
-				
-				var respuesta = swig.renderFile('views/user/friends.html', {
-					friends : friends,
-					pgActual : pg,
-					pgUltima : pgUltima,
-					email: req.session.email
-				});
-				res.send(respuesta);	
-			}
-		});
+		res.status(200);
+		res.send(JSON.stringify(friendsEmails));
 	}
 	
 };
