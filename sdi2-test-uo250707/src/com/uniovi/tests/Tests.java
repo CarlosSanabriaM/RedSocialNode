@@ -277,7 +277,7 @@ public class Tests {
 	 * C1.1[[CInVal] Inicio de sesión con datos válidos.
 	 */
 	@Test
-	public void PR13() {
+	public void PR14() {
 		// Realizamos una petición POST a la URL /api/autenticar, pasando
 		// las credenciales de user1, y comprobamos que nos retorna un token 
 		// y un campo "authenticated" con valor true
