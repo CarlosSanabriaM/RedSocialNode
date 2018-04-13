@@ -153,15 +153,10 @@ app.use( function (err, req, res, next ) {
 	}
 });
 
-//Lanzar el servidor
-app.listen(app.get('port'), function() {
+// Lanzar el servidor, utilizando https
+https.createServer({
+	key:  fs.readFileSync('certificates/alice.key'),
+	cert: fs.readFileSync('certificates/alice.crt')
+}, app).listen(app.get('port'), function() {
 	console.log("Servidor activo");
 });
-
-//Lanzar el servidor, utilizando https
-//https.createServer({
-//	key:  fs.readFileSync('certificates/alice.key'),
-//	cert: fs.readFileSync('certificates/alice.crt')
-//}, app).listen(app.get('port'), function() {
-//	console.log("Servidor activo");
-//});

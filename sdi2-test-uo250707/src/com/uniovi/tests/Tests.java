@@ -23,7 +23,7 @@ public class Tests {
 	static String PathFirefox = "/Applications/Firefox_46.0.app/Contents/MacOS/firefox-bin"; // Mac
 	
 	static WebDriver driver = getDriver(PathFirefox);
-	static String URL = "http://localhost:8081";
+	static String URL = "https://localhost:8081";
 
 	public static WebDriver getDriver(String PathFirefox) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
