@@ -13,7 +13,7 @@ module.exports = function(app, gestorBD) {
 			if (users == null || users.length == 0) {
 				res.status(401); // Unauthorized
 				res.json({
-					autenticado : false,
+					authenticated : false,
 					message : "Inicio de sesión no correcto"
 				});
 			} else {
@@ -25,7 +25,7 @@ module.exports = function(app, gestorBD) {
 				
 				res.status(200);// OK
 				res.json({
-					autenticado: true,
+					authenticated: true,
 					token : token
 				});
 			}
