@@ -94,8 +94,8 @@ public class PO_ClientLoginView extends PO_View {
 		goToLoginAndfillForm(driver, baseUrl, emailp, passwordp);
 		
 		// Comprobamos que seguimos en el widget de login y se muestra el mensaje de error
-		PO_View.checkElement(driver, "text", "Identifícate como usuario");
-		PO_View.checkElement(driver, "text", "Email o password incorrecto");
+		PO_View.checkElement(driver, "text", "Indentifícate para acceder a los chats");
+		PO_View.checkElement(driver, "text", "Usuario no encontrado");
 	}
 	
 }
