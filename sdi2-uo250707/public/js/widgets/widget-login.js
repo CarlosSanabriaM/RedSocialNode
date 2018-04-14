@@ -24,7 +24,7 @@ $("#loginButton").click(function() {
 		},
 		dataType: 'json',
 		success: function(respuesta) {
-			console.log(respuesta.token);
+			console.log("Token: " + respuesta.token);
 			
 			//Guardamos el email del usuario en una variable global y en una cookie
 			userEmail = email;

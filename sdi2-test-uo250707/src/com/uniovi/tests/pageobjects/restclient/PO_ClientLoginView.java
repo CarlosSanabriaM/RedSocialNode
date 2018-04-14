@@ -73,7 +73,10 @@ public class PO_ClientLoginView extends PO_View {
 	static public void goToLoginFillFormAndCheckWasOk(WebDriver driver, String baseUrl, String emailp, String passwordp) {
 		goToLoginAndfillForm(driver, baseUrl, emailp, passwordp);
 		
-		// Comprobamos que aparece el widget con el listado de amigos
+		// Comprobamos que se muestra el título del widget con el listado de amigos y que el texto
+		// con el email del usuario autenticado coincide con el email del usuario que inició sesión
+		PO_View.checkElement(driver, "text", "Listado de tus amigos");
+		PO_View.checkElement(driver, "text", "Selecciona el nombre de un amigo para acceder a su chat");
 		PO_View.checkElement(driver, "text", "Usuario autenticado: " + emailp);
 	}
 	

@@ -11,7 +11,7 @@ function loadUserEmail() {
 	}
 	
 	console.log("Usuario autenticado: " + userEmail);
-	$('#userAuthenticatedEmail').text(userEmail);
+	$('#userAuthenticatedAs').text("Usuario autenticado: " + userEmail);
 }
 
 function loadFriends() {
@@ -28,7 +28,7 @@ function loadFriends() {
 			"token" : token
 		},
 		success : function(response) {
-			console.log(response);
+			console.log("Emails amigos: " + JSON.stringify(response));
 			var friendsEmails = response;
 			loadFriendsDataAndUpdateTable(friendsEmails);
 		},

@@ -14,6 +14,7 @@ import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_PrivateView;
 import com.uniovi.tests.pageobjects.PO_SignupView;
 import com.uniovi.tests.pageobjects.PO_View;
+import com.uniovi.tests.pageobjects.restclient.PO_ClientLoginView;
 import com.uniovi.tests.util.Mongo;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -273,12 +274,22 @@ public class Tests {
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 	
+	// Credenciales de inicio de sesión de usuarios para las pruebas de los widgets
+	private static String user10Email = "user10@gmail.com";
+	private static String user10Password = "1234";
+	private static String user11Email = "user11@gmail.com"; // TODO ??
+	private static String user11Password = "1234";
+	private static String user12Email = "user12@gmail.com";
+	private static String user12Password = "1234";
+	private static String user13Email = "user13@gmail.com";
+	private static String user13Password = "1234";
+
 	/**
 	 * C1.1[[CInVal] Inicio de sesión con datos válidos.
 	 */
 	@Test
 	public void PR14() {
-		
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
 	}
 	
 	/**
