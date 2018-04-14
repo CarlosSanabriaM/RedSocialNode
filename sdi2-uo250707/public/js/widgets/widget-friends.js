@@ -34,7 +34,7 @@ function loadFriendsDataAndUpdateTable(friendsEmailsToShow) {
 	for (i = 0; i < friendsEmailsToShow.length; i++) {
 		// Para cada email de un usuario amigo, sacamos todos sus datos
 		// y los añadimos a una fila de la tabla
-		loadUserDataAndAddToTable(friendsEmailsToShow);
+		loadUserDataAndAddToTable(friendsEmailsToShow[i]);
 	}
 }
 
@@ -103,6 +103,11 @@ $('#filterName').on('input', function(e) {
 function chat(email) {
 	selectedFriendEmail = email; // Variable global
 	loadWidget("chat");
+}
+
+function updateFriends() {
+	$('#filterName').val("");
+	loadFriends();
 }
 
 // TODO - usarlo para ordenar por numero de mensajes --> Meterlo en una especie de bucle que se llame cada N segundos
