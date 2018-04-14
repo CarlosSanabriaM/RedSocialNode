@@ -323,4 +323,29 @@ module.exports = function(app, gestorBD) {
 		});
 	}
 	
+	app.get("/api/user/:email", function(req, res) {		
+		// Obtenemos el usuario con ese email
+		var criterio = { "email" : req.params.email };
+		
+		gestorBD.getUsers(criterio, function(users) {
+			if (users == null){
+				// Error
+				res.status(500); // Server Internal Error
+				res.json({
+					error : "Se ha producido un error"
+				});
+			} else if(users.length == 0) {
+				// No existe el usuario
+				res.status(404); // Not Found
+				res.json({
+					error : "No existe el usuario con ese email"
+				});
+			} else {
+				// Existe el usuario
+				res.status(200);
+				res.send(JSON.stringify(users[0]));
+			}
+		});
+	});	
+	
 };
