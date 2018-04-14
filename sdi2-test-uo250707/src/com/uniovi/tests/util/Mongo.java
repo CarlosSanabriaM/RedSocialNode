@@ -59,4 +59,25 @@ public class Mongo {
 		mongoClient.close();
 	}	
 	
+	private void insertDocumentInCollection(Document document, String collectionName) {
+		MongoClient mongoClient = createMongoDBClient();
+		MongoDatabase db = mongoClient.getDatabase(database);
+		
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		
+		collection.insertOne(document);
+		
+		mongoClient.close();
+	}	
+	
+	public void insertFriendshipInFriendsCollection(String userEmail, String otherUserEmail) {
+		// Creamos el documento friendship
+		Document friendship = new Document();
+		friendship.append("userEmail", userEmail);
+		friendship.append("otherUserEmail", otherUserEmail);
+		
+		// Lo insertamos en la colección 'friends'
+		insertDocumentInCollection(friendship, "friends");
+	}	
+	
 }

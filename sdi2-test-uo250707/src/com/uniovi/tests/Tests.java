@@ -38,6 +38,16 @@ public class Tests {
 	private static String user1Name = "Juan Pérez Martínez";
 	private static String user2Email = "user02@gmail.com";
 	private static String user2Password = "1234";
+
+	// Credenciales de inicio de sesión de usuarios para las pruebas de los widgets
+	private static String user10Email = "user10@gmail.com";
+	private static String user10Password = "1234";
+	private static String user11Email = "user11@gmail.com"; // TODO ??
+	private static String user11Password = "1234";
+	private static String user12Email = "user12@gmail.com";
+	private static String user12Password = "1234";
+	private static String user13Email = "user13@gmail.com";
+	private static String user13Password = "1234";
 	
 	/**
 	 * Antes de cada prueba se navega al URL home de la aplicaciónn
@@ -71,6 +81,11 @@ public class Tests {
 		
 		// Borramos al usuario newUser@gmail.com, si existe
 		mongo.deleteUserWithEmail("newUser@gmail.com");
+		
+		// Creamos 3 relaciones de amistad, de user10 con: user11, user12 y user13
+		mongo.insertFriendshipInFriendsCollection(user10Email, user11Email);
+		mongo.insertFriendshipInFriendsCollection(user10Email, user12Email);
+		mongo.insertFriendshipInFriendsCollection(user10Email, user13Email);
 	}
 
 	/**
@@ -273,17 +288,9 @@ public class Tests {
 		
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
-	
-	// Credenciales de inicio de sesión de usuarios para las pruebas de los widgets
-	private static String user10Email = "user10@gmail.com";
-	private static String user10Password = "1234";
-	private static String user11Email = "user11@gmail.com"; // TODO ??
-	private static String user11Password = "1234";
-	private static String user12Email = "user12@gmail.com";
-	private static String user12Password = "1234";
-	private static String user13Email = "user13@gmail.com";
-	private static String user13Password = "1234";
 
+	// Pruebas Cliente Rest
+	
 	/**
 	 * C1.1[[CInVal] Inicio de sesión con datos válidos.
 	 */
