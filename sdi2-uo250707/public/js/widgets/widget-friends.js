@@ -53,8 +53,8 @@ function loadUserDataAndAddToTable(email) {
 			console.log("User with email '"+email+
 					"' data: "+JSON.stringify(response));
 			
-			friends.push = response;
-			addUserToTable(response);
+			friends.push(response); // se añade el amigo a la lista
+			addUserToTable(response);// y a la tabla
 		},
 		error : function(error) {
 			loadWidget("login");
@@ -74,9 +74,14 @@ function addUserToTable(user) {
 			"</tr>");
 }
 
-function chat(email) {
-	selectedFriendEmail = email; // Variable global
-	loadWidget("chat");
+function updateTable(friendsToShow) {
+	$("#tableBody").empty(); // Vaciar la tabla
+
+	// Para cada uno de los amigos a mostrar, lo añadimos directamente
+	// a la tabla (son amigos, no emails, no hace falta pedir los datos)
+	for (i = 0; i < friendsToShow.length; i++) {
+		addUserToTable(friendsToShow[i]);
+	}
 }
 
 // Escuchador del input 'nameFilter'
@@ -92,8 +97,13 @@ $('#filterName').on('input', function(e) {
 			filteredFriends.push(friends[i]);
 		}
 	}
-	loadFriendsDataAndUpdateTable(filteredFriends);
+	updateTable(filteredFriends);
 });
+
+function chat(email) {
+	selectedFriendEmail = email; // Variable global
+	loadWidget("chat");
+}
 
 // TODO - usarlo para ordenar por numero de mensajes --> Meterlo en una especie de bucle que se llame cada N segundos
 //var precioDsc = false;
