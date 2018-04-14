@@ -1,4 +1,5 @@
 var token;
+var userEmail;
 var URLbase = "https://localhost:8081/api";
 
 // Cargamos el widget-login al acceder a cliente.html

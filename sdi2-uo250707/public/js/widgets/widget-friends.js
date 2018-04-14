@@ -3,6 +3,17 @@ window.history.pushState("", "", "/cliente.html?w=friends");
 
 var friends; // TODO - guardar emails solo, o toda la info de los amigos??
 
+function loadUserEmail() {
+	// Si el email es null y existe una cookie con el email, 
+	// lo guardamos en la variable global
+	if (userEmail == null && Cookies.get('userEmail') != null) {
+		userEmail = Cookies.get('userEmail');
+	}
+	
+	console.log("Usuario autenticado: " + userEmail);
+	$('#userAuthenticatedEmail').text(userEmail);
+}
+
 function loadFriends() {
 	friends = []; // vaciamos el array de amigos
 	
@@ -129,3 +140,4 @@ function updateFriends() {
 
 // Al cargar el widget cargamos las amigos
 loadFriends();
+loadUserEmail();

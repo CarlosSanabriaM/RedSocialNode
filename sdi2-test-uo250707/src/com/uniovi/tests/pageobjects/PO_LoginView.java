@@ -28,7 +28,7 @@ public class PO_LoginView extends PO_NavView {
 		password.clear();
 		password.sendKeys(passwordp);
 		
-		// Pulsar el boton de Alta.
+		// Pulsar el boton de Iniciar sesión.
 		By boton = By.id("buttonSubmit");
 		driver.findElement(boton).click();
 	}
