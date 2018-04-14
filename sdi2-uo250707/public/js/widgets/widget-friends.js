@@ -1,9 +1,13 @@
 // Modificamos la URL actual del navegador
 window.history.pushState("", "", "/cliente.html?w=friends");
 
-var friends;
+var friends; // TODO - guardar emails solo, o toda la info de los amigos??
 
 function loadFriends() {
+	friends = []; // vaciamos el array de amigos
+	
+	// Obtenemos los emails, y por cada uno de ellos,
+	// obtenemos sus datos y los cargamos en friends y en la tabla
 	$.ajax({
 		url : URLbase + "/friend",
 		type : "GET",
@@ -14,8 +18,8 @@ function loadFriends() {
 		},
 		success : function(response) {
 			console.log(response);
-			friends = response;
-			updateTable(friends);
+			var friendsEmails = response;
+			loadFriendsDataAndUpdateTable(friendsEmails);
 		},
 		error : function(error) {
 			loadWidget("login");
@@ -23,23 +27,55 @@ function loadFriends() {
 	});
 }
 
-function updateTable(friendsToShow) {
+function loadFriendsDataAndUpdateTable(friendsEmailsToShow) {
+	// Para cada email, lo cargamos en friends y en la tabla
 	$("#tableBody").empty(); // Vaciar la tabla
 
-	for (i = 0; i < friendsToShow.length; i++) {
-		$("#tableBody").append(
-				"<tr id="+friendsToShow[i]._id+">" + 
-					"<td>" + friendsToShow[i].name + "</td>" + 
-					"<td>" + friendsToShow[i].email + "</td>" +  
-					"<td>" + 
-						"<a onclick=chat('" + friendsToShow[i]._id + "')>Chat</a><br>" +  
-					"</td>" + 
-				"</tr>");
+	for (i = 0; i < friendsEmailsToShow.length; i++) {
+		// Para cada email de un usuario amigo, sacamos todos sus datos
+		// y los añadimos a una fila de la tabla
+		loadUserDataAndAddToTable(friendsEmailsToShow);
 	}
 }
 
-function chat(_id) {
-	selectedFriendId = _id; // Variable global
+function loadUserDataAndAddToTable(email) {
+	// Cargamos los datos del usuario con ese email,
+	// y lo añadimos a friends y a la tabla
+	$.ajax({
+		url : URLbase + "/user/" + email,
+		type : "GET",
+		data : {},
+		dataType : 'json',
+		headers : {
+			"token" : token
+		},
+		success : function(response) {
+			console.log("User with email '"+email+
+					"' data: "+JSON.stringify(response));
+			
+			friends.push = response;
+			addUserToTable(response);
+		},
+		error : function(error) {
+			loadWidget("login");
+		}
+	});
+}
+
+function addUserToTable(user) {
+	// Añadimos los datos de ese usuario a la tabla
+	$("#tableBody").append(
+			"<tr id="+user.email+">" + 
+				"<td>" + user.name + "</td>" + 
+				"<td>" + user.email + "</td>" +  
+				"<td>" + 
+					"<a onclick=chat('" + user.email + "')>Chat</a><br>" +  
+				"</td>" + 
+			"</tr>");
+}
+
+function chat(email) {
+	selectedFriendEmail = email; // Variable global
 	loadWidget("chat");
 }
 
@@ -56,7 +92,7 @@ $('#filterName').on('input', function(e) {
 			filteredFriends.push(friends[i]);
 		}
 	}
-	updateTable(filteredFriends);
+	loadFriendsDataAndUpdateTable(filteredFriends);
 });
 
 // TODO - usarlo para ordenar por numero de mensajes --> Meterlo en una especie de bucle que se llame cada N segundos
@@ -72,7 +108,7 @@ $('#filterName').on('input', function(e) {
 //			return parseFloat(a.precio) - parseFloat(b.precio);
 //		});
 //	}
-//	updateTable(friends);
+//	loadFriendsDataAndUpdateTable(friends);
 //	precioDsc = !precioDsc; //invertir
 //}
 
