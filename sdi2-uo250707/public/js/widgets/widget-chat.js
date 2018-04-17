@@ -14,6 +14,21 @@ function loadUserEmail() { //TODO - pasar a cliente.html??
 	$('#userAuthenticatedAs').text("Usuario autenticado: " + userEmail);
 }
 
+function loadUserChatWithName() {
+	// Sacamos el nombre del usuario con el que estamos chateando
+	// de la lista de amigos, usando el email del usuario con el que estamos chateando
+	var nameUserChatWith;
+	for (i = 0; i < friends.length; i++) {
+		if(friends[i].email == selectedFriendEmail){
+			nameUserChatWith = friends[i].name;
+			break;
+		}
+	}
+	
+	console.log("Nombre usuario con el que chateas: " + nameUserChatWith);
+	$('#nameUserChatWith').text(nameUserChatWith);
+}
+
 function loadMessages() {
 	messages = []; // vaciamos el array de mensajes
 	
@@ -58,4 +73,5 @@ function addMessageToTable(message) {
 
 // Al cargar el widget cargamos los mensajes
 loadUserEmail();
+loadUserChatWithName();
 loadMessages();
