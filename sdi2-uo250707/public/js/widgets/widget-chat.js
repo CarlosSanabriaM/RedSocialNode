@@ -64,11 +64,24 @@ function updateTable(messages) {
 
 function addMessageToTable(message) {
 	// Añadimos los datos de ese mensaje a la tabla
-	$("#tableBody").append(
-			"<tr id="+message._id+">" + 
-				"<td>" + message.texto + "</td>" + 
-				"<td></td>" +    
-			"</tr>");
+	var tableBody;
+	
+	// Si el receptor del mensaje es el usuario en sesion
+	// el mensaje se muestra en la columna de la izquierda
+	if(message.destino == userEmail){
+		tableBody = "<tr id="+message._id+">" + 
+						"<td><span class='alert alert-info'>" + message.texto + "</span></td>" + 
+						"<td></td>" +    
+					"</tr>";
+	} else{
+		//Si no, se muestra en la columna de la derecha
+		tableBody = "<tr id="+message._id+">" + 
+						"<td></td>" + 
+						"<td><span class='alert alert-success'>" + message.texto + "</span></td>" +    
+					"</tr>";
+	}
+		
+	$("#tableBody").append(tableBody);
 }
 
 // Al cargar el widget cargamos los mensajes
