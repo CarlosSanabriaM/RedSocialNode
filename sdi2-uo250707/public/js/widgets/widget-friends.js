@@ -77,11 +77,8 @@ function addUserToTable(user) {
 	// Añadimos los datos de ese usuario a la tabla
 	$("#tableBody").append(
 			"<tr id="+user.email+">" + 
-				"<td>" + user.name + "</td>" + 
+				"<td><a onclick=chat('" + user.email + "')>" + user.name + "</a></td>" + 
 				"<td>" + user.email + "</td>" +  
-				"<td>" + 
-					"<a onclick=chat('" + user.email + "')>Chat</a><br>" +  
-				"</td>" + 
 			"</tr>");
 }
 

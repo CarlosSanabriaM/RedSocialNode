@@ -1,0 +1,26 @@
+<div id="widget-chat">
+	<span class="label label-primary" id="userAuthenticatedAs">
+		Usuario autenticado: email@email.com
+	</span>
+
+	<h2>Chat con el usuario: <span id="nameUserChatWith"></span></h2>
+	
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th class="col-md-1"></th>
+				<th class="col-md-1"></th>
+			</tr>
+		</thead>
+		<tbody id="tableBody">
+
+		</tbody>
+	</table>
+	
+	<input type="text" class="form-control"
+		placeholder="Introduce mensaje a enviar" id="messageContent" />
+	<button class="btn btn-default" onclick="sendMessage()">Enviar</button>
+	
+</div>
+
+<script src="/js/widgets/widget-chat.js"></script>
