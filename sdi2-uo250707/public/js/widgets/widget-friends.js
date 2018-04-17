@@ -1,8 +1,6 @@
 // Modificamos la URL actual del navegador
 window.history.pushState("", "", "/cliente.html?w=friends");
 
-var friends; // TODO - guardar emails solo, o toda la info de los amigos??
-
 function loadUserEmail() {
 	// Si el email es null y existe una cookie con el email, 
 	// lo guardamos en la variable global
@@ -110,6 +108,8 @@ $('#filterName').on('input', function(e) {
 
 function chat(email) {
 	selectedFriendEmail = email; // Variable global
+	Cookies.set('selectedFriendEmail', email); // lo guardamos en una cookie
+	Cookies.set('friends', friends); // lo guardamos en una cookie
 	loadWidget("chat");
 }
 

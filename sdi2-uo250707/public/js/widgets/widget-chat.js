@@ -2,6 +2,7 @@
 window.history.pushState("", "", "/cliente.html?w=chat");
 
 var messages;
+var nameUserChatWith;
 
 function loadUserEmail() { //TODO - pasar a cliente.html??
 	// Si el email es null y existe una cookie con el email, 
@@ -14,14 +15,32 @@ function loadUserEmail() { //TODO - pasar a cliente.html??
 	$('#userAuthenticatedAs').text("Usuario autenticado: " + userEmail);
 }
 
+function loadUserChatWithEmail() {
+	// Si el email y/o la lista de emails de los amigos es null y existe una cookie, 
+	// recuperamos su valor de ella
+	if (friends == null && Cookies.get('friends') != null) {
+		friends = Cookies.get('friends');
+	}
+	if (selectedFriendEmail == null && Cookies.get('selectedFriendEmail') != null) {
+		selectedFriendEmail = Cookies.get('selectedFriendEmail');
+	}
+}
+
 function loadUserChatWithName() {
-	// Sacamos el nombre del usuario con el que estamos chateando
-	// de la lista de amigos, usando el email del usuario con el que estamos chateando
-	var nameUserChatWith;
-	for (i = 0; i < friends.length; i++) {
-		if(friends[i].email == selectedFriendEmail){
-			nameUserChatWith = friends[i].name;
-			break;
+	// Si el nombre del amigo con el que chateas es null y existe una cookie, 
+	// recuperamos su valor de ella
+	if(nameUserChatWith == null && Cookies.get('nameUserChatWith') != null) {
+		nameUserChatWith = Cookies.get('nameUserChatWith');
+	}
+	else{
+		// Si no, sacamos el nombre del usuario con el que estamos chateando
+		// de la lista de amigos, usando el email del usuario con el que estamos chateando
+		for (i = 0; i < friends.length; i++) {
+			if(friends[i].email == selectedFriendEmail){
+				nameUserChatWith = friends[i].name;
+				Cookies.set('nameUserChatWith', nameUserChatWith);
+				break;
+			}
 		}
 	}
 	
@@ -86,5 +105,6 @@ function addMessageToTable(message) {
 
 // Al cargar el widget cargamos los mensajes
 loadUserEmail();
+loadUserChatWithEmail();
 loadUserChatWithName();
 loadMessages();
