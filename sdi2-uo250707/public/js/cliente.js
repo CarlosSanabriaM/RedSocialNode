@@ -3,7 +3,7 @@ var token;
 var userEmail;
 var selectedFriendEmail;
 var friends; // TODO - guardar emails solo, o toda la info de los amigos??
-var URLbase = "https://localhost:8081/api";
+var URLbase = "http://localhost:8081/api";
 
 // Cargamos el widget-login al acceder a cliente.html
 loadWidget("login");

@@ -1,7 +1,10 @@
 //Modificamos la URL actual del navegador
 window.history.pushState("", "", "/cliente.html?w=login");
 
-$("#loginButton").click(function() {console.log("Click boton login");
+// Borramos todos los eventos antes de registrar uno nuevo
+$("#loginButton").unbind( "click" );
+
+$("#loginButton").click(function() {
 	var email = $("#email").val();
 	var password = $("#password").val();
 	
