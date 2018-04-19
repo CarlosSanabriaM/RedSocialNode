@@ -108,3 +108,8 @@ loadUserEmail();
 loadUserChatWithEmail();
 loadUserChatWithName();
 loadMessages();
+
+// Cada N segundos se va a realizar una llamada al SW para comprobar si hay nuevos mensajes
+setInterval(function(){
+	loadMessages();
+}, UPDATE_TIME);
