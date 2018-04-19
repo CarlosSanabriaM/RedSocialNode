@@ -68,7 +68,10 @@ function loadMessages() {
 			updateTable(response);
 		},
 		error : function(error) {
-			loadWidget("login");
+			// Dejamos de hacer peticiones al SW cuando se produce
+			// un error, como por ejemplo, caduca el token de sesión
+            clearInterval(refreshIntervalId);
+			loadWidget("login");// TODO - aqui se podria parar el setInterval??
 		}
 	});
 }
@@ -110,6 +113,6 @@ loadUserChatWithName();
 loadMessages();
 
 // Cada N segundos se va a realizar una llamada al SW para comprobar si hay nuevos mensajes
-setInterval(function(){
+var refreshIntervalId = setInterval(function(){
 	loadMessages();
 }, UPDATE_TIME);
