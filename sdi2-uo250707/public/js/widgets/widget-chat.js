@@ -4,17 +4,6 @@ window.history.pushState("", "", "/cliente.html?w=chat");
 var messages;
 var nameUserChatWith;
 
-function loadUserEmail() { //TODO - pasar a cliente.html??
-	// Si el email es null y existe una cookie con el email, 
-	// lo guardamos en la variable global
-	if (userEmail == null && Cookies.get('userEmail') != null) {
-		userEmail = Cookies.get('userEmail');
-	}
-	
-	console.log("Usuario autenticado: " + userEmail);
-	$('#userAuthenticatedAs').text("Usuario autenticado: " + userEmail);
-}
-
 function loadUserChatWithEmail() {
 	// Si el email y/o la lista de emails de los amigos es null y existe una cookie, 
 	// recuperamos su valor de ella
@@ -70,8 +59,8 @@ function loadMessages() {
 		error : function(error) {
 			// Dejamos de hacer peticiones al SW cuando se produce
 			// un error, como por ejemplo, caduca el token de sesión
-            clearInterval(refreshIntervalId);
-			loadWidget("login");// TODO - aqui se podria parar el setInterval??
+            updateMessages = false;
+			loadWidget("login");
 		}
 	});
 }
@@ -106,6 +95,7 @@ function addMessageToTable(message) {
 	$("#tableBody").append(tableBody);
 }
 
+
 // Al cargar el widget cargamos los mensajes
 loadUserEmail();
 loadUserChatWithEmail();
@@ -114,5 +104,12 @@ loadMessages();
 
 // Cada N segundos se va a realizar una llamada al SW para comprobar si hay nuevos mensajes
 var refreshIntervalId = setInterval(function(){
-	loadMessages();
+	console.log("Refresh Interval");
+	if(updateMessages) {
+        console.log("Update Messages");
+        loadMessages();
+    }
 }, UPDATE_TIME);
+
+// Cuando entramos en el chat marcamos que queremos actualizar los mensajes
+updateMessages = true;

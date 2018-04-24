@@ -5,6 +5,7 @@ var selectedFriendEmail;
 var friends; // TODO - guardar emails solo, o toda la info de los amigos??
 var URLbase = "http://localhost:8081/api";
 var UPDATE_TIME = 1000; // Tiempo en milisegundos entre cada actualiación
+var updateMessages = false;
 
 // Cargamos el widget-login al acceder a cliente.html
 loadWidget("login");
@@ -46,4 +47,15 @@ function loadWidgetUsingUrl(){
 function loadWidget(widget){
 	$("#contenedor-principal").load("widget-"+ widget +".html");
 	$("#messageContainer").empty();
+}
+
+function loadUserEmail() { //TODO - pasar a cliente.html??
+    // Si el email es null y existe una cookie con el email,
+    // lo guardamos en la variable global
+    if (userEmail == null && Cookies.get('userEmail') != null) {
+        userEmail = Cookies.get('userEmail');
+    }
+
+    console.log("Usuario autenticado: " + userEmail);
+    $('#userAuthenticatedAs').text("Usuario autenticado: " + userEmail);
 }

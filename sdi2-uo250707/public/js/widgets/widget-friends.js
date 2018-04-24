@@ -1,17 +1,6 @@
 // Modificamos la URL actual del navegador
 window.history.pushState("", "", "/cliente.html?w=friends");
 
-function loadUserEmail() {
-	// Si el email es null y existe una cookie con el email, 
-	// lo guardamos en la variable global
-	if (userEmail == null && Cookies.get('userEmail') != null) {
-		userEmail = Cookies.get('userEmail');
-	}
-	
-	console.log("Usuario autenticado: " + userEmail);
-	$('#userAuthenticatedAs').text("Usuario autenticado: " + userEmail);
-}
-
 function loadFriends() {
 	friends = []; // vaciamos el array de amigos
 	
