@@ -1,0 +1,20 @@
+@CHARSET "ISO-8859-1";
+
+#tableChat>tbody>tr>td,
+#tableChat>tbody>tr>th,
+#tableChat>tfoot>tr>td,
+#tableChat>tfoot>tr>th,
+#tableChat>thead>tr>td,
+#tableChat>thead>tr>th{
+    border-top: none;
+}
+
+#tableChat>tbody>tr>td:nth-child(2){
+    text-align: right;
+}
+
+.chatMessage{
+    padding: 10px;
+    margin-bottom: 25px; //TODO - corregir
+    margin-top: 25px;
+}

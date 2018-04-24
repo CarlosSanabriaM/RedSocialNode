@@ -55,7 +55,7 @@ function loadMessages() {
 	// y el email del usuario con el que estamos chateando, y
 	// los cargamos en messages y en la tabla
 	$.ajax({
-		url : URLbase + "/conversation/message?user1="+userEmail+"&user2="+selectedFriendEmail,
+		url : URLbase + "/message?user1="+userEmail+"&user2="+selectedFriendEmail,
 		type : "GET",
 		data : {},
 		dataType : 'json',
@@ -92,14 +92,14 @@ function addMessageToTable(message) {
 	// el mensaje se muestra en la columna de la izquierda
 	if(message.destino == userEmail){
 		tableBody = "<tr id="+message._id+">" + 
-						"<td><span class='alert alert-info'>" + message.texto + "</span></td>" + 
+						"<td><span class='alert alert-info chatMessage'>" + message.texto + "</span></td>" +
 						"<td></td>" +    
 					"</tr>";
 	} else{
 		//Si no, se muestra en la columna de la derecha
 		tableBody = "<tr id="+message._id+">" + 
 						"<td></td>" + 
-						"<td><span class='alert alert-success'>" + message.texto + "</span></td>" +    
+						"<td><span class='alert alert-success chatMessage'>" + message.texto + "</span></td>" +
 					"</tr>";
 	}
 		

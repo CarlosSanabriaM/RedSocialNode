@@ -155,7 +155,7 @@ module.exports = function(app, gestorBD) {
 		 });// TODO - log
 	}
 	
-	app.get("/api/conversation/message", function(req, res) {// QUitar lo de conversation??
+	app.get("/api/message", function(req, res) {
 		// Validamos los datos de entrada
 		if (req.query.user1 == null || req.query.user2 == null
 				|| typeof req.query.user1 != "string"
@@ -254,11 +254,21 @@ module.exports = function(app, gestorBD) {
 		});
 	}
 
-	// Permite marcar un mensaje como leido
 	app.put("/api/message/:id", function(req, res) {
 		// Primero obtenemos el mensaje con ese id
 		var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
-		
+
+		// De momento, solo se puede actualizar un mensaje marcandolo como leido
+		if(req.body.leido == null || typeof req.body.leido != "boolean" || req.body.leido != true){
+            res.status(400);// Bad Request
+            res.json({
+                error : "Datos a actualizar erróneos. Sólo se puede actualizar el campo leido a true."
+            });
+            return;
+		}
+
+		var message = {leido : req.body.leido};
+
 		gestorBD.getMessages(criterio, function(messages) {
 			if (messages == null){
 				// Error
@@ -274,38 +284,38 @@ module.exports = function(app, gestorBD) {
 				});
 			} else {
 				// Existe el mensaje
-				paso1ComprobarUsuarioEnSesionEsReceptorMensaje(req, res, messages[0]);
+				paso1ComprobarUsuarioEnSesionEsReceptorMensaje(req, res, messages[0], message);
 			}
 		});
 	});
 	
-	function paso1ComprobarUsuarioEnSesionEsReceptorMensaje(req, res, message){
+	function paso1ComprobarUsuarioEnSesionEsReceptorMensaje(req, res, message, messageDataToUpdate){
 		if(res.email == message.destino){
-			paso2ComprobarMensajeNoLeido(req, res, message);
+			paso2ComprobarMensajeNoLeido(req, res, message, messageDataToUpdate);
 		} else{
 			res.status(403); // Forbidden
 			res.json({
-				error : "No puedes marcar como leído un mensaje del cual no eres su receptor"
+				error : "No puedes modificar un mensaje del cual no eres su receptor"
 			});
 		}
 	}
 	
-	function paso2ComprobarMensajeNoLeido(req, res, message){
-		if(message.leido){
-			res.status(400); // Forbidden TODO - correcto el status??
+	function paso2ComprobarMensajeNoLeido(req, res, message, messageDataToUpdate){
+		// Si se quiere actualizar a leido el mensaje, y ya está marcado como leido
+		if(messageDataToUpdate.leido && message.leido){
+			res.status(400); // Bad Request
 			res.json({
 				error : "Ese mensaje ya está marcado como leido"
 			});
 		} else{
-			paso3MarcarMensajeComoLeido(req, res);
+			paso3ActualizarMensaje(req, res, messageDataToUpdate);
 		}
 	}
 	
-	function paso3MarcarMensajeComoLeido(req, res){
+	function paso3ActualizarMensaje(req, res, messageDataToUpdate){
 		var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
-		var message = { leido : true };
-		
-		gestorBD.updateMessage(criterio, message, function(result) {
+
+		gestorBD.updateMessage(criterio, messageDataToUpdate, function(result) {
 			if (result == null) {
 				// Error
 				res.status(500); // Server Internal Error
