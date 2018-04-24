@@ -1,7 +1,5 @@
 package com.uniovi.tests.pageobjects;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -41,8 +39,7 @@ public class PO_PrivateView extends PO_NavView {
 	 * Comprueba que el numero de usuarios en la vista actual coincida con el indicado
 	 */
 	public static void checkNumUsers(WebDriver driver, int numUsers) {
-		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr");
-		assertTrue(elementos.size() == numUsers);
+		PO_View.checkNumRowsInTableBody(driver, numUsers);
 	}
 	
 	/**

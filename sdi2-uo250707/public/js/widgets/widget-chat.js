@@ -36,7 +36,7 @@ function loadUserChatWithName() {
 	}
 	
 	console.log("Nombre usuario con el que chateas: " + nameUserChatWith);
-	$('#nameUserChatWith').text(nameUserChatWith);
+	$('#nameUserChatWith').text("Chat con el usuario: " + nameUserChatWith);
 }
 
 function loadMessages() {

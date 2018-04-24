@@ -1,9 +1,10 @@
 <div id="widget-chat">
 	<span class="label label-primary" id="userAuthenticatedAs">
-		Usuario autenticado: email@email.com </span>
+		Usuario autenticado: email@email.com
+	</span>
 
-	<h2>
-		Chat con el usuario: <span id="nameUserChatWith"></span>
+	<h2 id="nameUserChatWith">
+		Chat con el usuario: Nombre Apellidos
 	</h2>
 
 	<table class="table" id="tableChat">
@@ -24,7 +25,7 @@
 				<input type="text" class="form-control"
 					placeholder="Introduce mensaje a enviar" id="messageContent" />
 				<span class="input-group-btn">
-					<button class="btn btn-default" onclick="sendMessage()">Enviar</button>
+					<button id="buttonMessage" class="btn btn-default" onclick="sendMessage()">Enviar</button>
 				</span>
 			</div>
 		</div>

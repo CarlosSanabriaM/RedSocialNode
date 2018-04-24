@@ -59,4 +59,12 @@ public class PO_View {
 		assertTrue(elementos.size() == 1);
 	}
 	
+	/**
+	 * Comprueba que el cuerpo de la tabla presente en la vista actual tenga el numero de filas indicado
+	 */
+	public static void checkNumRowsInTableBody(WebDriver driver, int numRows) {
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr");
+		assertTrue(elementos.size() == numRows);
+	}
+	
 }

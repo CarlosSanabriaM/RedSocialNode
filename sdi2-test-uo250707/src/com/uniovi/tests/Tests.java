@@ -43,12 +43,10 @@ public class Tests {
 	// Credenciales de inicio de sesión de usuarios para las pruebas de los widgets
 	private static String user10Email = "user10@gmail.com";
 	private static String user10Password = "1234";
-	private static String user11Email = "user11@gmail.com"; // TODO ??
-	private static String user11Password = "1234";
+	private static String user11Email = "user11@gmail.com";
+	private static String user11Name = "Diego Armando";
 	private static String user12Email = "user12@gmail.com";
-	private static String user12Password = "1234";
 	private static String user13Email = "user13@gmail.com";
-	private static String user13Password = "1234";
 	
 	/**
 	 * Antes de cada prueba se navega al URL home de la aplicaciónn
@@ -88,6 +86,13 @@ public class Tests {
 		mongo.insertFriendshipInFriendsCollection(user10Email, user11Email);
 		mongo.insertFriendshipInFriendsCollection(user10Email, user12Email);
 		mongo.insertFriendshipInFriendsCollection(user10Email, user13Email);
+		
+		// Insertamos 5 mensajes en la conversacion entre user10 y user11
+		mongo.insertMessageInMessagessCollection(user10Email, user11Email, "Hola, ¿qué tal estás?", false);
+		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Hola!", false);
+		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Muy bien. ¿Al final a que hora quedamos?", false);
+		mongo.insertMessageInMessagessCollection(user10Email, user11Email, "¿A las 17:00?", false);
+		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Vale, genial!", false);
 	}
 
 	/**
@@ -311,7 +316,7 @@ public class Tests {
 	}
 	
 	/**
-	 * C.2.1 [CListAmiVal] Acceder a la lista de amigos de un usuario, que al menos tenga tres amigos.
+	 * C2.1 [CListAmiVal] Acceder a la lista de amigos de un usuario, que al menos tenga tres amigos.
 	 */
 	@Test
 	public void PR16() {
@@ -332,7 +337,7 @@ public class Tests {
 	}
 	
 	/**
-	 * C.2.2 [CListAmiFil] Acceder a la lista de amigos de un usuario, y realizar un filtrado 
+	 * C2.2 [CListAmiFil] Acceder a la lista de amigos de un usuario, y realizar un filtrado 
 	 * para encontrar a un amigo concreto, el nombre a buscar debe coincidir con el de un amigo.
 	 */
 	@Test
@@ -359,11 +364,39 @@ public class Tests {
 	}
 	
 	/**
-	 * 
+	 * C3.1 [CListMenVal] Acceder a la lista de mensajes de un amigo “chat”, 
+	 * la lista debe contener al menos tres mensajes.
 	 */
 	@Test
 	public void PR18() {
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
 		
+		// Comprobamos que tiene 3 amigos
+		PO_ClientPrivateView.checkNumFriends(driver, 3);
+		
+		// Accedemos al chat con user11 y comprobamos que se muestran 5 mensajes
+		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user10Email, user11Name);
+		PO_ClientPrivateView.checkNumMessages(driver, 5);
+	}
+	
+	/**
+	 * C4.1 [CCrearMenVal] Acceder a la lista de mensajes de un amigo “chat” y 
+	 * crear un nuevo mensaje, validar que el mensaje aparece en la lista de mensajes.
+	 */
+	@Test
+	public void PR19() {
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
+		
+		// Comprobamos que tiene 3 amigos
+		PO_ClientPrivateView.checkNumFriends(driver, 3);
+		
+		// Accedemos al chat con user11 y comprobamos que se muestran 5 mensajes
+		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user10Email, user11Name);
+		PO_ClientPrivateView.checkNumMessages(driver, 5);
+		
+		// Creamos un nuevo mensaje, comprobamos que aparece, y que ahora hay 6 mensajes
+		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, "Bien, nos vemos. Chao!");
+		PO_ClientPrivateView.checkNumMessages(driver, 6);
 	}
 	
 }

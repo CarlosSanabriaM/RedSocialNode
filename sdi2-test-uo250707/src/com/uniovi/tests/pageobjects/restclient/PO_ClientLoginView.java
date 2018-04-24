@@ -4,9 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.uniovi.tests.pageobjects.*;
-
-public class PO_ClientLoginView extends PO_View {
+public class PO_ClientLoginView extends PO_ClientView {
 
 	/**
 	 * Espera a que se cargue el widget de login y lo rellena con los datos indicados
@@ -36,16 +34,6 @@ public class PO_ClientLoginView extends PO_View {
 	}
 	
 	/**
-	 * Va al widget de login
-	 * 
-	 * @param driver: apuntando al navegador abierto actualmente
-	 * @param baseUrl: url base de la aplicación
-	 */
-	static public void goToLogin(WebDriver driver, String baseUrl) {
-		driver.navigate().to(baseUrl + "/cliente.html?w=login");
-	}
-	
-	/**
 	 * Va al widget de login y lo rellena con los datos indicados
 	 * 
 	 * @param driver: apuntando al navegador abierto actualmente
@@ -54,7 +42,7 @@ public class PO_ClientLoginView extends PO_View {
 	 * @param passwordp: valor para el campo password
 	 */
 	static public void goToLoginAndfillForm(WebDriver driver, String baseUrl, String emailp, String passwordp) {
-		PO_ClientLoginView.goToLogin(driver, baseUrl);
+		PO_ClientView.goToWidget(driver, baseUrl, "login");
 		
 		// Comprobamos que aparece el título del widget y rellenamos el formulario
 		PO_ClientLoginView.checkElement(driver, "text", "Indentifícate para acceder a los chats");
@@ -75,9 +63,9 @@ public class PO_ClientLoginView extends PO_View {
 		
 		// Comprobamos que se muestra el título del widget con el listado de amigos y que el texto
 		// con el email del usuario autenticado coincide con el email del usuario que inició sesión
-		PO_View.checkElement(driver, "text", "Listado de tus amigos");
-		PO_View.checkElement(driver, "text", "Selecciona el nombre de un amigo para acceder a su chat");
-		PO_View.checkElement(driver, "text", "Usuario autenticado: " + emailp);
+		PO_ClientView.checkElement(driver, "text", "Listado de tus amigos");
+		PO_ClientView.checkElement(driver, "text", "Selecciona el nombre de un amigo para acceder a su chat");
+		PO_ClientView.checkElement(driver, "text", "Usuario autenticado: " + emailp);
 	}
 	
 	/**
@@ -94,8 +82,8 @@ public class PO_ClientLoginView extends PO_View {
 		goToLoginAndfillForm(driver, baseUrl, emailp, passwordp);
 		
 		// Comprobamos que seguimos en el widget de login y se muestra el mensaje de error
-		PO_View.checkElement(driver, "text", "Indentifícate para acceder a los chats");
-		PO_View.checkElement(driver, "text", "Usuario no encontrado");
+		PO_ClientView.checkElement(driver, "text", "Indentifícate para acceder a los chats");
+		PO_ClientView.checkElement(driver, "text", "Usuario no encontrado");
 	}
 	
 }

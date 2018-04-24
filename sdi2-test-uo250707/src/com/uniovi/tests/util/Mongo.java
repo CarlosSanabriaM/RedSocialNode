@@ -78,6 +78,18 @@ public class Mongo {
 		
 		// Lo insertamos en la colección 'friends'
 		insertDocumentInCollection(friendship, "friends");
-	}	
+	}
+	
+	public void insertMessageInMessagessCollection(String emisor, String destino, String texto, boolean leido) {
+		// Creamos el documento message
+		Document message = new Document();
+		message.append("emisor", emisor);
+		message.append("destino", destino);
+		message.append("texto", texto);
+		message.append("leido", leido);
+		
+		// Lo insertamos en la colección 'messages'
+		insertDocumentInCollection(message, "messages");
+	}
 	
 }
