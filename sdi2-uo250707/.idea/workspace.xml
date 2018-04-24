@@ -14,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="rapi.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rapi.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/rapi.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="240" column="13" lean-forward="true" selection-start-line="240" selection-start-column="13" selection-end-line="240" selection-end-column="13" />
+            <state relative-caret-position="336">
+              <caret line="246" column="16" lean-forward="true" selection-start-line="246" selection-start-column="16" selection-end-line="246" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -44,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="widget-chat.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="widget-chat.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/js/widgets/widget-chat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="100" column="38" lean-forward="true" selection-start-line="100" selection-start-column="38" selection-end-line="100" selection-end-column="38" />
+            <state relative-caret-position="356">
+              <caret line="92" column="0" lean-forward="false" selection-start-line="83" selection-start-column="5" selection-end-line="92" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -145,8 +145,8 @@
         <option value="$PROJECT_DIR$/public/widget-chat.html" />
         <option value="$PROJECT_DIR$/public/css/cliente.css" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/public/js/widgets/widget-chat.js" />
         <option value="$PROJECT_DIR$/routes/rapi.js" />
+        <option value="$PROJECT_DIR$/public/js/widgets/widget-chat.js" />
       </list>
     </option>
   </component>
@@ -270,12 +270,12 @@
       <workItem from="1524034327363" duration="657000" />
       <workItem from="1524056879449" duration="761000" />
       <workItem from="1524167635138" duration="3118000" />
-      <workItem from="1524554348335" duration="3933000" />
+      <workItem from="1524554348335" duration="4141000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9521000" />
+    <option name="totallyTimeSpent" value="9729000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1680" height="975" extended-state="0" />
@@ -564,18 +564,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/widgets/widget-chat.js">
+    <entry file="file://$PROJECT_DIR$/routes/rapi.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="100" column="38" lean-forward="true" selection-start-line="100" selection-start-column="38" selection-end-line="100" selection-end-column="38" />
+        <state relative-caret-position="336">
+          <caret line="246" column="16" lean-forward="true" selection-start-line="246" selection-start-column="16" selection-end-line="246" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/rapi.js">
+    <entry file="file://$PROJECT_DIR$/public/js/widgets/widget-chat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="240" column="13" lean-forward="true" selection-start-line="240" selection-start-column="13" selection-end-line="240" selection-end-column="13" />
+        <state relative-caret-position="356">
+          <caret line="92" column="0" lean-forward="false" selection-start-line="83" selection-start-column="5" selection-end-line="92" selection-end-column="0" />
           <folding />
         </state>
       </provider>

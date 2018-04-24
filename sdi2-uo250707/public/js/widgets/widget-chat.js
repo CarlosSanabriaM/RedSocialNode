@@ -90,7 +90,7 @@ function addMessageToTable(message) {
 	
 	// Si el receptor del mensaje es el usuario en sesion
 	// el mensaje se muestra en la columna de la izquierda
-	if(message.destino == userEmail){
+	if(message.destino.includes(userEmail)){
 		tableBody = "<tr id="+message._id+">" + 
 						"<td><span class='alert alert-info chatMessage'>" + message.texto + "</span></td>" +
 						"<td></td>" +    
