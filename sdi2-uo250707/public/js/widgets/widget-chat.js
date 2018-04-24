@@ -52,7 +52,7 @@ function loadMessages() {
 			"token" : token
 		},
 		success : function(response) {
-			console.log("Mensajes cargados: " + JSON.stringify(response));
+			console.log("Número mensajes cargados: " + response.length);
 			messages = response;
 			updateTable(response);
 		},
@@ -102,14 +102,12 @@ loadUserChatWithEmail();
 loadUserChatWithName();
 loadMessages();
 
+// Cuando entramos en el chat marcamos que queremos actualizar los mensajes
+updateMessages = true;
+
 // Cada N segundos se va a realizar una llamada al SW para comprobar si hay nuevos mensajes
-var refreshIntervalId = setInterval(function(){
-	console.log("Refresh Interval");
+setInterval(function(){
 	if(updateMessages) {
-        console.log("Update Messages");
         loadMessages();
     }
 }, UPDATE_TIME);
-
-// Cuando entramos en el chat marcamos que queremos actualizar los mensajes
-updateMessages = true;

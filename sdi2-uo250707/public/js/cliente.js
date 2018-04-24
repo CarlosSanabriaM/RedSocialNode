@@ -2,7 +2,7 @@
 var token;
 var userEmail;
 var selectedFriendEmail;
-var friends; // TODO - guardar emails solo, o toda la info de los amigos??
+var friends;
 var URLbase = "http://localhost:8081/api";
 var UPDATE_TIME = 1000; // Tiempo en milisegundos entre cada actualiación
 var updateMessages = false;

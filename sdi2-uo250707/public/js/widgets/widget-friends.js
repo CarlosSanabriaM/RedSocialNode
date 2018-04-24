@@ -48,9 +48,6 @@ function loadUserDataAndAddToTable(email) {
 			"token" : token
 		},
 		success : function(response) {
-			console.log("User with email '"+email+
-					"' data: "+JSON.stringify(response));
-			
 			friends.push(response); // se añade el amigo a la lista
 			addUserToTable(response);// y a la tabla
 		},
