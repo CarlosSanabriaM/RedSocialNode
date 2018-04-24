@@ -248,6 +248,13 @@ module.exports = function(app, gestorBD) {
 					error : "Se ha producido un error"
 				});
 			} else {
+				// Añadimos la URL /api/user/ para los campos emisor y destino de cada mensaje
+				// HATEOAS
+                for (var i = 0; i < messages.length; i++) {
+                    messages[i].emisor = "/api/user/" + messages[i].emisor;
+                    messages[i].destino = "/api/user/" + messages[i].destino;
+                }
+
 				res.status(200);	// OK
 				res.send(JSON.stringify(messages));
 			}
