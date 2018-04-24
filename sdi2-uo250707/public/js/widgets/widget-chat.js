@@ -13,6 +13,8 @@ function loadUserChatWithEmail() {
 	if (selectedFriendEmail == null && Cookies.get('selectedFriendEmail') != null) {
 		selectedFriendEmail = Cookies.get('selectedFriendEmail');
 	}
+
+    console.log("Email usuario con el que chateas: " + selectedFriendEmail);
 }
 
 function loadUserChatWithName() {
@@ -93,6 +95,36 @@ function addMessageToTable(message) {
 	}
 		
 	$("#tableBody").append(tableBody);
+}
+
+function sendMessage(){
+	// Recuperamos el valor del mensaje y lo vaciamos
+	var messageContent = $("#messageContent").val();
+    $("#messageContent").val("")
+
+	var message = {
+        destino : selectedFriendEmail,
+        texto : messageContent,
+	};
+
+    $.ajax({
+        url : URLbase + "/message",
+        type : "POST",
+        data : message,
+        dataType : 'json',
+        headers : {
+            "token" : token
+        },
+        success : function(response) {
+            console.log("Mensaje creado correctamente");
+        },
+        error : function(error) {
+            // Dejamos de hacer peticiones al SW cuando se produce
+            // un error, como por ejemplo, caduca el token de sesión
+            updateMessages = false;
+            loadWidget("login");
+        }
+    });
 }
 
 
