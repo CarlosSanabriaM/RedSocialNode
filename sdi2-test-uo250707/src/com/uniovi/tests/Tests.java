@@ -15,6 +15,7 @@ import com.uniovi.tests.pageobjects.PO_PrivateView;
 import com.uniovi.tests.pageobjects.PO_SignupView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.pageobjects.restclient.PO_ClientLoginView;
+import com.uniovi.tests.pageobjects.restclient.PO_ClientPrivateView;
 import com.uniovi.tests.util.Mongo;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -24,7 +25,7 @@ public class Tests {
 	static String PathFirefox = "/Applications/Firefox_46.0.app/Contents/MacOS/firefox-bin"; // Mac
 	
 	static WebDriver driver = getDriver(PathFirefox);
-	static String URL = "https://localhost:8081";
+	static String URL = "http://localhost:8081";
 
 	public static WebDriver getDriver(String PathFirefox) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -75,9 +76,10 @@ public class Tests {
 	static public void begin() {
 		Mongo mongo = new Mongo();
 		
-		// Borramos todas las invitaciones y las relaciones de amistad
+		// Borramos todas las invitaciones, las relaciones de amistad y los mensajes
 		mongo.deleteAllDocumentsInCollection("invitations");
 		mongo.deleteAllDocumentsInCollection("friends");
+		mongo.deleteAllDocumentsInCollection("messages");
 		
 		// Borramos al usuario newUser@gmail.com, si existe
 		mongo.deleteUserWithEmail("newUser@gmail.com");
@@ -289,6 +291,7 @@ public class Tests {
 		PO_PrivateView.logoutAndCheckWasOk(driver);
 	}
 
+	
 	// Pruebas Cliente Rest
 	
 	/**
@@ -305,6 +308,44 @@ public class Tests {
 	@Test
 	public void PR15() {
 		PO_ClientLoginView.goToLoginFillFormAndCheckWasWrong(driver, URL, "notExists@gmail.com", "123456");
+	}
+	
+	/**
+	 * C.2.1 [CListAmiVal] Acceder a la lista de amigos de un usuario, que al menos tenga tres amigos.
+	 */
+	@Test
+	public void PR16() {
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
+		
+		// Comprobamos que tiene 3 amigos
+		PO_ClientPrivateView.checkNumFriends(driver, 3);
+		
+		/* Los datos de los amigos de user10 son:
+		 * - Diego Armando 	- user11@gmail.com
+		 * - Peter Scholes	- user12@gmail.com
+		 * - Red Parker		- user13@gmail.com
+		 */
+		
+		PO_ClientLoginView.checkElement(driver, "text", "Diego Armando");
+		PO_ClientLoginView.checkElement(driver, "text", "Peter Scholes");
+		PO_ClientLoginView.checkElement(driver, "text", "Red Parker");
+	}
+	
+	/**
+	 * C.2.2 [CListAmiFil] Acceder a la lista de amigos de un usuario, y realizar un filtrado 
+	 * para encontrar a un amigo concreto, el nombre a buscar debe coincidir con el de un amigo.
+	 */
+	@Test
+	public void PR17() {
+		
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void PR18() {
+		
 	}
 	
 }

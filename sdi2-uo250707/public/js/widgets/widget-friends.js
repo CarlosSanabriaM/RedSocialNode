@@ -99,11 +99,6 @@ function chat(email) {
 	loadWidget("chat");
 }
 
-function updateFriends() {
-	$('#filterName').val("");
-	loadFriends();
-}
-
 // TODO - usarlo para ordenar por numero de mensajes --> Meterlo en una especie de bucle que se llame cada N segundos
 //var precioDsc = false;
 //
