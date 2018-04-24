@@ -337,7 +337,25 @@ public class Tests {
 	 */
 	@Test
 	public void PR17() {
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
 		
+		/* Los datos de los amigos de user10 son:
+		 * - Diego Armando 	- user11@gmail.com
+		 * - Peter Scholes	- user12@gmail.com
+		 * - Red Parker		- user13@gmail.com
+		 */
+		
+		// Comprobamos que tiene 3 amigos
+		PO_ClientPrivateView.checkNumFriends(driver, 3);
+		
+		// Escribimos en el campo de filtrado 'Red Parker' y comprobamos 
+		// que sólo sale un amigo (Red Parker) y se muestra su nombre e email
+		PO_ClientPrivateView.filterFriendsByName(driver, "Red Parker");
+
+		PO_ClientPrivateView.checkNumFriends(driver, 1);
+		
+		PO_ClientPrivateView.checkElement(driver, "text", "Red Parker");
+		PO_ClientPrivateView.checkElement(driver, "text", "user13@gmail.com");
 	}
 	
 	/**
