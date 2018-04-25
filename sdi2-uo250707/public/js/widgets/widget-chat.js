@@ -86,7 +86,7 @@ function addMessageToTable(message) {
 	// Si el mensaje está marcado como leido, tenemos que añadirle el texto <leido>
 	var messageText = message.texto;
 	if(message.leido)
-        messageText += " <leido>";
+        messageText += " &lt;leido&gt;";
 	
 	// Si el receptor del mensaje es el usuario en sesion
 	if(message.destino.includes(userEmail)){
@@ -99,6 +99,7 @@ function addMessageToTable(message) {
 		// Si el mensaje no estaba marcado como leido, lo marcamos
 		if(!message.leido)
 	        markMessageAsRead(message);
+		
 	} else{
 		// Si no, se muestra en la columna de la derecha
 		tableBody = "<tr id="+message._id+">" + 

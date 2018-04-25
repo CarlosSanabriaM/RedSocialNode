@@ -264,7 +264,7 @@ module.exports = function(app, gestorBD) {
 	app.put("/api/message/:id", function(req, res) {
 		// Primero obtenemos el mensaje con ese id
 		var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
-        // el valor que nos llega puede ser un string
+        // el valor que nos llega puede ser un string o un boolean
 		var message = {leido : req.body.leido == 'true' || req.body.leido};
 
 		// De momento, solo se puede actualizar un mensaje marcandolo como leido
