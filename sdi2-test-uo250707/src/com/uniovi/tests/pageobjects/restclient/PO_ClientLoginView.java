@@ -45,7 +45,7 @@ public class PO_ClientLoginView extends PO_ClientView {
 		PO_ClientView.goToWidget(driver, baseUrl, "login");
 		
 		// Comprobamos que aparece el título del widget y rellenamos el formulario
-		PO_ClientLoginView.checkElement(driver, "text", "Indentifícate para acceder a los chats");
+		PO_ClientLoginView.checkElement(driver, "text", "Identifícate para acceder a los chats");
 		PO_ClientLoginView.fillForm(driver, emailp, passwordp);
 	}
 

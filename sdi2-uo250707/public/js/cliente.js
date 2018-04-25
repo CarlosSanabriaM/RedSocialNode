@@ -6,6 +6,7 @@ var friends;
 var URLbase = "http://localhost:8081/api";
 var UPDATE_TIME = 1000; // Tiempo en milisegundos entre cada actualiación
 var updateMessages = false;
+var updateFriends = false;
 
 // Cargamos el widget-login al acceder a cliente.html
 loadWidget("login");
@@ -47,6 +48,12 @@ function loadWidgetUsingUrl(){
 function loadWidget(widget){
 	$("#contenedor-principal").load("widget-"+ widget +".html");
 	$("#messageContainer").empty();
+}
+
+function loadWidgetAndStopIntervals(widget){
+    loadWidget(widget);
+    updateMessages = false;
+    updateFriends = false;
 }
 
 function loadUserEmail() {

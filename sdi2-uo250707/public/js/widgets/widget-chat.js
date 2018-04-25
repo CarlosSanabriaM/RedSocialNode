@@ -4,7 +4,26 @@ window.history.pushState("", "", "/cliente.html?w=chat");
 var messages;
 var nameUserChatWith;
 
-function errorProduced(){
+// Cargamos los mensajes
+loadUserEmail();
+loadUserChatWithEmail();
+loadUserChatWithName();
+loadMessages();
+
+// Marcamos que queremos actualizar los mensajes
+updateMessages = true;
+
+// Cada N segundos se va a realizar una llamada al SW para comprobar si hay nuevos mensajes
+setInterval(function(){
+    if(updateMessages) {
+        loadMessages();
+    }
+}, UPDATE_TIME);
+
+
+// Funciones:
+
+function errorProducedInChat(){
     // Dejamos de hacer peticiones al SW cuando se produce
     // un error, como por ejemplo, caduca el token de sesión
     updateMessages = false;
@@ -63,16 +82,16 @@ function loadMessages() {
 		success : function(response) {
 			console.log("Número mensajes cargados: " + response.length);
 			messages = response;
-			updateTable(response);
+			updateMessagesTable(response);
 		},
 		error : function(error) {
-            errorProduced();
+            errorProducedInChat();
 		}
 	});
 }
 
-function updateTable(messages) {
-	$("#tableBody").empty(); // Vaciar la tabla
+function updateMessagesTable(messages) {
+	$("#chatTableBody").empty(); // Vaciar la tabla
 
 	for (i = 0; i < messages.length; i++) {
 		addMessageToTable(messages[i]);
@@ -108,7 +127,7 @@ function addMessageToTable(message) {
 					"</tr>";
 	}
 		
-	$("#tableBody").append(tableBody);
+	$("#chatTableBody").append(tableBody);
 }
 
 function markMessageAsRead(message){
@@ -126,7 +145,7 @@ function markMessageAsRead(message){
             console.log("Mensaje "+ message._id +" marcado como leido correctamente");
         },
         error : function(error) {
-            errorProduced();
+            errorProducedInChat();
         }
     });
 }
@@ -156,24 +175,7 @@ function sendMessage(){
             console.log("Mensaje creado correctamente");
         },
         error : function(error) {
-            errorProduced();
+            errorProducedInChat();
         }
     });
 }
-
-
-// Al cargar el widget cargamos los mensajes
-loadUserEmail();
-loadUserChatWithEmail();
-loadUserChatWithName();
-loadMessages();
-
-// Cuando entramos en el chat marcamos que queremos actualizar los mensajes
-updateMessages = true;
-
-// Cada N segundos se va a realizar una llamada al SW para comprobar si hay nuevos mensajes
-setInterval(function(){
-	if(updateMessages) {
-        loadMessages();
-    }
-}, UPDATE_TIME);
