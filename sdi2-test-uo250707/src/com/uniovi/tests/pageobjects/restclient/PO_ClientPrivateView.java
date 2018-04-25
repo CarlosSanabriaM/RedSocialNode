@@ -98,7 +98,7 @@ public class PO_ClientPrivateView extends PO_ClientView {
 	 */
 	public static void checkMessageIsRead(WebDriver driver, String messageContent) {
 		// Comprobamos que aparece el texto del mensaje + <leido>
-		PO_ClientPrivateView.checkElement(driver, "text", messageContent + "<leido>");
+		PO_ClientPrivateView.checkElement(driver, "text", messageContent + " <leido>");
 	}
 	
 }
