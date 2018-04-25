@@ -102,6 +102,9 @@ function sendMessage(){
 	var messageContent = $("#messageContent").val();
     $("#messageContent").val("")
 
+	if(messageContent == "")
+		return;
+
 	var message = {
         destino : selectedFriendEmail,
         texto : messageContent,

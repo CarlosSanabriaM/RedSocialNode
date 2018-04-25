@@ -81,8 +81,6 @@ $('#filterName').on('input', function(e) {
 	var filteredFriends = [];
 	var filterName = $("#filterName").val();
 
-	// TODO - modificar para que sea insensible a mayusculas y minusculas?? O mejor, añadir un checbox para que lo decida el usuario
-	
 	for (i = 0; i < friends.length; i++) {
 		// indexOf() retorna -1 si el valor buscado no se encuentra en el string
 		if (friends[i].name.indexOf(filterName) != -1) {
@@ -99,7 +97,7 @@ function chat(email) {
 	loadWidget("chat");
 }
 
-// TODO - usarlo para ordenar por numero de mensajes --> Meterlo en una especie de bucle que se llame cada N segundos
+// TODO - usarlo para ordenar por numero de mensajes --> Meterlo en un setInverval(function, TIME)
 //var precioDsc = false;
 //
 //function ordenarPorPrecio() {

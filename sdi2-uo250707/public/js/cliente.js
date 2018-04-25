@@ -49,7 +49,7 @@ function loadWidget(widget){
 	$("#messageContainer").empty();
 }
 
-function loadUserEmail() { //TODO - pasar a cliente.html??
+function loadUserEmail() {
     // Si el email es null y existe una cookie con el email,
     // lo guardamos en la variable global
     if (userEmail == null && Cookies.get('userEmail') != null) {

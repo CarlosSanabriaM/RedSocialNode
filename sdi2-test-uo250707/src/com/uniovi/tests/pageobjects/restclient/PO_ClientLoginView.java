@@ -82,7 +82,7 @@ public class PO_ClientLoginView extends PO_ClientView {
 		goToLoginAndfillForm(driver, baseUrl, emailp, passwordp);
 		
 		// Comprobamos que seguimos en el widget de login y se muestra el mensaje de error
-		PO_ClientView.checkElement(driver, "text", "Indentifícate para acceder a los chats");
+		PO_ClientView.checkElement(driver, "text", "Identifícate para acceder a los chats");
 		PO_ClientView.checkElement(driver, "text", "Usuario no encontrado");
 	}
 	

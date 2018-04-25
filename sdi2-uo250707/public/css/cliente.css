@@ -15,6 +15,5 @@
 
 .chatMessage{
     padding: 10px;
-    margin-bottom: 25px; //TODO - corregir
-    margin-top: 25px;
+    line-height: 200%;
 }

@@ -90,7 +90,7 @@ public class Tests {
 		// Insertamos 5 mensajes en la conversacion entre user10 y user11
 		mongo.insertMessageInMessagessCollection(user10Email, user11Email, "Hola, ¿qué tal estás?", false);
 		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Hola!", false);
-		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Muy bien. ¿Al final a que hora quedamos?", false);
+		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "¿Al final a que hora quedamos?", false);
 		mongo.insertMessageInMessagessCollection(user10Email, user11Email, "¿A las 17:00?", false);
 		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Vale, genial!", false);
 	}
@@ -300,7 +300,7 @@ public class Tests {
 	// Pruebas Cliente Rest
 	
 	/**
-	 * C1.1[[CInVal] Inicio de sesión con datos válidos.
+	 * C1.1[CInVal] Inicio de sesión con datos válidos.
 	 */
 	@Test
 	public void PR14() {
