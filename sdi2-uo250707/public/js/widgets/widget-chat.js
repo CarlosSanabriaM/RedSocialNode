@@ -34,7 +34,7 @@ function loadUserChatWithEmail() {
 	// Si el email y/o la lista de emails de los amigos es null y existe una cookie, 
 	// recuperamos su valor de ella
 	if (friends == null && Cookies.get('friends') != null) {
-		friends = Cookies.get('friends');
+		friends = JSON.parse(Cookies.get('friends'));
 	}
 	if (selectedFriendEmail == null && Cookies.get('selectedFriendEmail') != null) {
 		selectedFriendEmail = Cookies.get('selectedFriendEmail');
@@ -44,20 +44,12 @@ function loadUserChatWithEmail() {
 }
 
 function loadUserChatWithName() {
-	// Si el nombre del amigo con el que chateas es null y existe una cookie, 
-	// recuperamos su valor de ella
-	if(nameUserChatWith == null && Cookies.get('nameUserChatWith') != null) {
-		nameUserChatWith = Cookies.get('nameUserChatWith');
-	}
-	else{
-		// Si no, sacamos el nombre del usuario con el que estamos chateando
-		// de la lista de amigos, usando el email del usuario con el que estamos chateando
-		for (i = 0; i < friends.length; i++) {
-			if(friends[i].email == selectedFriendEmail){
-				nameUserChatWith = friends[i].name;
-				Cookies.set('nameUserChatWith', nameUserChatWith);
-				break;
-			}
+	// Sacamos el nombre del usuario con el que estamos chateando
+	// de la lista de amigos, usando el email del usuario con el que estamos chateando
+	for (i = 0; i < friends.length; i++) {
+		if(friends[i].email == selectedFriendEmail){
+			nameUserChatWith = friends[i].name;
+			break;
 		}
 	}
 	

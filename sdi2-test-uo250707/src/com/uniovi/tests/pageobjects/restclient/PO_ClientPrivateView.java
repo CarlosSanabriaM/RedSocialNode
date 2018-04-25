@@ -89,4 +89,16 @@ public class PO_ClientPrivateView extends PO_ClientView {
 		PO_ClientPrivateView.checkElement(driver, "text", messageContent);
 	}
 	
+	/**
+	 * Estando en un chat con un amigo, comprueba que el mensaje indicado
+	 * se muestra como leido.
+	 * 
+	 * @param driver: apuntando al navegador abierto actualmente. 
+	 * @param messageContent: contenido del mensaje a verificar si está leido.
+	 */
+	public static void checkMessageIsRead(WebDriver driver, String messageContent) {
+		// Comprobamos que aparece el texto del mensaje + <leido>
+		PO_ClientPrivateView.checkElement(driver, "text", messageContent + "<leido>");
+	}
+	
 }

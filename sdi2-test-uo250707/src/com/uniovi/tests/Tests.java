@@ -43,7 +43,9 @@ public class Tests {
 	// Credenciales de inicio de sesión de usuarios para las pruebas de los widgets
 	private static String user10Email = "user10@gmail.com";
 	private static String user10Password = "1234";
+	private static String user10Name = "David Villa";
 	private static String user11Email = "user11@gmail.com";
+	private static String user11Password = "1234";
 	private static String user11Name = "Diego Armando";
 	private static String user12Email = "user12@gmail.com";
 	private static String user13Email = "user13@gmail.com";
@@ -397,6 +399,34 @@ public class Tests {
 		// Creamos un nuevo mensaje, comprobamos que aparece, y que ahora hay 6 mensajes
 		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, "Bien, nos vemos. Chao!");
 		PO_ClientPrivateView.checkNumMessages(driver, 6);
+	}
+
+
+	/**
+	 * C5.1 [CMenLeidoVal] Identificarse en la aplicación y enviar un mensaje a un amigo, 
+	 * validar que el mensaje enviado aparece en el chat. Identificarse después con el usuario 
+	 * que recibido el mensaje y validar que tiene un mensaje sin leer, entrar en el chat y 
+	 * comprobar que el mensaje pasa a tener el estado leído.
+	 */
+	@Test
+	public void PR20() {
+		String message = "¡Hasta luego!";
+		
+		// Accedemos como user 11
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user11Email, user11Password);
+		
+		// Entramos al chat con user10 y le mandamos un mensaje
+		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user11Email, user10Name);
+		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, message);
+		
+		
+		// Accedemos como user 10
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
+		
+		// Entramos en el chat con user11 y comprobamos que el mensaje pasa a leido
+		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user10Email, user11Name);
+		PO_ClientPrivateView.checkMessageIsRead(driver, message);
+		
 	}
 	
 }
