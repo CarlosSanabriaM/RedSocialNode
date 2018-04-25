@@ -428,5 +428,15 @@ public class Tests {
 		PO_ClientPrivateView.checkMessageIsRead(driver, message);
 		
 	}
-	
+
+	/**
+	 * C6.1 [CListaMenNoLeidoVal] Identificarse en la aplicación y enviar tres
+	 * mensajes a un amigo, validar que los mensajes enviados aparecen en el chat.
+	 * Identificarse después con el usuario que recibido el mensaje y validar que
+	 * el número de mensajes sin leer aparece en la propia lista de amigos.
+	 */
+	@Test
+	public void PR21() {
+		//TODO
+	}
 }
