@@ -264,17 +264,17 @@ module.exports = function(app, gestorBD) {
 	app.put("/api/message/:id", function(req, res) {
 		// Primero obtenemos el mensaje con ese id
 		var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
+        // el valor que nos llega puede ser un string
+		var message = {leido : req.body.leido == 'true'};
 
 		// De momento, solo se puede actualizar un mensaje marcandolo como leido
-		if(req.body.leido == null || typeof req.body.leido != "boolean" || req.body.leido != true){
+		if(message.leido  != true){
             res.status(400);// Bad Request
             res.json({
                 error : "Datos a actualizar erróneos. Sólo se puede actualizar el campo leido a true."
             });
             return;
 		}
-
-		var message = {leido : req.body.leido};
 
 		gestorBD.getMessages(criterio, function(messages) {
 			if (messages == null){

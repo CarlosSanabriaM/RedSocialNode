@@ -4,6 +4,13 @@ window.history.pushState("", "", "/cliente.html?w=chat");
 var messages;
 var nameUserChatWith;
 
+function errorProduced(){
+    // Dejamos de hacer peticiones al SW cuando se produce
+    // un error, como por ejemplo, caduca el token de sesión
+    updateMessages = false;
+    loadWidget("login");
+}
+
 function loadUserChatWithEmail() {
 	// Si el email y/o la lista de emails de los amigos es null y existe una cookie, 
 	// recuperamos su valor de ella
@@ -59,10 +66,7 @@ function loadMessages() {
 			updateTable(response);
 		},
 		error : function(error) {
-			// Dejamos de hacer peticiones al SW cuando se produce
-			// un error, como por ejemplo, caduca el token de sesión
-            updateMessages = false;
-			loadWidget("login");
+            errorProduced();
 		}
 	});
 }
@@ -78,23 +82,52 @@ function updateTable(messages) {
 function addMessageToTable(message) {
 	// Añadimos los datos de ese mensaje a la tabla
 	var tableBody;
+
+	// Si el mensaje está marcado como leido, tenemos que añadirle el texto <leido>
+	var messageText = message.texto;
+	if(message.leido)
+        messageText += " <leido>";
 	
 	// Si el receptor del mensaje es el usuario en sesion
-	// el mensaje se muestra en la columna de la izquierda
 	if(message.destino.includes(userEmail)){
-		tableBody = "<tr id="+message._id+">" + 
-						"<td><span class='alert alert-info chatMessage'>" + message.texto + "</span></td>" +
+        // El mensaje se muestra en la columna de la izquierda
+		tableBody = "<tr id="+message._id+">" +
+						"<td><span class='alert alert-info chatMessage'>" + messageText + "</span></td>" +
 						"<td></td>" +    
 					"</tr>";
+
+		// Si el mensaje no estaba marcado como leido, lo marcamos
+		if(!message.leido)
+	        markMessageAsRead(message);
 	} else{
-		//Si no, se muestra en la columna de la derecha
+		// Si no, se muestra en la columna de la derecha
 		tableBody = "<tr id="+message._id+">" + 
 						"<td></td>" + 
-						"<td><span class='alert alert-success chatMessage'>" + message.texto + "</span></td>" +
+						"<td><span class='alert alert-success chatMessage'>" + messageText + "</span></td>" +
 					"</tr>";
 	}
 		
 	$("#tableBody").append(tableBody);
+}
+
+function markMessageAsRead(message){
+    $.ajax({
+        url : URLbase + "/message/" + message._id,
+        type : "PUT",
+        data : {
+        	"leido" : true
+		}, // se marca como leido
+        dataType : 'json',
+        headers : {
+            "token" : token
+        },
+        success : function(response) {
+            console.log("Mensaje "+ message._id +" marcado como leido correctamente");
+        },
+        error : function(error) {
+            errorProduced();
+        }
+    });
 }
 
 function sendMessage(){
@@ -122,10 +155,7 @@ function sendMessage(){
             console.log("Mensaje creado correctamente");
         },
         error : function(error) {
-            // Dejamos de hacer peticiones al SW cuando se produce
-            // un error, como por ejemplo, caduca el token de sesión
-            updateMessages = false;
-            loadWidget("login");
+            errorProduced();
         }
     });
 }
