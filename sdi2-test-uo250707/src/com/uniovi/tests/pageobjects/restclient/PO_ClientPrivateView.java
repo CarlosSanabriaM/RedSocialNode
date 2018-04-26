@@ -1,12 +1,23 @@
 package com.uniovi.tests.pageobjects.restclient;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import com.uniovi.tests.pageobjects.PO_View;
+
 public class PO_ClientPrivateView extends PO_ClientView {
+
+	private static String getUserNameFromWebElement(WebElement elemento) {
+		String friendName = elemento.getText();
+		friendName.substring(0, friendName.length() - 5); // quitamos el " [n] "
+
+		return friendName;
+	}
 	
 	/**
 	 * Comprueba que el numero de amigos del usuario en sesión coincida con el indicado
@@ -66,6 +77,33 @@ public class PO_ClientPrivateView extends PO_ClientView {
 		// y "Chat con el usuario: <userName>"
 		PO_ClientPrivateView.checkElement(driver, "text", "Usuario autenticado: " + emailUserSession);
 		PO_ClientPrivateView.checkElement(driver, "text", "Chat con el usuario: " + userNameChat);
+	}
+	
+	/**
+	 * Estando en el listado de amigos del usuario, accede al chat con 
+	 * el ultimo amigo de la lista, y comprueba que se muestra los textos:
+	 * "Usuario autenticado: <emailUserSession>"
+	 * "Chat con el usuario: <friendName>"
+	 * 
+	 * @param driver: apuntando al navegador abierto actualmente. 
+	 * @param emailUserSession: email del usuario en sesión.
+	 */
+	public static String goToChatOfLastFriendAndCheckWasOk(WebDriver driver, String emailUserSession) {
+		// Buscamos el enlace de la ultima fila de la tabla de amigos
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr[last()]/td[1]/a");
+		
+		// Sacamos el nombre del amigo
+		String lastFriendName = getUserNameFromWebElement(elementos.get(0));
+		
+		// Clickamos el enlace para acceder a su chat
+		elementos.get(0).click();
+		
+		// Comprobamos que se muestran los textos "Usuario autenticado: <emailUserSession>" 
+		// y "Chat con el usuario: <lastFriendName>"
+		PO_ClientPrivateView.checkElement(driver, "text", "Usuario autenticado: " + emailUserSession);
+		PO_ClientPrivateView.checkElement(driver, "text", "Chat con el usuario: " + lastFriendName);
+		
+		return lastFriendName;
 	}
 
 	/**
@@ -134,6 +172,28 @@ public class PO_ClientPrivateView extends PO_ClientView {
 		
 		// Comprobamos que el numero de mensajes sin leer de dicho amigo coincide con el indicado
 		PO_ClientPrivateView.checkElement(driver, "text", friendName + " [" + numMessagesNotRead + "]");
+	}
+
+	/**
+	 * Estando en la lista de amigos, comprueba que el amigo con el nombre
+	 * dado está el primero en la lista.
+	 * 
+	 * @param driver: apuntando al navegador abierto actualmente. 
+	 * @param friendName: nombre del amigo que quieres comprobar que es el primero
+	 */
+	public static void checkFriendIsFirst(WebDriver driver, String friendName) {
+		// TODO Esperar mensaje ordenados
+		
+		// Buscamos el enlace de la primera fila de la tabla de amigos
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr[1]/td[1]/a");
+		
+		// Sacamos el nombre del amigo
+		String firstFriendName = getUserNameFromWebElement(elementos.get(0));
+		
+		// Comprobamos que coincide con el nombre dado
+		assertTrue("El usuario con nombre '" + friendName +"' NO se muestra el primero en la lista."
+				+ "El nombre del primer usuario es: " + firstFriendName, 
+				firstFriendName.equals(friendName));
 	}
 	
 }

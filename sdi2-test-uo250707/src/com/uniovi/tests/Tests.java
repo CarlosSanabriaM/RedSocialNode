@@ -37,6 +37,7 @@ public class Tests {
 	private static String user1Email = "user01@gmail.com";
 	private static String user1Password = "1234";
 	private static String user1Name = "Juan Pérez Martínez";
+	
 	private static String user2Email = "user02@gmail.com";
 	private static String user2Password = "1234";
 
@@ -44,11 +45,16 @@ public class Tests {
 	private static String user10Email = "user10@gmail.com";
 	private static String user10Password = "1234";
 	private static String user10Name = "David Villa";
+	
 	private static String user11Email = "user11@gmail.com";
 	private static String user11Password = "1234";
 	private static String user11Name = "Diego Armando";
+	
 	private static String user12Email = "user12@gmail.com";
+	
 	private static String user13Email = "user13@gmail.com";
+	private static String user13Password = "1234";
+	private static String user13Name = "Red Parker";
 	
 	/**
 	 * Antes de cada prueba se navega al URL home de la aplicaciónn
@@ -461,5 +467,41 @@ public class Tests {
 		
 		// Comprobamos que tiene tres mensaje sin leer de user11
 		PO_ClientPrivateView.checkNumMessagesNotReadInFriendsList(driver, user11Name, 3);
+	}
+	
+	/**
+	 * C7.1 [COrdenMenVall] Identificarse con un usuario A que al menos tenga 3
+	 * amigos, ir al chat del ultimo amigo de la lista y enviarle un mensaje, volver
+	 * a la lista de amigos y comprobar que el usuario al que se le ha enviado el
+	 * mensaje esta en primera posición. Identificarse con el usuario B y enviarle
+	 * un mensaje al usuario A. Volver a identificarse con el usuario A y ver que el
+	 * usuario que acaba de mandarle el mensaje es el primero en su lista de amigos.
+	 */
+	@Test
+	public void PR22() {
+		// Accedemos como user 10
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
+		
+		// Entramos al chat con el ultimo usuario de la lista y le enviamos un mensaje
+		String friendName = PO_ClientPrivateView.goToChatOfLastFriendAndCheckWasOk(driver, user10Email);
+		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, "Buenos dias");
+		
+		// Volvemos a la lista de amigos y comprobamos que el usuario al que le enviamos el mensaje está el primero
+		PO_ClientPrivateView.goToWidget(driver, URL, "friends"); // TODO - clickar el boton pa ir a amigos?? Es que falla mucho
+		PO_ClientPrivateView.checkFriendIsFirst(driver, friendName);
+		
+		
+		// Accedemos como user 13
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user13Email, user13Password);
+		
+		// Entramos al chat con user10 y le enviamos un mensaje
+		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user13Email, user10Name);
+		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, "Me gusta el ketchup");
+		
+		// Accedemos de nuevo como user 10
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
+		
+		// Comprobamos que user13 es el primero de la lista de amigos
+		PO_ClientPrivateView.checkFriendIsFirst(driver, user13Name);
 	}
 }

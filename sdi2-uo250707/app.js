@@ -62,7 +62,7 @@ routerUsuarioToken.use(function(req, res, next) {
 		// verificar el token
 		jwt.verify(token, 'secreto', function(err, infoToken) {
 			// Si el token NO es valido o han pasado más de 4min desde que se expedió
-			if (err || (Date.now() / 1000 - infoToken.tiempo) > 240) {
+			if (err || (Date.now() / 1000 - infoToken.tiempo) > 480) {
 				res.status(403); // Forbidden
 				res.json({
 					access: false,

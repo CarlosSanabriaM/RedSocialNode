@@ -50,10 +50,10 @@ function loadWidget(widget){
 	$("#messageContainer").empty();
 }
 
-function loadWidgetAndStopIntervals(widget){
-    loadWidget(widget);
+function loadWidgetAndStopIntervals(widget){// TODO - quitar??
     updateMessages = false;
     updateFriends = false;
+	loadWidget(widget);
 }
 
 function loadUserEmail() {

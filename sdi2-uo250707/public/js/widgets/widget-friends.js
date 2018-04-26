@@ -117,7 +117,6 @@ function updateFriendsTable(friendsToShow) {
 	// Para cada uno de los amigos a mostrar, lo añadimos directamente
 	// a la tabla (son amigos, no emails, no hace falta pedir los datos)
 	for (i = 0; i < friendsToShow.length; i++) {
-        //console.log(friendsToShow[i].lastMessageTime.toLocaleString()); // TODO qutiar
 		addUserToTable(friendsToShow[i]);
 	}
 }
@@ -207,7 +206,7 @@ function getNumMessagesNotRead(messages){
 }
 
 function updateFriendLastMessageTime(email, messages){
-	// Si el array de mensajes está vacio, no modificamos lastMessageTime, será null TODO - revisar
+	// Si el array de mensajes está vacio, no modificamos lastMessageTime, será null
 	if(messages.length == 0)
 		return;
 
@@ -247,20 +246,3 @@ function updateNumFriendsLoaded(){
 		$("#friendsFooterMessage").text("Todos los amigos cargados");
 	}
 }
-
-// TODO - usarlo para ordenar por numero de mensajes --> Meterlo en un setInverval(function, TIME)
-//var precioDsc = false;
-//
-//function ordenarPorPrecio() {
-//	if (precioDsc) {
-//		friends.sort(function(a, b) {
-//			return parseFloat(b.precio) - parseFloat(a.precio);
-//		});
-//	} else {
-//		friends.sort(function(a, b) {
-//			return parseFloat(a.precio) - parseFloat(b.precio);
-//		});
-//	}
-//	loadFriendsDataAndUpdateTable(friends);
-//	precioDsc = !precioDsc; //invertir
-//}
