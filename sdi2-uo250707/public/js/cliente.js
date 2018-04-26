@@ -66,3 +66,8 @@ function loadUserEmail() {
     console.log("Usuario autenticado: " + userEmail);
     $('#userAuthenticatedAs').text("Usuario autenticado: " + userEmail);
 }
+
+function dateFromObjectId(objectId) {
+    var timestamp = objectId.substring(0, 8);
+    return new Date(parseInt(timestamp, 16) * 1000);
+};

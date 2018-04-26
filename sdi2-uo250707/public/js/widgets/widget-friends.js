@@ -13,7 +13,7 @@ loadUserEmail();
 // Cada N segundos se va a realizar una llamada al SW para comprobar el numero de mensajes sin leer y el orden de los amigos
 setInterval(function(){
     if(updateFriends) {
-        checkNumMessagesNotRead();
+        checkNumMessagesNotReadAndOrderFriends();
     }
 }, UPDATE_TIME);
 
@@ -134,15 +134,19 @@ function chat(email) {
 	loadWidget("chat");
 }
 
-function checkNumMessagesNotRead(){
+function checkNumMessagesNotReadAndOrderFriends(){
 	// Por cada uno de los amigos que se estan mostrando actualmente,
 	// comprobamos el numero de mensajes que hay sin leer en su chat
+	// y actualizamos el tiempo del ultimo mensaje creado en su chat
     for (i = 0; i < currentFriendsShown.length; i++) {
-        checkNumMessagesNotReadOfFriend(currentFriendsShown[i].email);
+        checkNumMessagesNotReadOfFriendAndUpdateTime(currentFriendsShown[i].email);
     }
+
+    // Ordenamos a los amigos por antiguedad del ultimo mensaje en su chat
+	// TODO - orderFriends();
 }
 
-function checkNumMessagesNotReadOfFriend(email){
+function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
 	// Obtenemos todos los mensajes con ese usuario
     $.ajax({
         url : URLbase + "/message?user1="+userEmail+"&user2="+email,
@@ -153,31 +157,45 @@ function checkNumMessagesNotReadOfFriend(email){
             "token" : token
         },
         success : function(response) {
-        	// Calculamos el numero de mensajes no leidos
-        	var numMessagesNotRead = 0;
             var messages = response;
 
-            for (i = 0; i < messages.length; i++) {
-                // Si eres el receptor del mensaje y no lo has leido
-            	if(messages[i].destino.includes(userEmail) && !messages[i].leido)
-                	numMessagesNotRead++;
-            }
+        	// Actualizamos el numero de mensajes no leidos en el chat con ese usuario
+            updateNumMessagesNotReadOfFriend(messages, email);
 
-            console.log("Numero de mensajes sin leer con " + email + ": " + numMessagesNotRead);
+            // Actualizamos el tiempo del ultimo mensaje creado en el chat con ese amigo
+			// TODO
 
-            // Modificamos el numero de mensajes sin leer para ese amigo en el array
-			// que tiene los amigos que se muestran actualmente
-            for (i = 0; i < currentFriendsShown.length; i++) {
-                if(currentFriendsShown[i].email == email)
-                    currentFriendsShown[i].numMessagesNotRead = numMessagesNotRead;
-            }
-            // Actualizamos la tabla con los amigos que se muestran actualemnte
+            // Actualizamos la tabla con los amigos que se muestran actualmente
 			updateFriendsTable(currentFriendsShown);
         },
         error : function(error) {
             errorProducedInFriends();
         }
     });
+}
+
+function updateNumMessagesNotReadOfFriend(messages, email){
+    var numMessagesNotRead = getNumMessagesNotRead(messages);
+    console.log("Numero de mensajes sin leer con " + email + ": " + numMessagesNotRead);
+
+    // Modificamos el numero de mensajes sin leer para ese amigo en el array
+    // que tiene los amigos que se muestran actualmente
+    for (i = 0; i < currentFriendsShown.length; i++) {
+        if(currentFriendsShown[i].email == email) {
+            currentFriendsShown[i].numMessagesNotRead = numMessagesNotRead;
+            break;
+        }
+    }
+}
+
+function getNumMessagesNotRead(messages){
+    var numMessagesNotRead = 0;
+    for (i = 0; i < messages.length; i++) {
+        // Si eres el receptor del mensaje y no lo has leido
+        if(messages[i].destino.includes(userEmail) && !messages[i].leido)
+            numMessagesNotRead++;
+    }
+    return numMessagesNotRead;
 }
 
 // TODO - usarlo para ordenar por numero de mensajes --> Meterlo en un setInverval(function, TIME)
