@@ -89,12 +89,12 @@ public class Tests {
 		mongo.insertFriendshipInFriendsCollection(user10Email, user12Email);
 		mongo.insertFriendshipInFriendsCollection(user10Email, user13Email);
 		
-		// Insertamos 5 mensajes en la conversacion entre user10 y user11
-		mongo.insertMessageInMessagessCollection(user10Email, user11Email, "Hola, ¿qué tal estás?", false);
-		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Hola!", false);
-		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "¿Al final a que hora quedamos?", false);
-		mongo.insertMessageInMessagessCollection(user10Email, user11Email, "¿A las 17:00?", false);
-		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Vale, genial!", false);
+		// Insertamos 5 mensajes en la conversacion entre user10 y user11 (están leidos)
+		mongo.insertMessageInMessagessCollection(user10Email, user11Email, "Hola, ¿qué tal estás?", true);
+		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Hola!", true);
+		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "¿Al final a que hora quedamos?", true);
+		mongo.insertMessageInMessagessCollection(user10Email, user11Email, "¿A las 17:00?", true);
+		mongo.insertMessageInMessagessCollection(user11Email, user10Email, "Vale, genial!", true);
 	}
 
 	/**
@@ -415,7 +415,7 @@ public class Tests {
 		// Accedemos como user 11
 		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user11Email, user11Password);
 		
-		// Entramos al chat con user10 y le mandamos un mensaje
+		// Entramos al chat con user10 y le mandamos un mensaje (validando que aparece)
 		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user11Email, user10Name);
 		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, message);
 		
@@ -437,11 +437,29 @@ public class Tests {
 	/**
 	 * C6.1 [CListaMenNoLeidoVal] Identificarse en la aplicación y enviar tres
 	 * mensajes a un amigo, validar que los mensajes enviados aparecen en el chat.
-	 * Identificarse después con el usuario que recibido el mensaje y validar que
+	 * Identificarse después con el usuario que ha recibido el mensaje y validar que
 	 * el número de mensajes sin leer aparece en la propia lista de amigos.
 	 */
 	@Test
 	public void PR21() {
-		//TODO
+		String message1 = "Ah!";
+		String message2 = "Recuerda llevar las entradas";
+		String message3 = "Están en la cocina";
+		
+		// Accedemos como user 11
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user11Email, user11Password);
+		
+		// Entramos al chat con user10 y le mandamos los 3 mensajes (validando que aparecen)
+		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user11Email, user10Name);
+		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, message1);
+		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, message2);
+		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, message3);
+
+		
+		// Accedemos como user 10
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
+		
+		// Comprobamos que tiene tres mensaje sin leer de user11
+		PO_ClientPrivateView.checkNumMessagesNotReadInFriendsList(driver, user11Name, 3);
 	}
 }
