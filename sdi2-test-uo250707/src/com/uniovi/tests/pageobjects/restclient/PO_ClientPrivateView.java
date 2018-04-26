@@ -14,9 +14,7 @@ public class PO_ClientPrivateView extends PO_ClientView {
 
 	private static String getUserNameFromWebElement(WebElement elemento) {
 		String friendName = elemento.getText();
-		friendName.substring(0, friendName.length() - 5); // quitamos el " [n] "
-
-		return friendName;
+		return friendName.substring(0, friendName.length() - 4); // quitamos el " [n] "
 	}
 	
 	/**
@@ -89,8 +87,8 @@ public class PO_ClientPrivateView extends PO_ClientView {
 	 * @param emailUserSession: email del usuario en sesión.
 	 */
 	public static String goToChatOfLastFriendAndCheckWasOk(WebDriver driver, String emailUserSession) {
-		// Buscamos el enlace de la ultima fila de la tabla de amigos
-		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr[last()]/td[1]/a");
+		// Buscamos el enlace de la ultima fila de la tabla de amigos, que contenga un "["
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr[last()]/td[1]/a[contains(text(),'[')]");
 		
 		// Sacamos el nombre del amigo
 		String lastFriendName = getUserNameFromWebElement(elementos.get(0));
@@ -182,10 +180,11 @@ public class PO_ClientPrivateView extends PO_ClientView {
 	 * @param friendName: nombre del amigo que quieres comprobar que es el primero
 	 */
 	public static void checkFriendIsFirst(WebDriver driver, String friendName) {
-		// TODO Esperar mensaje ordenados
+		// Esperamos a que aparezca el mensaje "Todos los amigos cargados"
+		PO_ClientView.checkElement(driver, "text", "Todos los amigos cargados");
 		
-		// Buscamos el enlace de la primera fila de la tabla de amigos
-		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr[1]/td[1]/a");
+		// Buscamos el enlace de la primera fila de la tabla de amigos, que contenga un "["
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//tbody/tr[1]/td[1]/a[contains(text(),'[')]");
 		
 		// Sacamos el nombre del amigo
 		String firstFriendName = getUserNameFromWebElement(elementos.get(0));

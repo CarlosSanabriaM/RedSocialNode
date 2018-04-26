@@ -3,7 +3,8 @@ window.history.pushState("", "", "/cliente.html?w=friends");
 
 var currentFriendsShown = [];
 var numFriends = 0; // numero de amigos totales que tiene el usuario
-var numFriendsLoaded = 0; // numero de amigos cuya info ha sido cargada
+var numFriendsFullyLoaded = 0; // numero de amigos cuya info ha sido cargada
+var friendsNeverUpdated = true;
 
 // Marcamos que queremos actualizar los amigos
 updateFriends = true;
@@ -85,9 +86,6 @@ function loadUserDataAndAddToTable(email) {
 			friends.push(response); // se añade el amigo a la lista de todos los amigos
             currentFriendsShown.push(response); // se añade el amigo a la lista de amigos mostrados actualmente
 			addUserToTable(response);// y a la tabla
-
-			// aumentamos el numero de amigos cuya info se ha cargado
-			updateNumFriendsLoaded();
 		},
 		error : function(error) {
             errorProducedInFriends();
@@ -175,6 +173,9 @@ function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
 
             // Actualizamos el tiempo del ultimo mensaje creado en el chat con ese amigo
 			updateFriendLastMessageTime(email, messages);
+
+            // actualizamos el numero de amigos cuya info se ha cargado totalmente
+            updateNumFriendsFullyLoaded();
         },
         error : function(error) {
             errorProducedInFriends();
@@ -238,11 +239,15 @@ function orderFriendsAndCurrentFriendsShown(){
 	});
 }
 
-function updateNumFriendsLoaded(){
-    numFriendsLoaded++;
+function updateNumFriendsFullyLoaded(){
+    numFriendsFullyLoaded++;
 
-    //Si se han cargado todos los amigos, mostramos el siguiente texto en el footer
-	if(numFriendsLoaded == numFriends){
+    // Si se han cargado totalmente todos los amigos
+	// (están ordenados y aparece su numero de mensajes sin leer) POR PRIMERA VEZ,
+	// mostramos el siguiente texto en el footer
+	if(friendsNeverUpdated && numFriendsFullyLoaded == numFriends){
 		$("#friendsFooterMessage").text("Todos los amigos cargados");
+        friendsNeverUpdated = false;
+        console.log("ACTUALIZADOS!!!!"); // TODO QUITAR!
 	}
 }
