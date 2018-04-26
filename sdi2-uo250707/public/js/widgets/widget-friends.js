@@ -13,7 +13,11 @@ loadUserEmail();
 // Cada N segundos se va a realizar una llamada al SW para comprobar el numero de mensajes sin leer y el orden de los amigos
 setInterval(function(){
     if(updateFriends) {
-        checkNumMessagesNotReadAndOrderFriends();
+        // Actualizamos el numero de mensajes y la fecha del ultimo mensaje de cada amigo
+    	checkNumMessagesNotReadAndOrderFriends();
+
+        // Actualizamos la tabla con los amigos que se muestran actualmente
+        updateFriendsTable(currentFriendsShown);
     }
 }, UPDATE_TIME);
 
@@ -106,6 +110,7 @@ function updateFriendsTable(friendsToShow) {
 	// Para cada uno de los amigos a mostrar, lo añadimos directamente
 	// a la tabla (son amigos, no emails, no hace falta pedir los datos)
 	for (i = 0; i < friendsToShow.length; i++) {
+        //console.log(friendsToShow[i].lastMessageTime.toLocaleString()); // TODO qutiar
 		addUserToTable(friendsToShow[i]);
 	}
 }
@@ -142,8 +147,8 @@ function checkNumMessagesNotReadAndOrderFriends(){
         checkNumMessagesNotReadOfFriendAndUpdateTime(currentFriendsShown[i].email);
     }
 
-    // Ordenamos a los amigos por antiguedad del ultimo mensaje en su chat
-	// TODO - orderFriends();
+    // Ordenamos a los amigos que se muestran actualmente por antiguedad del ultimo mensaje en su chat
+	orderCurrentFriendsShown();
 }
 
 function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
@@ -164,9 +169,6 @@ function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
 
             // Actualizamos el tiempo del ultimo mensaje creado en el chat con ese amigo
 			updateFriendLastMessageTime(email, messages);
-
-            // Actualizamos la tabla con los amigos que se muestran actualmente
-			updateFriendsTable(currentFriendsShown);// TODO-mover a setInterval??
         },
         error : function(error) {
             errorProducedInFriends();
@@ -176,7 +178,6 @@ function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
 
 function updateNumMessagesNotReadOfFriend(email, messages){
     var numMessagesNotRead = getNumMessagesNotRead(messages);
-    console.log("Numero de mensajes sin leer con " + email + ": " + numMessagesNotRead);
 
     // Modificamos el numero de mensajes sin leer para ese amigo en el array
     // que tiene los amigos que se muestran actualmente
@@ -210,10 +211,18 @@ function updateFriendLastMessageTime(email, messages){
     for (i = 0; i < currentFriendsShown.length; i++) {
         if(currentFriendsShown[i].email == email) {
             currentFriendsShown[i].lastMessageTime = dateFromObjectId(lastMessage._id);
-            console.log(currentFriendsShown[i].lastMessageTime.toLocaleString()); // TODO qutiar
             break;
         }
     }
+}
+
+function orderCurrentFriendsShown(){
+    currentFriendsShown.sort(function(a, b) {
+    	if(a.lastMessageTime == null && b.lastMessageTime == null) return 0;
+    	if(a.lastMessageTime == null) return +1;// si solo a NO tiene fecha, aparece a despues en el array
+    	if(b.lastMessageTime == null) return -1;// si solo b NO tiene fecha, aparece b despues en el array
+		return b.lastMessageTime - a.lastMessageTime; // si ambos tienen fecha, los ordenamos por fecha (el de fecha mayor va antes)
+	});
 }
 
 // TODO - usarlo para ordenar por numero de mensajes --> Meterlo en un setInverval(function, TIME)
