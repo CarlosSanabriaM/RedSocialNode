@@ -390,7 +390,7 @@ public class Tests {
 		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
 		
 		// Comprobamos que tiene 3 amigos
-		PO_ClientPrivateView.checkNumFriends(driver, 3);
+		PO_ClientPrivateView.checkNumFriends(driver, 3);// TODO - falla a veces en los tests!!!
 		
 		// Accedemos al chat con user11 y comprobamos que se muestran 5 mensajes
 		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user10Email, user11Name);

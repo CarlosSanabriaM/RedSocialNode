@@ -2,6 +2,8 @@
 window.history.pushState("", "", "/cliente.html?w=friends");
 
 var currentFriendsShown = [];
+var numFriends = 0; // numero de amigos totales que tiene el usuario
+var numFriendsLoaded = 0; // numero de amigos cuya info ha sido cargada
 
 // Marcamos que queremos actualizar los amigos
 updateFriends = true;
@@ -48,6 +50,8 @@ function loadFriends() {
 			console.log("Emails amigos: " + JSON.stringify(response));
 			var friendsEmails = response;
 			loadFriendsDataAndUpdateTable(friendsEmails);
+
+			numFriends = response.length;
 		},
 		error : function(error) {
             errorProducedInFriends();
@@ -81,6 +85,9 @@ function loadUserDataAndAddToTable(email) {
 			friends.push(response); // se añade el amigo a la lista de todos los amigos
             currentFriendsShown.push(response); // se añade el amigo a la lista de amigos mostrados actualmente
 			addUserToTable(response);// y a la tabla
+
+			// aumentamos el numero de amigos cuya info se ha cargado
+			updateNumFriendsLoaded();
 		},
 		error : function(error) {
             errorProducedInFriends();
@@ -148,7 +155,7 @@ function checkNumMessagesNotReadAndOrderFriends(){
     }
 
     // Ordenamos a los amigos que se muestran actualmente por antiguedad del ultimo mensaje en su chat
-	orderCurrentFriendsShown();
+	orderFriendsAndCurrentFriendsShown();
 }
 
 function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
@@ -216,13 +223,29 @@ function updateFriendLastMessageTime(email, messages){
     }
 }
 
-function orderCurrentFriendsShown(){
-    currentFriendsShown.sort(function(a, b) {
+function orderFriendsAndCurrentFriendsShown(){
+    friends.sort(function(a, b) {
+        if(a.lastMessageTime == null && b.lastMessageTime == null) return 0;
+        if(a.lastMessageTime == null) return +1;// si solo a NO tiene fecha, aparece a despues en el array
+        if(b.lastMessageTime == null) return -1;// si solo b NO tiene fecha, aparece b despues en el array
+        return b.lastMessageTime - a.lastMessageTime; // si ambos tienen fecha, los ordenamos por fecha (el de fecha mayor va antes)
+    });
+
+	currentFriendsShown.sort(function(a, b) {
     	if(a.lastMessageTime == null && b.lastMessageTime == null) return 0;
     	if(a.lastMessageTime == null) return +1;// si solo a NO tiene fecha, aparece a despues en el array
     	if(b.lastMessageTime == null) return -1;// si solo b NO tiene fecha, aparece b despues en el array
 		return b.lastMessageTime - a.lastMessageTime; // si ambos tienen fecha, los ordenamos por fecha (el de fecha mayor va antes)
 	});
+}
+
+function updateNumFriendsLoaded(){
+    numFriendsLoaded++;
+
+    //Si se han cargado todos los amigos, mostramos el siguiente texto
+	if(numFriendsLoaded == numFriends){
+
+	}
 }
 
 // TODO - usarlo para ordenar por numero de mensajes --> Meterlo en un setInverval(function, TIME)
