@@ -242,9 +242,9 @@ function orderFriendsAndCurrentFriendsShown(){
 function updateNumFriendsLoaded(){
     numFriendsLoaded++;
 
-    //Si se han cargado todos los amigos, mostramos el siguiente texto
+    //Si se han cargado todos los amigos, mostramos el siguiente texto en el footer
 	if(numFriendsLoaded == numFriends){
-
+		$("#friendsFooterMessage").text("Todos los amigos cargados");
 	}
 }
 
