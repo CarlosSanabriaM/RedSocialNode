@@ -90,7 +90,7 @@ function updateMessagesTable(messages) {
 	}
 }
 
-function addMessageToTable(message) {console.log(dateFromObjectId(message._id).toLocaleString()); //TODO - quitar
+function addMessageToTable(message) {
 	// Añadimos los datos de ese mensaje a la tabla
 	var tableBody;
 

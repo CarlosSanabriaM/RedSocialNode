@@ -160,13 +160,13 @@ function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
             var messages = response;
 
         	// Actualizamos el numero de mensajes no leidos en el chat con ese usuario
-            updateNumMessagesNotReadOfFriend(messages, email);
+            updateNumMessagesNotReadOfFriend(email, messages);
 
             // Actualizamos el tiempo del ultimo mensaje creado en el chat con ese amigo
-			// TODO
+			updateFriendLastMessageTime(email, messages);
 
             // Actualizamos la tabla con los amigos que se muestran actualmente
-			updateFriendsTable(currentFriendsShown);
+			updateFriendsTable(currentFriendsShown);// TODO-mover a setInterval??
         },
         error : function(error) {
             errorProducedInFriends();
@@ -174,7 +174,7 @@ function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
     });
 }
 
-function updateNumMessagesNotReadOfFriend(messages, email){
+function updateNumMessagesNotReadOfFriend(email, messages){
     var numMessagesNotRead = getNumMessagesNotRead(messages);
     console.log("Numero de mensajes sin leer con " + email + ": " + numMessagesNotRead);
 
@@ -196,6 +196,24 @@ function getNumMessagesNotRead(messages){
             numMessagesNotRead++;
     }
     return numMessagesNotRead;
+}
+
+function updateFriendLastMessageTime(email, messages){
+	// Si el array de mensajes está vacio, no modificamos lastMessageTime, será null TODO - revisar
+	if(messages.length == 0)
+		return;
+
+    // Modificamos el tiempo del ultimo mensaje en el chat con ese amigo
+	// en el array que tiene los amigos que se muestran actualmente
+	var lastMessage = messages[messages.length-1];
+
+    for (i = 0; i < currentFriendsShown.length; i++) {
+        if(currentFriendsShown[i].email == email) {
+            currentFriendsShown[i].lastMessageTime = dateFromObjectId(lastMessage._id);
+            console.log(currentFriendsShown[i].lastMessageTime.toLocaleString()); // TODO qutiar
+            break;
+        }
+    }
 }
 
 // TODO - usarlo para ordenar por numero de mensajes --> Meterlo en un setInverval(function, TIME)
