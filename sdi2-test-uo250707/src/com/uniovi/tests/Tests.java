@@ -419,14 +419,19 @@ public class Tests {
 		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user11Email, user10Name);
 		PO_ClientPrivateView.createMessageAndCheckWasOk(driver, message);
 		
+		// Comprobamos que NO esta leido
+		PO_ClientPrivateView.checkMessageIsNotRead(driver, message);
+		
 		
 		// Accedemos como user 10
 		PO_ClientLoginView.goToLoginFillFormAndCheckWasOk(driver, URL, user10Email, user10Password);
 		
+		// Comprobamos que tiene un mensaje sin leer de user11
+		PO_ClientPrivateView.checkNumMessagesNotReadInFriendsList(driver, user11Name, 1);
+		
 		// Entramos en el chat con user11 y comprobamos que el mensaje pasa a leido
 		PO_ClientPrivateView.goToChatAndCheckWasOk(driver, user10Email, user11Name);
 		PO_ClientPrivateView.checkMessageIsRead(driver, message);
-		
 	}
 
 	/**

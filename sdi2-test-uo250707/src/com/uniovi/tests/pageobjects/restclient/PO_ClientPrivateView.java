@@ -100,5 +100,36 @@ public class PO_ClientPrivateView extends PO_ClientView {
 		// Comprobamos que aparece el texto del mensaje + <leido>
 		PO_ClientPrivateView.checkElement(driver, "text", messageContent + " <leido>");
 	}
+
+	/**
+	 * Estando en un chat con un amigo, comprueba que el mensaje indicado
+	 * aparece, pero NO se muestra como leido.
+	 * 
+	 * @param driver: apuntando al navegador abierto actualmente. 
+	 * @param messageContent: contenido del mensaje a verificar que NO está leido.
+	 */
+	public static void checkMessageIsNotRead(WebDriver driver, String messageContent) {
+		// Comprobamos que aparece el texto del mensaje
+		PO_ClientPrivateView.checkElement(driver, "text", messageContent);
+		
+		// y que NO aparece el texto del mensaje + <leido>
+		PO_ClientPrivateView.checkTextNotPresent(driver, messageContent + " <leido>");
+	}
+	
+	/**
+	 * Estando en la lista de amigos, comprueba que el numero de mensajes
+	 * sin leer con el amigo de nombre indicado coincida con el numero indicado.
+	 * 
+	 * @param driver: apuntando al navegador abierto actualmente. 
+	 * @param friendName: nombre del amigo cuyo numero de mensajes sin leer quieres comprobar.
+	 * @param numMessagesNotRead: numero de mensajes sin leer que deberia haber de ese amigo.
+	 */
+	public static void checkNumMessagesNotReadInFriendsList(WebDriver driver, String friendName, int numMessagesNotRead) {
+		// Comprobamos que aparece ese amigo en la lista de amigos
+		PO_ClientPrivateView.checkElement(driver, "text", friendName);
+		
+		// Comprobamos que el numero de mensajes sin leer de dicho amigo coincide con el indicado
+		PO_ClientPrivateView.checkElement(driver, "text", friendName + " [" + numMessagesNotRead + "]");
+	}
 	
 }

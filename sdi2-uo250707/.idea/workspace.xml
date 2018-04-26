@@ -24,11 +24,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="widget-friends.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="widget-friends.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/js/widgets/widget-friends.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-576">
-              <caret line="119" column="33" lean-forward="true" selection-start-line="119" selection-start-column="33" selection-end-line="119" selection-end-column="33" />
+            <state relative-caret-position="228">
+              <caret line="90" column="79" lean-forward="false" selection-start-line="90" selection-start-column="40" selection-end-line="90" selection-end-column="79" />
               <folding />
             </state>
           </provider>
@@ -84,7 +84,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="widget-friends.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="widget-friends.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/widget-friends.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="390">
@@ -98,7 +98,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>loadFriends</find>
       <find>&lt;a</find>
       <find>messages</find>
       <find>contentT</find>
@@ -128,6 +127,7 @@
       <find>Cookies.get</find>
       <find>Cookies</find>
       <find>tableBody</find>
+      <find>&quot; [</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -290,12 +290,12 @@
       <workItem from="1524034327363" duration="657000" />
       <workItem from="1524056879449" duration="761000" />
       <workItem from="1524167635138" duration="3118000" />
-      <workItem from="1524554348335" duration="44707000" />
+      <workItem from="1524554348335" duration="45265000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50295000" />
+    <option name="totallyTimeSpent" value="50853000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1680" height="975" extended-state="0" />
@@ -567,14 +567,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/widgets/widget-friends.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-576">
-          <caret line="119" column="33" lean-forward="true" selection-start-line="119" selection-start-column="33" selection-end-line="119" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/widgets/widget-chat.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="339">
@@ -611,6 +603,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="26" column="30" lean-forward="true" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/widgets/widget-friends.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="90" column="79" lean-forward="false" selection-start-line="90" selection-start-column="40" selection-end-line="90" selection-end-column="79" />
           <folding />
         </state>
       </provider>

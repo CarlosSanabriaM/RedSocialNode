@@ -11,7 +11,7 @@ import com.uniovi.tests.util.SeleniumUtils;
 
 public class PO_View {
 	
-	protected static int timeout = 4;
+	protected static int timeout = 5;
 
 	public static int getTimeout() {
 		return timeout;
@@ -33,6 +33,16 @@ public class PO_View {
 	static public List<WebElement> checkElement(WebDriver driver, String criterio, String text) {
 		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, criterio, text, getTimeout());
 		return elementos;		
+	}
+	
+	/**
+	 *  Comprueba que el texto NO está presente en la página actual
+	 * 
+	 * @param driver: apuntando al navegador abierto actualmente.
+	 * @param text: texto a comprobar que NO aparece.
+	 */
+	static public void checkTextNotPresent(WebDriver driver, String text) {
+		SeleniumUtils.EsperaCargaPaginaNoTexto(driver, text, getTimeout());
 	}
 	
 	/**
