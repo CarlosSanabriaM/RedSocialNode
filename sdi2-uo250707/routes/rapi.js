@@ -298,7 +298,7 @@ module.exports = function(app, gestorBD) {
 	
 	function paso1ComprobarUsuarioEnSesionEsReceptorMensaje(req, res, message, messageDataToUpdate){
 		if(res.email == message.destino){
-			paso2ComprobarMensajeNoLeido(req, res, message, messageDataToUpdate);
+            paso2ActualizarMensaje(req, res, messageDataToUpdate);
 		} else{
 			res.status(403); // Forbidden
 			res.json({
@@ -306,20 +306,8 @@ module.exports = function(app, gestorBD) {
 			});
 		}
 	}
-	
-	function paso2ComprobarMensajeNoLeido(req, res, message, messageDataToUpdate){
-		// Si se quiere actualizar a leido el mensaje, y ya está marcado como leido
-		if(messageDataToUpdate.leido && message.leido){
-			res.status(400); // Bad Request
-			res.json({
-				error : "Ese mensaje ya está marcado como leido"
-			});
-		} else{
-			paso3ActualizarMensaje(req, res, messageDataToUpdate);
-		}
-	}
-	
-	function paso3ActualizarMensaje(req, res, messageDataToUpdate){
+
+	function paso2ActualizarMensaje(req, res, messageDataToUpdate){
 		var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
 
 		gestorBD.updateMessage(criterio, messageDataToUpdate, function(result) {

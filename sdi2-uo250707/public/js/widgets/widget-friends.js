@@ -50,9 +50,10 @@ function loadFriends() {
 		success : function(response) {
 			console.log("Emails amigos: " + JSON.stringify(response));
 			var friendsEmails = response;
-			loadFriendsDataAndUpdateTable(friendsEmails);
 
-			numFriends = response.length;
+			numFriends = friendsEmails.length;
+
+			loadFriendsDataAndUpdateTable(friendsEmails);
 		},
 		error : function(error) {
             errorProducedInFriends();
@@ -117,6 +118,11 @@ function updateFriendsTable(friendsToShow) {
 	for (i = 0; i < friendsToShow.length; i++) {
 		addUserToTable(friendsToShow[i]);
 	}
+
+    // Si se han cargado todos los amigos totalmente, se añade un texto en el footer indicándolo
+    if(numFriendsFullyLoaded == numFriends){
+        friendsFullyLoaded();
+    }
 }
 
 // Escuchador del input 'nameFilter'
@@ -175,7 +181,10 @@ function checkNumMessagesNotReadOfFriendAndUpdateTime(email){
 			updateFriendLastMessageTime(email, messages);
 
             // actualizamos el numero de amigos cuya info se ha cargado totalmente
-            updateNumFriendsFullyLoaded();
+            if(numFriendsFullyLoaded < numFriends){
+                numFriendsFullyLoaded++;
+			}
+
         },
         error : function(error) {
             errorProducedInFriends();
@@ -239,15 +248,12 @@ function orderFriendsAndCurrentFriendsShown(){
 	});
 }
 
-function updateNumFriendsFullyLoaded(){
-    numFriendsFullyLoaded++;
-
+function friendsFullyLoaded(){
     // Si se han cargado totalmente todos los amigos
 	// (están ordenados y aparece su numero de mensajes sin leer) POR PRIMERA VEZ,
 	// mostramos el siguiente texto en el footer
 	if(friendsNeverUpdated && numFriendsFullyLoaded == numFriends){
 		$("#friendsFooterMessage").text("Todos los amigos cargados");
         friendsNeverUpdated = false;
-        console.log("ACTUALIZADOS!!!!"); // TODO QUITAR!
 	}
 }

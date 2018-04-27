@@ -18,11 +18,15 @@ public class PO_ClientPrivateView extends PO_ClientView {
 	}
 	
 	/**
-	 * Comprueba que el numero de amigos del usuario en sesión coincida con el indicado
+	 * Comprueba que el numero de amigos del usuario en sesión coincida con el indicado.
+	 * NO sirve para comprobar que tenga 0 amigos.
 	 */
 	public static void checkNumFriends(WebDriver driver, int numFriends) {
 		// Esperamos a que aparezca el mensaje "Todos los amigos cargados"
 		PO_ClientView.checkElement(driver, "text", "Todos los amigos cargados");
+		
+		// Esperamos a que el amigo en la primera fila de la tabla de amigos contenga un "[" despues de su nombre
+		PO_View.checkElement(driver, "free", "//tbody/tr[1]/td[1]/a[contains(text(),'[')]");
 		
 		// Comprobamos que el numero de filas de la tabla coincida con el numero de amigos esperado
 		PO_ClientView.checkNumRowsInTableBody(driver, numFriends);
