@@ -87,8 +87,9 @@ public class Tests {
 		mongo.deleteAllDocumentsInCollection("friends");
 		mongo.deleteAllDocumentsInCollection("messages");
 		
-		// Borramos al usuario newUser@gmail.com, si existe
+		// Borramos a los usuarios newUser@gmail.com y notExists@gmail.com, si existen
 		mongo.deleteUserWithEmail("newUser@gmail.com");
+		mongo.deleteUserWithEmail("notExists@gmail.com");
 		
 		// Creamos 3 relaciones de amistad, de user10 con: user11, user12 y user13
 		mongo.insertFriendshipInFriendsCollection(user10Email, user11Email);
@@ -148,7 +149,7 @@ public class Tests {
 	 */
 	@Test
 	public void PR04() {
-		PO_LoginView.goToLoginFillFormAndCheckWasWrong(driver, "notExists@gmail.com", "123456");
+		PO_LoginView.goToLoginFillFormAndCheckWasWrong(driver, "notExists@gmail.com", "1234");
 	}
 
 	/**
@@ -320,7 +321,7 @@ public class Tests {
 	 */
 	@Test
 	public void PR15() {
-		PO_ClientLoginView.goToLoginFillFormAndCheckWasWrong(driver, URL, "notExists@gmail.com", "123456");
+		PO_ClientLoginView.goToLoginFillFormAndCheckWasWrong(driver, URL, "notExists@gmail.com", "1234");
 	}
 	
 	/**
