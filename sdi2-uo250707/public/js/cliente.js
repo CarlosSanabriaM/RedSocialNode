@@ -52,7 +52,7 @@ function loadWidget(widget){
 	$("#messageContainer").empty();
 }
 
-function loadWidgetAndStopIntervals(widget){// TODO - quitar??
+function loadWidgetAndStopIntervals(widget){
     clearInterval(friendsIntervalId);
     clearInterval(chatIntervalId);
 	loadWidget(widget);

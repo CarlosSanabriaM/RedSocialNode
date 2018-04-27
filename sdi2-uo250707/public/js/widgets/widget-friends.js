@@ -11,7 +11,7 @@ loadFriends();
 loadUserEmail();
 
 // Cada N segundos se va a realizar una llamada al SW para comprobar el numero de mensajes sin leer y el orden de los amigos
-friendsIntervalId = setInterval(function(){console.log("Interval")
+friendsIntervalId = setInterval(function(){
 	// Actualizamos el numero de mensajes y la fecha del ultimo mensaje de cada amigo
 	checkNumMessagesNotReadAndOrderFriends();
 
