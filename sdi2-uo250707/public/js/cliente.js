@@ -7,6 +7,8 @@ var URLbase = "http://localhost:8081/api";
 var UPDATE_TIME = 1000; // Tiempo en milisegundos entre cada actualiación
 var updateMessages = false;
 var updateFriends = false;
+var friendsIntervalId; // Identificador del setInterval de widget-friends
+var chatIntervalId; // Identificador del setInterval de widget-chat
 
 // Cargamos el widget-login al acceder a cliente.html
 loadWidget("login");
@@ -51,8 +53,8 @@ function loadWidget(widget){
 }
 
 function loadWidgetAndStopIntervals(widget){// TODO - quitar??
-    updateMessages = false;
-    updateFriends = false;
+    clearInterval(friendsIntervalId);
+    clearInterval(chatIntervalId);
 	loadWidget(widget);
 }
 

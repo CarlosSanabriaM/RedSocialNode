@@ -10,14 +10,10 @@ loadUserChatWithEmail();
 loadUserChatWithName();
 loadMessages();
 
-// Marcamos que queremos actualizar los mensajes
-updateMessages = true;
 
 // Cada N segundos se va a realizar una llamada al SW para comprobar si hay nuevos mensajes
-setInterval(function(){
-    if(updateMessages) {
+chatIntervalId = setInterval(function(){
         loadMessages();
-    }
 }, UPDATE_TIME);
 
 
@@ -26,7 +22,7 @@ setInterval(function(){
 function errorProducedInChat(){
     // Dejamos de hacer peticiones al SW cuando se produce
     // un error, como por ejemplo, caduca el token de sesión
-    updateMessages = false;
+    clearInterval(chatIntervalId);
     loadWidget("login");
 }
 

@@ -6,22 +6,18 @@ var numFriends = 0; // numero de amigos totales que tiene el usuario
 var numFriendsFullyLoaded = 0; // numero de amigos cuya info ha sido cargada
 var friendsNeverUpdated = true;
 
-// Marcamos que queremos actualizar los amigos
-updateFriends = true;
-
 // Cargamos las amigos
 loadFriends();
 loadUserEmail();
 
 // Cada N segundos se va a realizar una llamada al SW para comprobar el numero de mensajes sin leer y el orden de los amigos
-setInterval(function(){
-    if(updateFriends) {
-        // Actualizamos el numero de mensajes y la fecha del ultimo mensaje de cada amigo
-    	checkNumMessagesNotReadAndOrderFriends();
+friendsIntervalId = setInterval(function(){console.log("Interval")
+	// Actualizamos el numero de mensajes y la fecha del ultimo mensaje de cada amigo
+	checkNumMessagesNotReadAndOrderFriends();
 
-        // Actualizamos la tabla con los amigos que se muestran actualmente
-        updateFriendsTable(currentFriendsShown);
-    }
+	// Actualizamos la tabla con los amigos que se muestran actualmente
+	updateFriendsTable(currentFriendsShown);
+
 }, UPDATE_TIME);
 
 
@@ -30,7 +26,7 @@ setInterval(function(){
 function errorProducedInFriends(){
     // Dejamos de hacer peticiones al SW cuando se produce
     // un error, como por ejemplo, caduca el token de sesión
-    updateFriends = false;
+    clearInterval(friendsIntervalId);
     loadWidget("login");
 }
 
@@ -142,7 +138,7 @@ $('#filterName').on('input', function(e) {
 });
 
 function chat(email) {
-    updateFriends = false; // Dejamos de actualizar los amigos
+    clearInterval(friendsIntervalId); // Dejamos de actualizar los amigos
 	selectedFriendEmail = email; // Variable global
 	Cookies.set('selectedFriendEmail', email); // lo guardamos en una cookie
 	Cookies.set('friends', friends); // lo guardamos en una cookie
