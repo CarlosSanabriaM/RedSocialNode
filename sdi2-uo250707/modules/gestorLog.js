@@ -60,7 +60,7 @@ module.exports = {
 				+ "del usuario con email '"+ senderEmail +"'. Ahora pasan a ser amigos.");
 	},
 	error : function(errorMessage) {
-		this.logger.error(errorMessage);
+		this.logger.warn(errorMessage);
 	}
 };
 

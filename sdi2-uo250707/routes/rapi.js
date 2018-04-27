@@ -1,6 +1,8 @@
 module.exports = function(app, gestorBD) {
-	
-	app.post("/api/autenticar/", function(req, res) {
+
+    var gestorLogApi = app.get('gestorLogApi');
+
+    app.post("/api/autenticar/", function(req, res) {
 		var encryptedPassword = app.get("crypto").createHmac('sha256', app.get('key'))
 			.update(req.body.password).digest('hex');
 		
@@ -17,8 +19,10 @@ module.exports = function(app, gestorBD) {
 					message : "Inicio de sesión no correcto"
 				});
 			} else {
+                gestorLogApi.userHasAuthenticated(criterio.email);
+
 				// El token consiste en el email del usuario y la fecha actual 
-				// en segundas, todo ello encriptado
+				// en segundos, todo ello encriptado
 				var token = app.get('jwt').sign(
 						{email: criterio.email , tiempo: Date.now()/1000},
 						"secreto");
@@ -29,7 +33,7 @@ module.exports = function(app, gestorBD) {
 					token : token
 				});
 			}
-		});//TODO - log
+		});
 	});
 
 	app.get("/api/friend", function(req, res) {
@@ -59,6 +63,8 @@ module.exports = function(app, gestorBD) {
 			else
 				friendsEmails.push(currentFriendship.otherUserEmail);
 		});
+
+		gestorLogApi.userListHisFriends(res.email, friendsEmails);
 		
 		res.status(200);
 		res.send(JSON.stringify(friendsEmails));
@@ -69,8 +75,8 @@ module.exports = function(app, gestorBD) {
 			 emisor : res.email, // el emisor es el usuario en sesión
 			 destino : req.body.destino,
 			 texto : req.body.texto,
-			 leido : false, // por defecto se crea como no leido
-		 }
+			 leido : false // por defecto se crea como no leido
+		 };
 		 
 		 // Validamos los datos de entrada
 		 if(message.destino == null || message.texto == null ||
@@ -146,13 +152,15 @@ module.exports = function(app, gestorBD) {
 					 error : "Se ha producido un error"
 				 });
 			 } else {
+				 gestorLogApi.userSendsMessage(message.emisor, message.destino);
+
 				 res.status(201); // Created
 				 res.json({
 					 mensaje : "Mensaje insertado",
 					 _id : id
 				 });
 			 }
-		 });// TODO - log
+		 });
 	}
 	
 	app.get("/api/message", function(req, res) {
@@ -248,6 +256,9 @@ module.exports = function(app, gestorBD) {
 					error : "Se ha producido un error"
 				});
 			} else {
+				var friendEmail = res.email == req.query.user1 ? req.query.user2 : req.query.user1;
+				gestorLogApi.userGetsHisMessagesWith(res.email, friendEmail);
+
 				// Añadimos la URL /api/user/ para los campos emisor y destino de cada mensaje
 				// HATEOAS
                 for (var i = 0; i < messages.length; i++) {
@@ -318,7 +329,8 @@ module.exports = function(app, gestorBD) {
 					error : "Se ha producido un error"
 				});
 			} else {
-				// TODO - log
+				gestorLogApi.userMarkMessageAsRead(res.email, req.params.id);
+
 				res.status(200); // OK
 				res.json({
 					mensaje: "Mensaje marcado como leído",

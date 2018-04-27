@@ -51,6 +51,9 @@ var logger = log4js.getLogger();
 var gestorLog = require("./modules/gestorLog.js");
 gestorLog.init(app, logger);
 
+var gestorLogApi = require("./modules/gestorLogApi.js");
+gestorLogApi.init(app, logger);
+
 //routerUsuarioToken
 var routerUsuarioToken = express.Router();
 routerUsuarioToken.use(function(req, res, next) {
@@ -116,6 +119,7 @@ app.set('key','abcdefg');
 app.set('crypto',crypto);
 app.set('itemsPerPage', 5);
 app.set('gestorLog', gestorLog);
+app.set('gestorLogApi', gestorLogApi);
 app.set('jwt',jwt);
 
 // Rutas/controladores por lógica
