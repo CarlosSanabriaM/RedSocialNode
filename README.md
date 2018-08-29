@@ -28,3 +28,12 @@ Hay varias formas para ejecutar, entre ellas:
 
 Para visualizar la web, abrir un navegador y visitar la siguiente URL: http://localhost:8081/.
 
+
+## Cómo ejecutar los tests
+Para probar la aplicación se utiliza una versión antigua de un navegador Firefox. En concreto, la versión 46. Este Firefox en particular no guarda datos en caché, por lo que es perfecto para probar la aplicación mientras está en desarrollo.
+
+Es necesaria una versión de Firefox 47 o inferior, debido a que a partir de la 48 Mozilla no permite utilizar Selenium.
+
+Una vez tenemos dicho Firefox, hay que acceder al fichero `Tests.js` del proyecto *red-social-node-test* y modificar la ruta donde se encuentra dicha versión de Firefox. Para ello, hay que cambiar la línea `static String PathFirefox = "/Applications/Firefox.app/Contents/MacOS/firefox-bin";` e indicar ahí la ruta.
+
+Importar el proyecto en un workspace de Eclipse. Hacer click derecho en el archivo *Tests.js* y seleccionar *Run as -> JUnit Test*.
