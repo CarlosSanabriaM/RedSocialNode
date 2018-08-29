@@ -1,12 +1,17 @@
 # Red Social (Node JS)
-Este proyecto se trata de una aplicación web realizada para la asignatura "Sistemas Distribuidos e Internet", utilizando la plataforma Node Js.
+Este proyecto se trata de una aplicación web realizada para la asignatura "Sistemas Distribuidos e Internet", utilizando la plataforma Node Js. Está divido en 2 partes:
+- Una aplicación web tradicional, en la que se utiliza un patrón similar al Modelo-Vista-Controlador (MVC). En la capa del "modelo" no hay a su vez una capa de "lógica de negocio", sino que el "controlador" interactua directamente con la capa de "persistencia" (perteneciente al modelo) debido a la sencillez de la aplicación.
+- La implementación de una API RESTful y un cliente jQuery que consume dicha API, para crear una Single Page Application (SPA).
+
+
+## Contenido
 - **La carpeta *red-social-node*** contiene la aplicación web.
 - **La carpeta *red-social-node-test*** contiene un proyecto Java JUnit con una serie de pruebas unitarias, empleando el framework Selenium. Estas comprueban el correcto funcionamiento de la aplicación web.
 - **El pdf *Instrucciones*** explica los requisitos necesarios que han de satisfacer tanto la aplicación como los tests.
 - **El pdf *Documentacion*** explica cómo se han implementado la aplicación y los tests.
 
 
-## Información Base de datos
+## Información de la Base de datos
 Esta aplicación utiliza una base de datos MongoDB en la nube. Concretamente, utiliza los servicios de [MLab](https://mlab.com). Por tanto, la base de datos original sólo es accesible desde mi cuenta de MLab. 
 
 Sin embargo, se puede crear una cuenta en MLab y crear una nueva base de datos propia para probar la aplicación. Una vez creada la base de datos, se debe crear un usuario para la misma.
