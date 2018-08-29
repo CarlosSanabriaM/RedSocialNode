@@ -24,7 +24,7 @@ Del mismo modo, si se usa una BD propia en MLab, hay que acceder al proyecto *re
 				new MongoClientURI("mongodb://admin:sdi_2018@ds129593.mlab.com:29593/sdi2-uo250707");`.
 
 ## Cómo ejecutar la aplicación
-Es necesario tener instalado Node.js en el SO. En caso de no tenerlo instalado, se puede desarcargar desde el siguiente enlace https://nodejs.org/es/download/package-manager/.
+Es necesario tener instalado Node.js en el SO. En caso de no tenerlo instalado, se puede desarcargar desde el siguiente enlace https://nodejs.org/es/download/package-manager/. (Para seguir con el desarrollo de esta aplicación también es necesario instalar *npm*, pero ya se instala directamente al instalar Node).
 
 Hay varias formas para ejecutar, entre ellas:
 1. **Desde línea de comandos:** Situarse en la carpeta *red-social-node* desde la línea de comandos y ejecutar el comando: `node app.js`. Para parar el servidor, pulsar `Control + C`.
