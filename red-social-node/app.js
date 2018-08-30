@@ -38,7 +38,7 @@ log4js.configure({
 			layout: { type: 'pattern', pattern: '%[[%d{dd-MM-yyyy hh:mm:ss}] [%p] - %]%m' }
 		},
 	    file: { 	// para la salida a un fichero de log
-	    		type: 'file', filename: 'logs/uo250707.log', 
+	    		type: 'file', filename: 'logs/red-social-node.log',
 	    		layout: { type: 'pattern', pattern: '[%d{dd-MM-yyyy hh:mm:ss}] [%p] - %m' }
 		}
 	},
