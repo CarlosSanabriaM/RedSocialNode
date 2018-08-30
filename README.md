@@ -29,7 +29,7 @@ Es necesario tener instalado Node.js en el SO. En caso de no tenerlo instalado, 
 Hay varias formas para ejecutar, entre ellas:
 1. **Desde línea de comandos:** Situarse en la carpeta *red-social-node* desde la línea de comandos y ejecutar el comando: `node app.js`. Para parar el servidor, pulsar `Control + C`.
 2. **Utilizando el IDE WebStorm:** Abrir el proyecto *red-social-node* utilizando WebStorm. Hacer click derecho en el archivo *app.js* y seleccionar *Run 'app.js'*.
-3.  **Utilizando el IDE Eclipse:** Instalar y habilitar el plugin Nodeclipse del eclipse Marketplace. Importar el proyecto en un workspace. Hacer click derecho en el archivo *app.js* y seleccionar *Run as -> Node.js Application*.
+3. **Utilizando el IDE Eclipse:** Instalar y habilitar el plugin Nodeclipse del eclipse Marketplace. Importar el proyecto *red-social-node* en un workspace. Hacer click derecho en el archivo *app.js* y seleccionar *Run as -> Node.js Application*.
 
 Para visualizar la web, abrir un navegador y visitar la siguiente URL: http://localhost:8081/.
 
@@ -39,6 +39,6 @@ Para probar la aplicación se utiliza una versión antigua de un navegador Firef
 
 Es necesaria una versión de Firefox 47 o inferior, debido a que a partir de la 48 Mozilla no permite utilizar Selenium.
 
-Una vez tenemos dicho Firefox, hay que acceder al fichero `Tests.js` del proyecto *red-social-node-test* y modificar la ruta donde se encuentra dicha versión de Firefox. Para ello, hay que cambiar la línea `static String PathFirefox = "/Applications/Firefox.app/Contents/MacOS/firefox-bin";` e indicar ahí la ruta.
+Una vez tenemos dicho Firefox, hay que acceder al fichero `Tests.java` del proyecto *red-social-node-test* y modificar la ruta donde se encuentra dicha versión de Firefox. Para ello, hay que cambiar la línea `static String PathFirefox = "/Applications/Firefox.app/Contents/MacOS/firefox-bin";` e indicar ahí la ruta.
 
-Importar el proyecto en un workspace de Eclipse. Hacer click derecho en el archivo *Tests.js* y seleccionar *Run as -> JUnit Test*.
+Importar el proyecto en un workspace de Eclipse. Hacer click derecho en el archivo *Tests.java* y seleccionar *Run as -> JUnit Test*.
